@@ -3,135 +3,119 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Algas - Tienda de Ropa</title>
+<title>Algas - Catálogo (Rescate)</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 <style>
 :root{
   --verde-oscuro:#1e3a2e;
   --verde-medio:#2d5a42;
   --verde-claro:#f8fffe;
-  --blanco:#ffffff;
   --gris-1:#333;
-  --gris-2:#555;
   --rojo:#e74c3c;
   --whatsapp:#25d366;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial, sans-serif;background:var(--verde-claro);color:var(--gris-1)}
-header{position:fixed;top:0;left:0;right:0;height:70px;background:rgba(255,255,255,0.8);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;z-index:1000;}
-header h1{font-family:'Playfair Display',serif;color:var(--verde-oscuro);font-size:2rem;}
+
+/* Header */
+header{position:fixed;top:0;left:0;right:0;height:70px;background:rgba(255,255,255,0.9);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:space-between;z-index:1000;padding:0 20px;border-bottom:1px solid rgba(0,0,0,.08)}
+header img.logo{height:50px;width:50px;border-radius:50%;border:2px solid var(--verde-oscuro);box-shadow:0 2px 6px rgba(0,0,0,.25)}
+header h1{font-family:'Playfair Display',serif;color:var(--verde-oscuro);font-size:1.8rem;flex:1;text-align:center;margin-right:50px}
+
+/* Sections */
 section{padding:100px 20px}
-.section-title{font-size:2rem;margin-bottom:20px;color:var(--verde-oscuro);text-align:center}
-.grid{display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));}
-.card{background:#fff;border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,0.1);padding:14px;text-align:center;min-height:350px;display:flex;flex-direction:column;justify-content:flex-start}
-.card img{width:100%;height:auto;max-height:240px;object-fit:contain;display:block;margin:0 auto 10px auto}
-.card .product-name{font-weight:bold;margin:8px 0}
-.card .product-price{color:var(--verde-medio);font-size:1.2rem;margin-bottom:10px}
+.section-title{font-size:2rem;margin-bottom:10px;color:var(--verde-oscuro);text-align:center}
+
+/* Hero */
+#inicio{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:linear-gradient(160deg,#eafff8,#a9efcf);min-height:60vh;padding-top:100px}
+#inicio h1{font-family:'Poppins',sans-serif;font-size:4rem;font-weight:600;color:#1e3a2e;text-shadow:2px 2px 6px rgba(0,0,0,0.25);margin:0}
 .btn{padding:10px 16px;border-radius:8px;cursor:pointer;border:none;font-weight:bold}
 .btn-primary{background:var(--verde-oscuro);color:#fff}
+
+/* Catalog index */
+.catalogo-indice{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:10px 0 20px}
+.catalogo-indice .btn{background:#fff;border:1px solid #dcdcdc;color:#333}
+.catalogo-indice .btn.active{background:var(--verde-medio);color:#fff;border-color:var(--verde-medio)}
+
+/* Grid */
+.grid{display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));}
+.card{position:relative;background:#fff;border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,0.1);padding:14px;text-align:center;min-height:350px;display:flex;flex-direction:column;justify-content:flex-start}
+.card img{width:100%;height:auto;max-height:240px;object-fit:contain;display:block;margin:0 auto 10px;border-radius:8px;background:#f4f4f4}
+.card .product-name{font-weight:bold;margin:8px 0}
+.card .product-price{color:var(--verde-medio);font-size:1.1rem;margin-bottom:10px}
+
+/* Badge destello */
+.badge{position:absolute;top:10px;left:10px;width:70px;height:70px;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:bold;color:#fff;text-transform:uppercase;border-radius:50%;animation:pulse 1.5s infinite;z-index:5}
+.badge.off{background:#e74c3c;box-shadow:0 0 12px rgba(231,76,60,0.8)}
+.badge.especial{background:#2d5a42;box-shadow:0 0 12px rgba(45,90,66,0.8)}
+@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.1)}100%{transform:scale(1)}}
+
 /* Detail */
 #productDetail{display:none;padding:100px 20px}
-.detail-content{max-width:900px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
-.detail-content img{max-width:100%;border-radius:12px}
+.detail-content{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;grid-template-areas:'info image';gap:20px;align-items:start}
+#detailImage{grid-area:image;overflow:hidden;position:relative}
+#detailImage img{width:100%;height:auto;max-height:70vh;object-fit:contain;border-radius:12px;display:block;margin:0 auto;transition:transform .2s ease;cursor:zoom-in}
+.detail-info{grid-area:info}
 .detail-info h2{color:var(--verde-oscuro);margin-bottom:10px}
 .detail-info .price{font-size:1.5rem;color:var(--verde-medio);margin:10px 0}
 ul{padding-left:20px;margin:10px 0}
+.detail-buttons{display:flex;flex-direction:column;gap:15px;margin-top:15px}
+.detail-buttons .btn{width:100%}
+@media (max-width:768px){.detail-content{grid-template-columns:1fr;grid-template-areas:'image' 'info'}}
+
 /* Cart */
 #cartFab{position:fixed;top:80px;right:20px;background:#fff;padding:10px 14px;border-radius:999px;box-shadow:0 4px 10px rgba(0,0,0,.2);cursor:pointer;z-index:2000}
-.fab-count{background:var(--rojo);color:#fff;border-radius:50%;padding:2px 8px;margin-left:6px}
+#cartFab.bounce{animation:bounce .6s}
+@keyframes bounce{0%{transform:scale(1)}30%{transform:scale(1.2)}60%{transform:scale(0.9)}100%{transform:scale(1)}}
+.fab-count{background:#e74c3c;color:#fff;border-radius:50%;padding:2px 8px;margin-left:6px}
 #cartModal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:3000;align-items:center;justify-content:center}
-#cartModal .modal-content{background:#fff;border-radius:12px;max-width:500px;width:90%;padding:20px;position:relative}
-
-.cart-controls button {
-  width:28px;
-  height:28px;
-  border:none;
-  border-radius:50%;
-  background:var(--verde-medio);
-  color:#fff;
-  font-size:1rem;
-  font-weight:bold;
-  cursor:pointer;
-  transition:background 0.2s;
-}
-.cart-controls button:hover {
-  background:var(--verde-oscuro);
-}
-.cart-controls span {
-  min-width:24px;
-  text-align:center;
-  font-weight:bold;
-  color:var(--gris-1);
-}
-
-#cartModal h2{margin-bottom:10px}
+#cartModal .modal-content{background:#fff;border-radius:12px;max-width:520px;width:90%;padding:20px;position:relative}
 #cartModal .close{position:absolute;top:10px;right:15px;cursor:pointer;font-size:1.5rem}
-.cart-item{display:flex;justify-content:space-between;align-items:center;margin:8px 0}
-.cart-item span{flex:1}
+.cart-item{display:flex;justify-content:space-between;align-items:center;margin:8px 0;gap:8px}
 .cart-controls{display:flex;align-items:center;gap:6px}
+.cart-controls button{width:28px;height:28px;border:none;border-radius:50%;background:var(--verde-medio);color:#fff;font-size:1rem;font-weight:bold;cursor:pointer}
+.cart-controls button:hover{background:var(--verde-oscuro)}
+.cart-controls span{min-width:24px;text-align:center;font-weight:bold}
 .cart-total{font-weight:bold;font-size:1.2rem;margin-top:15px;text-align:right}
-.cart-actions{display:flex;justify-content:space-between;margin-top:20px}
-.cart-actions button{flex:1;margin:0 5px}
-/* WhatsApp floating */
+.cart-actions{display:flex;gap:10px;margin-top:20px}
+.cart-actions button{flex:1}
+
+/* WhatsApp FAB */
 #whatsappFab{position:fixed;bottom:20px;right:20px;display:flex;align-items:center;gap:8px;padding:12px 18px;background:var(--whatsapp);color:#fff;border-radius:999px;cursor:pointer;z-index:2000;box-shadow:0 4px 10px rgba(0,0,0,.3)}
 #whatsappFab img{height:26px;width:26px}
-footer{background:var(--verde-oscuro);color:#fff;text-align:center;padding:20px}
-footer a{color:#fff;text-decoration:underline}
-
-.card img{width:100%;height:auto;max-height:240px;object-fit:contain;display:block;margin:0 auto 10px auto}
-
-
-/* Detail responsive order using grid areas */
-.detail-content{display:grid;grid-template-columns:1fr 1fr;grid-template-areas:'info image';gap:20px;align-items:start}
-#detailImage{grid-area:image}
-.detail-info{grid-area:info}
-@media (max-width: 768px){
-  .detail-content{grid-template-columns:1fr;grid-template-areas:'image' 'info'}
-}
-/* Make detail image show the whole garment, not cropped */
-#detailImage img{width:100%;height:auto;max-height:70vh;object-fit:contain;border-radius:12px}
-
-
-/* Lift WhatsApp button when near footer */
-#whatsappFab{position:fixed;bottom:20px;right:20px;z-index:2000}
 #whatsappFab.lifted{bottom:120px}
-@media (max-width:768px){
-  #whatsappFab.lifted{bottom:140px}
-}
+@media (max-width:768px){#whatsappFab.lifted{bottom:140px}}
 
-
-.detail-buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  margin-top: 15px;
-}
-.detail-buttons .btn {
-  width: 100%;
-}
-
+/* Footer */
+footer{background:var(--verde-oscuro);color:#fff;text-align:center;padding:20px;margin-top:40px}
+footer a{color:#fff;text-decoration:underline}
 </style>
-<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<header style="display:flex;align-items:center;justify-content:space-between;padding:0 20px;">
-  <img src="https://i.ibb.co/SX5Rnw8x/Imagen-de-Whats-App-2025-09-02-a-las-18-04-18-f0b3a1ac.jpg" alt="Logo Algas" style="height:50px;width:50px;border-radius:50%;border:2px solid #1e3a2e;box-shadow:0 2px 6px rgba(0,0,0,0.3);">
-  <h1 style="font-family:'Playfair Display',serif;color:#1e3a2e;font-size:1.8rem;flex:1;text-align:center;margin-right:50px;">Algas</h1>
+<header>
+  <img class="logo" src="https://i.ibb.co/SX5Rnw8x/Imagen-de-Whats-App-2025-09-02-a-las-18-04-18-f0b3a1ac.jpg" alt="Logo Algas">
+  <h1>Algas</h1>
 </header>
 
-
-
-<section id="inicio" style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:linear-gradient(160deg,#eafff8,#a9efcf);padding-top:100px;min-height:100vh;">
+<section id="inicio">
   <div>
-    <h1 style="font-family:'Poppins', sans-serif;font-size:4rem;font-weight:600;color:#1e3a2e;text-shadow:2px 2px 6px rgba(0,0,0,0.25);margin:0;color:#1e3a2e;text-shadow:2px 2px 6px rgba(0,0,0,0.25);margin:0;">Algas</h1>
-    <a href="#productos" class="btn btn-primary" style="margin-top:35px;display:inline-block;font-size:1.3rem;padding:14px 24px;">Ver Productos →</a>
+    <h1>Algas</h1>
+    <a href="#productos" class="btn btn-primary" style="margin-top:20px;display:inline-block;font-size:1.1rem;padding:12px 20px;">Ver Productos →</a>
   </div>
 </section>
 
 <section id="productos">
   <h2 class="section-title">Nuestros Productos</h2>
+
+  <div id="catalogoIndice" class="catalogo-indice">
+    <button class="btn btn-primary active" type="button" data-cat="all">Todos</button>
+    <button class="btn" type="button" data-cat="camperas">🧥 Camperas</button>
+    <button class="btn" type="button" data-cat="camisas">👔 Camisas</button>
+    <button class="btn" type="button" data-cat="pantalones">👖 Pantalones</button>
+  </div>
+
   <div id="productsGrid" class="grid"></div>
 </section>
 
@@ -143,18 +127,20 @@ footer a{color:#fff;text-decoration:underline}
       <div class="price" id="detailPrice"></div>
       <p id="detailDesc"></p>
       <ul id="detailFeatures"></ul>
-      <div class="detail-buttons"><button class="btn" onclick="goBackToProducts()">← Volver a Productos</button>
-      <button class="btn btn-primary" onclick="addToCart(currentProduct)">🛒 Agregar al Carrito</button>
-      <button class="btn" style="background:#25d366;color:#fff" onclick="consultarWhatsApp()">💬 Consultar por WhatsApp</button></div>
+      <div class="detail-buttons">
+        <button class="btn" onclick="goBackToProducts()">← Volver a Productos</button>
+        <button class="btn btn-primary" onclick="addToCart(currentProduct)">🛒 Agregar al Carrito</button>
+        <button class="btn" style="background:#25d366;color:#fff" onclick="consultarWhatsApp()">💬 Consultar por WhatsApp</button>
+      </div>
     </div>
   </div>
 </section>
 
 <!-- Cart Modal -->
 <div id="cartModal">
-  <div class="modal-content">
-    <span class="close" onclick="toggleCart()">&times;</span>
-    <h2>🛒 Mi Carrito</h2>
+  <div class="modal-content" role="dialog" aria-labelledby="cartTitle">
+    <span class="close" onclick="toggleCart()" aria-label="Cerrar">&times;</span>
+    <h2 id="cartTitle">🛒 Mi Carrito</h2>
     <div id="cartItems"></div>
     <div class="cart-total" id="cartTotal"></div>
     <div class="cart-actions">
@@ -172,162 +158,191 @@ footer a{color:#fff;text-decoration:underline}
 </footer>
 
 <button id="cartFab" onclick="toggleCart()">🛒 Carrito <span id="cartCount" class="fab-count">0</span></button>
-<button id="whatsappFab"><img src="https://i.ibb.co/BV91S86b/image.png">WhatsApp</button>
+<button id="whatsappFab"><img src="https://i.ibb.co/BV91S86b/image.png" alt="WhatsApp">WhatsApp</button>
 
 <script>
-const WA_NUMBER = '5491161521424';
-const CURRENCY = {style:'currency',currency:'ARS'};
-const fmt = (n)=> n.toLocaleString('es-AR',CURRENCY);
+const WA_NUMBER='5491161521424';
+const CURRENCY={style:'currency',currency:'ARS'};
+const fmt=(n)=> n.toLocaleString('es-AR',CURRENCY);
 let cart=[]; let currentProduct=null;
 
+// === CATÁLOGO (5 camperas) ===
 const PRODUCTS=[
-  {
-    id:'campera-buckingham',
-    name:'Campera Doble Pechera Buckingham Polo Club',
-    price:45000,
+  { id:'campera-buckingham', categoria:'camperas', name:'Campera Doble Pechera Buckingham Polo Club', price:45000,
     image:'https://i.ibb.co/8DCZtDLT/Imagen-de-Whats-App-2025-09-02-a-las-15-04-22-d86e4fea.jpg',
     description:'Campera doble pechera de la marca Buckingham Polo Club, pensada para brindar abrigo y estilo. Disponible en talle XL.',
-    features:[
-      'Diseño de doble pechera para mayor protección térmica',
-      'Marca Buckingham Polo Club, símbolo de elegancia',
-      'Materiales resistentes y costuras reforzadas',
-      'Disponible en talle XL',
-      '10% OFF pagando en efectivo o transferencia'
-    ]
+    features:['Diseño de doble pechera para mayor protección térmica','Marca Buckingham Polo Club, símbolo de elegancia','Materiales resistentes y costuras reforzadas','Disponible en talle XL','10% OFF pagando en efectivo o transferencia'],
+    tag:'off'
   },
-  {
-    id:'campera-impermeable',
-    name:'Campera Impermeable con Capucha Desmontable Buckingham Polo Club',
-    price:40000,
+  { id:'campera-impermeable', categoria:'camperas', name:'Campera Impermeable con Capucha Desmontable Buckingham Polo Club', price:40000,
     image:'https://i.ibb.co/j9m1hd5s/Imagen-de-Whats-App-2025-09-02-a-las-15-04-22-3e106fdf.jpg',
-    description:'Campera impermeable de la marca Buckingham Polo Club, con capucha desmontable para mayor versatilidad. Ideal para días lluviosos y fríos, combina resistencia y estilo. Disponible en talle XL y también en color azul.',
-    features:[
-      'Material impermeable de alta calidad',
-      'Capucha desmontable con cierre oculto',
-      'Confección resistente y cómoda',
-      'Marca Buckingham Polo Club',
-      'Disponible en talle XL y en color azul'
-    ]
+    description:'Campera impermeable con capucha desmontable de Buckingham Polo Club. Ideal para lluvia y frío. Disponible en XL y color azul.',
+    features:['Material impermeable de alta calidad','Capucha desmontable con cierre oculto','Confección resistente y cómoda','Marca Buckingham Polo Club','Disponible en talle XL y en color azul'],
+    tag:null
+  },
+  { id:'campera-backing', categoria:'camperas', name:'Campera Backing Polo Club — Oferta Especial', price:25000,
+    image:'https://i.ibb.co/nNZkfLKQ/Imagen-de-Whats-App-2025-09-02-a-las-15-04-22-98e2bc66.jpg',
+    description:'Campera Backing Polo Club en color único. Oferta especial desde talle S hasta doble XL.',
+    features:['Diseño exclusivo de Backing Polo Club','Oferta limitada a un único color','Disponible desde talle S hasta doble XL','Confección resistente y cómoda','Precio promocional especial'],
+    tag:'especial'
+  },
+  { id:'campera-buckingham-reversible', categoria:'camperas', name:'Campera Buckingham Polo Club — Reversible', price:35000,
+    image:'https://i.ibb.co/60gWC3Cg/Imagen-de-Whats-App-2025-09-02-a-las-15-04-22-9543c4f7.jpg',
+    description:'Campera reversible de Buckingham Polo Club, ideal para diferentes estilos y situaciones. Disponible en talles S a doble XL.',
+    features:['Diseño reversible para dos estilos','Marca Buckingham Polo Club, sinónimo de calidad','Ideal para climas fríos y moderados','Disponible en talles desde S hasta doble XL','Precio increíble de $35,000'],
+    tag:null
+  },
+  { id:'campera-engomada', categoria:'camperas', name:'Campera Engomada Buckingham Polo Club', price:45000,
+    image:'https://i.ibb.co/xShQ1PGx/Imagen-de-Whats-App-2025-09-02-a-las-15-04-23-01309848.jpg',
+    description:'Campera engomada Buckingham Polo Club, del talle S al doble XL. Terminación engomada con excelente resistencia y estilo.',
+    features:['Terminación engomada de alta resistencia','Marca Buckingham Polo Club','Disponible del talle S al doble XL','Interior cómodo para uso diario','Precio especial $45.000'],
+    tag:null
   }
-];
 
-function renderProductsGrid(){
+  ,
+  { id:'campera-capucha-desmontable',
+    categoria:'camperas',
+    name:'Campera Buckingham Polo Club — Capucha Desmontable',
+    price:40000,
+    image:'https://i.ibb.co/tw0QJtkp/Imagen-de-Whats-App-2025-09-02-a-las-15-04-23-995082e4.jpg',
+    description:'Campera con capucha desmontable e impermeable de Buckingham Polo Club, con precio increíble. Ideal para lluvia y uso diario.',
+    features:[
+      'Capucha desmontable para mayor versatilidad',
+      'Tejido impermeable para lluvia',
+      'Marca Buckingham Polo Club',
+      'Confección cómoda para uso diario',
+      'Precio increíble: $40.000'
+    ],
+    tag:null
+  }
+  ,
+  { id:'campera-uniqlo-impermeable',
+    categoria:'camperas',
+    name:'Campera Impermeable Símil Uniqlo Buckingham Polo Club',
+    price:25000,
+    image:'https://i.ibb.co/nN4sKcMj/Imagen-de-Whats-App-2025-09-02-a-las-15-04-23-bf6f3281.jpg',
+    description:'Campera impermeable símil Uniqlo de Buckingham Polo Club, disponible del talle S al XXL. Precio imbatible: $25.000.',
+    features:[
+      'Inspirada en el estilo Uniqlo',
+      'Material impermeable de alta calidad',
+      'Disponible del talle S al XXL',
+      'Confección cómoda y resistente',
+      'Precio imbatible $25.000'
+    ],
+    tag:null
+  }];
+
+// Render grid
+function renderProductsGrid(list){
   const grid=document.getElementById('productsGrid');
   grid.innerHTML='';
-  PRODUCTS.forEach(p=>{
+  const productos = list && Array.isArray(list) ? list : PRODUCTS;
+  if(productos.length===0){
+    const ph=document.createElement('div'); ph.className='card'; ph.innerHTML='<strong>Sin productos</strong>';
+    grid.appendChild(ph); return;
+  }
+  productos.forEach(p=>{
     const card=document.createElement('div');
     card.className='card';
     card.innerHTML=`
-      <img src="${p.image}" alt="${p.name}">
+      ${p.tag ? `<span class='badge ${p.tag}'>${p.tag==='off'?'OFF':'ESPECIAL'}</span>` : ''}
+      <img src="${p.image}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/240x160?text=Sin+Imagen'">
       <div class="product-name">${p.name}</div>
       <div class="product-price">${fmt(p.price)}</div>
-      <button class="btn btn-primary">Ver Detalles</button>`;
-    card.querySelector('button').onclick=()=>showProductDetail(p.id);
+      <button class="btn btn-primary" type="button">Ver Detalles</button>`;
+    card.querySelector('button').addEventListener('click',()=>showProductDetail(p.id));
     grid.appendChild(card);
   });
 }
 
+// Índice
+function setupCatalogIndex(){
+  const index=document.getElementById('catalogoIndice');
+  if(!index) return;
+  index.addEventListener('click', e=>{
+    const btn=e.target.closest('button[data-cat]'); if(!btn) return;
+    index.querySelectorAll('button').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const cat=btn.dataset.cat;
+    if(cat==='all'){ renderProductsGrid(PRODUCTS); }
+    else { renderProductsGrid(PRODUCTS.filter(p=>p.categoria===cat)); }
+    document.getElementById('productos').scrollIntoView({behavior:'smooth',block:'start'});
+  });
+}
+
+// Detalle
 function showProductDetail(id){
-  const p=PRODUCTS.find(x=>x.id===id);
+  const p=PRODUCTS.find(x=>x.id===id); if(!p) return;
   currentProduct=p;
   document.getElementById('productos').style.display='none';
-  document.getElementById('productDetail').style.display='block';
-  document.getElementById('detailImage').innerHTML=`<img src="${p.image}" alt="${p.name}">`;
+  const detail=document.getElementById('productDetail'); detail.style.display='block';
+  document.getElementById('detailImage').innerHTML=`<img src="${p.image}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/500x400?text=Sin+Imagen'">`;
   document.getElementById('detailName').textContent=p.name;
   document.getElementById('detailPrice').textContent=fmt(p.price);
   document.getElementById('detailDesc').textContent=p.description;
-  const ul=document.getElementById('detailFeatures'); ul.innerHTML='';
-  p.features.forEach(f=>{const li=document.createElement('li');li.textContent=f;ul.appendChild(li)});
+  const ul=document.getElementById('detailFeatures'); ul.innerHTML=''; p.features.forEach(f=>{const li=document.createElement('li');li.textContent=f;ul.appendChild(li)});
+  document.getElementById('detailImage').scrollIntoView({behavior:'smooth',block:'start'});
 }
-
 function goBackToProducts(){
-  document.getElementById('productos').style.display='block';
   document.getElementById('productDetail').style.display='none';
+  document.getElementById('productos').style.display='block';
+  document.getElementById('productos').scrollIntoView({behavior:'smooth',block:'start'});
 }
 
+// Carrito
 function addToCart(p){
+  if(!p) return;
   const found=cart.find(i=>i.id===p.id);
-  if(found){found.qty++;} else {cart.push({...p,qty:1});}
+  if(found){ found.qty++; } else { cart.push({...p,qty:1}); }
   updateCartDisplay();
+  const fab=document.getElementById('cartFab'); if(fab){fab.classList.add('bounce'); setTimeout(()=>fab.classList.remove('bounce'),600);}
 }
-
 function updateCartDisplay(){
-  document.getElementById('cartCount').textContent=cart.reduce((a,b)=>a+b.qty,0);
-  const items=document.getElementById('cartItems');
-  items.innerHTML='';
+  const count=document.getElementById('cartCount'); if(count) count.textContent=cart.reduce((a,b)=>a+b.qty,0);
+  const items=document.getElementById('cartItems'); if(!items) return; items.innerHTML='';
   cart.forEach((item,i)=>{
-    const div=document.createElement('div');
-    div.className='cart-item';
-    div.innerHTML=`
-      <span>${item.name}</span>
+    const div=document.createElement('div'); div.className='cart-item';
+    div.innerHTML=`<span>${item.name}</span>
       <div class="cart-controls">
-        <button onclick="updateQuantity(${i},-1)">-</button>
+        <button type="button" onclick="updateQuantity(${i},-1)">-</button>
         <span>${item.qty}</span>
-        <button onclick="updateQuantity(${i},1)">+</button>
+        <button type="button" onclick="updateQuantity(${i},1)">+</button>
       </div>
       <span>${fmt(item.price*item.qty)}</span>`;
     items.appendChild(div);
   });
-  const total=cart.reduce((sum,it)=>sum+it.price*it.qty,0);
-  document.getElementById('cartTotal').textContent='Total: '+fmt(total);
+  const total=cart.reduce((s,it)=>s+it.price*it.qty,0);
+  const totalEl=document.getElementById('cartTotal'); if(totalEl) totalEl.textContent='Total: '+fmt(total);
 }
-
-function updateQuantity(i,change){
-  cart[i].qty+=change;
-  if(cart[i].qty<=0) cart.splice(i,1);
-  updateCartDisplay();
-}
-
-function clearCart(){
-  if(confirm('¿Vaciar carrito completo?')){
-    cart=[];updateCartDisplay();
-  }
-}
-
-function toggleCart(){
-  const modal=document.getElementById('cartModal');
-  modal.style.display=modal.style.display==='flex'?'none':'flex';
-}
-
+function updateQuantity(i,change){ cart[i].qty+=change; if(cart[i].qty<=0){cart.splice(i,1);} updateCartDisplay(); }
+function clearCart(){ if(confirm('¿Vaciar carrito completo?')){ cart=[]; updateCartDisplay(); } }
+function toggleCart(){ const m=document.getElementById('cartModal'); if(!m) return; m.style.display=(m.style.display==='flex')?'none':'flex'; }
 function checkout(){
-  if(cart.length===0){alert('El carrito está vacío');return;}
-  let msg="¡Hola buenas! Quiero hacer un pedido de las siguientes prendas:%0A%0A📋 RESUMEN DEL PEDIDO:%0A━━━━━━━━━━━━━━━━━━━━%0A";
-  cart.forEach(it=>{
-    msg+=`• ${it.name}%0A  Cantidad: ${it.qty} unidades%0A  Precio unitario: ${fmt(it.price)}%0A  Subtotal: ${fmt(it.price*it.qty)}%0A%0A`;
-  });
-  const total=cart.reduce((sum,it)=>sum+it.price*it.qty,0);
-  msg+=`━━━━━━━━━━━━━━━━━━━━%0A💰 TOTAL: ${fmt(total)}%0A%0A¡Espero su confirmación! 😊`;
-  window.open(`https://wa.me/${WA_NUMBER}?text=${msg}`,'_blank');
+  if(cart.length===0){ alert('El carrito está vacío'); return; }
+  let lines=['¡Hola buenas! Quiero hacer un pedido de las siguientes prendas:','','📋 RESUMEN DEL PEDIDO:','━━━━━━━━━━━━━━━━━━━━'];
+  cart.forEach(it=>{lines.push(`• ${it.name}`);lines.push(`  Cantidad: ${it.qty} unidades`);lines.push(`  Precio unitario: ${fmt(it.price)}`);lines.push(`  Subtotal: ${fmt(it.price*it.qty)}`);lines.push('');});
+  const total=cart.reduce((s,it)=>s+it.price*it.qty,0);
+  lines.push('━━━━━━━━━━━━━━━━━━━━');lines.push(`💰 TOTAL: ${fmt(total)}`);lines.push('');lines.push('¡Espero su confirmación! 😊');
+  const msg=encodeURIComponent(lines.join('\n')); window.open(`https://wa.me/${WA_NUMBER}?text=${msg}`,'_blank');
 }
 
-function consultarWhatsApp(){
-  if(!currentProduct) return;
-  const msg=`Hola, quiero consultar por el producto: ${currentProduct.name} (${fmt(currentProduct.price)})`;
-  window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`,'_blank');
-}
+// WhatsApp FAB y detalle
+document.getElementById('whatsappFab').addEventListener('click',()=>{
+  const msg=encodeURIComponent('¡Hola! Me interesa conocer más sobre los productos de Algas.'); window.open(`https://wa.me/${WA_NUMBER}?text=${msg}`,'_blank');
+});
+function consultarWhatsApp(){ if(!currentProduct) return; const msg=encodeURIComponent(`Hola, quiero consultar por el producto:\n\n📌 ${currentProduct.name}\n💲 Precio: ${fmt(currentProduct.price)}`); window.open(`https://wa.me/${WA_NUMBER}?text=${msg}`,'_blank'); }
+// Levantar FAB al ver footer
+(function(){const fab=document.getElementById('whatsappFab');const footer=document.querySelector('footer');if(fab&&footer&&'IntersectionObserver'in window){const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){fab.classList.add('lifted')}else{fab.classList.remove('lifted')}})}, {root:null,threshold:0});io.observe(footer);}})();
 
-document.getElementById('whatsappFab').onclick=()=>{
-  const msg="¡Hola! Me interesa conocer más sobre los productos de Algas.";
-  window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`,'_blank');
-};
+// Zoom panorámico en detalle
+(function(){const c=document.getElementById('detailImage'); if(!c) return; c.addEventListener('mousemove',e=>{const img=c.querySelector('img'); if(!img) return; const r=c.getBoundingClientRect(); const x=((e.clientX-r.left)/r.width)*100; const y=((e.clientY-r.top)/r.height)*100; img.style.transformOrigin=`${x}% ${y}%`; img.style.transform='scale(2)';}); c.addEventListener('mouseleave',()=>{const img=c.querySelector('img'); if(img){img.style.transformOrigin='center center'; img.style.transform='scale(1)';}});})();
 
-renderProductsGrid();
-
-// Lift WhatsApp FAB when footer enters the viewport so it doesn't overlap
-(function(){
-  const fab = document.getElementById('whatsappFab');
-  const footer = document.querySelector('footer');
-  if(fab && footer && 'IntersectionObserver' in window){
-    const io = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if(entry.isIntersecting){ fab.classList.add('lifted'); }
-        else { fab.classList.remove('lifted'); }
-      });
-    }, {root:null, threshold:0});
-    io.observe(footer);
-  }
-})();
-
+// Init
+document.addEventListener('DOMContentLoaded', ()=>{
+  renderProductsGrid(PRODUCTS);
+  setupCatalogIndex();
+  updateCartDisplay();
+});
 </script>
 </body>
 </html>
