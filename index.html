@@ -271,22 +271,38 @@ function setupCatalogIndex(){
 }
 
 // Detalle
-function showProductDetail(id){
-  const p=PRODUCTS.find(x=>x.id===id); if(!p) return;
+
+function showProductDetail(id, silent=false){
+  const p=PRODUCTS.find(x=>x.id===id);
+  if(!p) return;
   currentProduct=p;
   document.getElementById('productos').style.display='none';
-  const detail=document.getElementById('productDetail'); detail.style.display='block';
+  const detail=document.getElementById('productDetail');
+  detail.style.display='block';
   document.getElementById('detailImage').innerHTML=`<img src="${p.image}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/500x400?text=Sin+Imagen'">`;
   document.getElementById('detailName').textContent=p.name;
   document.getElementById('detailPrice').textContent=fmt(p.price);
   document.getElementById('detailDesc').textContent=p.description;
-  const ul=document.getElementById('detailFeatures'); ul.innerHTML=''; p.features.forEach(f=>{const li=document.createElement('li');li.textContent=f;ul.appendChild(li)});
-  document.getElementById('detailImage').scrollIntoView({behavior:'smooth',block:'start'});
+  const ul=document.getElementById('detailFeatures'); ul.innerHTML='';
+  p.features.forEach(f=>{ const li=document.createElement('li'); li.textContent=f; ul.appendChild(li); });
+  const target=document.getElementById('detailImage');
+  if(target && target.scrollIntoView){ target.scrollIntoView({behavior:'smooth', block:'start'}); }
+  if(!silent){
+    history.pushState({view:'detail', productId:id}, '', '#detalle-'+id);
+  }
 }
+
+
 function goBackToProducts(){
+  // If we're on a detail state, use browser back to keep history clean
+  if(history.state && history.state.view==='detail'){
+    history.back();
+    return;
+  }
   document.getElementById('productDetail').style.display='none';
   document.getElementById('productos').style.display='block';
-  document.getElementById('productos').scrollIntoView({behavior:'smooth',block:'start'});
+  document.getElementById('productos').scrollIntoView({behavior:'smooth', block:'start'});
+  history.replaceState({view:'grid'}, '', '#productos');
 }
 
 // Carrito
@@ -337,11 +353,39 @@ function consultarWhatsApp(){ if(!currentProduct) return; const msg=encodeURICom
 // Zoom panorámico en detalle
 (function(){const c=document.getElementById('detailImage'); if(!c) return; c.addEventListener('mousemove',e=>{const img=c.querySelector('img'); if(!img) return; const r=c.getBoundingClientRect(); const x=((e.clientX-r.left)/r.width)*100; const y=((e.clientY-r.top)/r.height)*100; img.style.transformOrigin=`${x}% ${y}%`; img.style.transform='scale(2)';}); c.addEventListener('mouseleave',()=>{const img=c.querySelector('img'); if(img){img.style.transformOrigin='center center'; img.style.transform='scale(1)';}});})();
 
+
+// History: handle device back button
+window.addEventListener('popstate', (event)=>{
+  if(event.state && event.state.view==='detail'){
+    const pid = event.state.productId;
+    showProductDetail(pid, true); // silent to avoid pushing again
+  }else{
+    // Grid
+    document.getElementById('productDetail').style.display='none';
+    document.getElementById('productos').style.display='block';
+  }
+});
+
 // Init
 document.addEventListener('DOMContentLoaded', ()=>{
   renderProductsGrid(PRODUCTS);
   setupCatalogIndex();
   updateCartDisplay();
+
+  // History initial state / deep-link
+  const hash = location.hash || '';
+  if(hash.startsWith('#detalle-')){
+    const pid = hash.replace('#detalle-','');
+    const p = PRODUCTS.find(x=>x.id===pid);
+    if(p){
+      showProductDetail(pid, true); // show without pushing
+      history.replaceState({view:'detail', productId:pid}, '', '#detalle-'+pid);
+    }else{
+      history.replaceState({view:'grid'}, '', '#productos');
+    }
+  }else{
+    history.replaceState({view:'grid'}, '', '#productos');
+  }
 });
 </script>
 </body>
