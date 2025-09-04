@@ -84,6 +84,12 @@ ul{padding-left:20px;margin:10px 0}
 /* Footer */
 footer{background:var(--verde-oscuro);color:#fff;text-align:center;padding:20px;margin-top:40px}
 footer a{color:#fff;text-decoration:underline}
+
+/* For mobile: force 2 cards per row */
+@media (max-width: 768px){
+  .grid{ grid-template-columns: repeat(2, 1fr); }
+}
+
 </style>
 </head>
 <body>
