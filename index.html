@@ -28,16 +28,12 @@ section{padding:100px 20px}
 .catalogo-indice .btn.active{background:var(--verde-medio);color:#fff;border-color:var(--verde-medio)}
 /* Grid */
 .grid{display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+/* Mobile: 2 per row */
+@media (max-width: 768px){ .grid{ grid-template-columns: repeat(2, 1fr); } }
 .card{position:relative;background:#fff;border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,0.1);padding:14px;text-align:center;min-height:360px;display:flex;flex-direction:column;justify-content:flex-start;cursor:pointer}
 .card img{width:100%;height:auto;max-height:240px;object-fit:contain;display:block;margin:0 auto 10px;border-radius:8px;background:#f4f4f4}
 .card .product-name{font-weight:bold;margin:8px 0}
 .card .product-price{color:var(--verde-medio);font-size:1.1rem;margin-bottom:6px}
-/* Talles */
-.sizes{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:6px 0 8px}
-.size-chip{width:28px;height:28px;border-radius:50%;border:1px solid #cfcfcf;display:flex;align-items:center;justify-content:center;font-size:.8rem;background:#fff}
-.size-chip.muted{opacity:.85}
-.size-chip.selectable{cursor:pointer;border:2px solid #ccc}
-.size-chip.selectable.selected{border-color:var(--verde-medio);background:#eaf6f0;font-weight:bold}
 /* Badges */
 .badge{position:absolute;top:10px;left:10px;width:70px;height:70px;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:bold;color:#fff;text-transform:uppercase;border-radius:50%;animation:pulse 1.5s infinite;z-index:5}
 .badge.off{background:#e74c3c;box-shadow:0 0 12px rgba(231,76,60,0.8)}
@@ -55,15 +51,20 @@ section{padding:100px 20px}
 .detail-info h2{color:var(--verde-oscuro);margin:10px 0}
 .detail-info .price{font-size:1.5rem;color:var(--verde-medio);margin:10px 0}
 .payment-note{max-width:900px;margin:8px 0 16px;padding:8px 12px;border:1px solid #d8efe5;background:#eef9f4;border-radius:8px;font-size:.95rem;color:var(--gris-1)}
-.payment-note.small{margin-top:6px}
 ul{padding-left:20px;margin:10px 0}
 .detail-buttons{display:flex;flex-direction:column;gap:15px;margin-top:15px}
 .detail-buttons .btn{width:100%}
+/* Sizes */
+.sizes{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-start;margin:6px 0 8px}
+.size-chip{width:30px;height:30px;border-radius:50%;border:2px solid #ccc;display:flex;align-items:center;justify-content:center;font-size:.85rem;background:#fff;cursor:pointer}
+.size-chip.selected{border-color:var(--verde-medio);background:#eaf6f0;font-weight:bold}
+.size-warning{color:#e74c3c;font-size:.95rem;display:none;margin-top:4px}
 @media (max-width:768px){.detail-content{grid-template-columns:1fr;grid-template-areas:'image' 'info'}}
 /* Cart */
 #cartFab{position:fixed;top:80px;right:20px;background:#fff;padding:10px 14px;border-radius:999px;box-shadow:0 4px 10px rgba(0,0,0,.2);cursor:pointer;z-index:2000}
 #cartFab.bounce{animation:bounce .6s}
-@keyframes bounce{0%{transform:scale(1)}30%{transform:scale(1.2)}60%{transform:scale(0.9)}100%{transform:scale(1)}}
+@keyframes bounce{0%{transform:scale(1)}30%{transform:scale(1.2)}60%{transform:scale(0.9)}100%{transform:scale(1)}
+}
 .fab-count{background:#e74c3c;color:#fff;border-radius:50%;padding:2px 8px;margin-left:6px}
 #cartModal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:3000;align-items:center;justify-content:center}
 #cartModal .modal-content{background:#fff;border-radius:12px;max-width:520px;width:90%;padding:20px;position:relative}
@@ -84,12 +85,6 @@ ul{padding-left:20px;margin:10px 0}
 /* Footer */
 footer{background:var(--verde-oscuro);color:#fff;text-align:center;padding:20px;margin-top:40px}
 footer a{color:#fff;text-decoration:underline}
-
-/* For mobile: force 2 cards per row */
-@media (max-width: 768px){
-  .grid{ grid-template-columns: repeat(2, 1fr); }
-}
-
 </style>
 </head>
 <body>
@@ -120,7 +115,7 @@ footer a{color:#fff;text-decoration:underline}
       </div>
       <h2 id="detailName"></h2>
       <div class="price" id="detailPrice"></div>
-      <div class="payment-note small" style="text-align:left;">
+      <div class="payment-note">
         <strong>Medios de pago</strong>
         <ul style="margin-top:6px;list-style:none;padding-left:0;">
           <li>efectivo 💵</li>
@@ -128,8 +123,8 @@ footer a{color:#fff;text-decoration:underline}
           <li>transferencia</li>
         </ul>
       </div>
-      <div id="detailSizes" class="sizes" style="justify-content:flex-start"></div>
-<div id="sizeWarning" style="color:#e74c3c;font-size:.95rem;display:none;margin-top:4px;">⚠️ Seleccioná un talle antes de agregar al carrito.</div>
+      <div id="detailSizes" class="sizes"></div>
+      <div id="sizeWarning" class="size-warning">⚠️ Seleccioná un talle antes de agregar al carrito.</div>
       <p id="detailDesc"></p>
       <ul id="detailFeatures"></ul>
       <div class="detail-buttons">
@@ -175,18 +170,19 @@ const CURRENCY={style:'currency',currency:'ARS'};
 const fmt=(n)=> n.toLocaleString('es-AR',CURRENCY);
 let cart=[]; let currentProduct=null; let prevScrollY=0; let selectedSize=null;
 
+// ===== CATÁLOGO =====
 const PRODUCTS=[
   { id:'campera-buckingham', categoria:'camperas', name:'Campera Doble Pechera Buckingham Polo Club', price:45000,
     image:'https://i.ibb.co/8DCZtDLT/Imagen-de-Whats-App-2025-09-02-a-las-15-04-22-d86e4fea.jpg',
     description:'Campera doble pechera de la marca Buckingham Polo Club, pensada para brindar abrigo y estilo. Disponible en talle XL.',
-    features:['Diseño de doble pechera para mayor protección térmica','Marca Buckingham Polo Club','Materiales resistentes y costuras reforzadas','Disponible en talle XL','10% OFF pagando en efectivo o transferencia'],
+    features:['Diseño de doble pechera para mayor protección térmica','Marca Buckingham Polo Club, símbolo de elegancia','Materiales resistentes y costuras reforzadas','Disponible en talle XL','10% OFF pagando en efectivo o transferencia'],
     sizes:['XL'],
     tag:'off'
   },
   { id:'campera-impermeable', categoria:'camperas', name:'Campera Impermeable con Capucha Desmontable Buckingham Polo Club', price:40000,
     image:'https://i.ibb.co/j9m1hd5s/Imagen-de-Whats-App-2025-09-02-a-las-15-04-22-3e106fdf.jpg',
     description:'Campera impermeable con capucha desmontable de Buckingham Polo Club. Ideal para lluvia y frío. Disponible en XL y color azul.',
-    features:['Material impermeable de alta calidad','Capucha desmontable con cierre oculto','Confección resistente y cómoda','Marca Buckingham Polo Club','Disponible en talle XL y color azul'],
+    features:['Material impermeable de alta calidad','Capucha desmontable con cierre oculto','Confección resistente y cómoda','Marca Buckingham Polo Club','Disponible en talle XL y en color azul'],
     sizes:['XL'],
     tag:null
   },
@@ -200,49 +196,49 @@ const PRODUCTS=[
   { id:'campera-buckingham-reversible', categoria:'camperas', name:'Campera Buckingham Polo Club — Reversible', price:35000,
     image:'https://i.ibb.co/60gWC3Cg/Imagen-de-Whats-App-2025-09-02-a-las-15-04-22-9543c4f7.jpg',
     description:'Campera reversible de Buckingham Polo Club, ideal para diferentes estilos y situaciones. Disponible en talles S a doble XL.',
-    features:['Diseño reversible para dos estilos','Marca Buckingham Polo Club','Ideal para climas fríos y moderados','Disponible desde S a XXL','Precio increíble $35.000'],
+    features:['Diseño reversible para dos estilos','Marca Buckingham Polo Club, sinónimo de calidad','Ideal para climas fríos y moderados','Disponible en talles desde S hasta doble XL','Precio increíble de $35,000'],
     sizes:['S','M','L','XL','XXL'],
     tag:null
   },
   { id:'campera-engomada', categoria:'camperas', name:'Campera Engomada Buckingham Polo Club', price:45000,
     image:'https://i.ibb.co/xShQ1PGx/Imagen-de-Whats-App-2025-09-02-a-las-15-04-23-01309848.jpg',
     description:'Campera engomada Buckingham Polo Club, del talle S al doble XL. Terminación engomada con excelente resistencia y estilo.',
-    features:['Terminación engomada de alta resistencia','Marca Buckingham Polo Club','Disponible del S al XXL','Interior cómodo para uso diario','Precio especial $45.000'],
+    features:['Terminación engomada de alta resistencia','Marca Buckingham Polo Club','Disponible del talle S al doble XL','Interior cómodo para uso diario','Precio especial $45.000'],
     sizes:['S','M','L','XL','XXL'],
     tag:null
   },
   { id:'campera-capucha-desmontable', categoria:'camperas', name:'Campera Buckingham Polo Club — Capucha Desmontable', price:40000,
     image:'https://i.ibb.co/tw0QJtkp/Imagen-de-Whats-App-2025-09-02-a-las-15-04-23-995082e4.jpg',
-    description:'Campera con capucha desmontable e impermeable. Ideal para lluvia y uso diario.',
-    features:['Capucha desmontable','Tejido impermeable','Marca Buckingham Polo Club','Confort de uso diario','Precio increíble: $40.000'],
+    description:'Campera con capucha desmontable e impermeable de Buckingham Polo Club, con precio increíble. Ideal para lluvia y uso diario.',
+    features:['Capucha desmontable para mayor versatilidad','Tejido impermeable para lluvia','Marca Buckingham Polo Club','Confección cómoda para uso diario','Precio increíble: $40.000'],
     sizes:['S','M','L','XL','XXL'],
     tag:null
   },
   { id:'campera-uniqlo-impermeable', categoria:'camperas', name:'Campera Impermeable Símil Uniqlo Buckingham Polo Club', price:25000,
     image:'https://i.ibb.co/nN4sKcMj/Imagen-de-Whats-App-2025-09-02-a-las-15-04-23-bf6f3281.jpg',
-    description:'Campera impermeable símil Uniqlo, del talle S al XXL. Precio imbatible.',
-    features:['Inspirada en Uniqlo','Material impermeable','Del S al XXL','Cómoda y resistente','Precio $25.000'],
+    description:'Campera impermeable símil Uniqlo de Buckingham Polo Club, disponible del talle S al XXL. Precio imbatible: $25.000.',
+    features:['Inspirada en el estilo Uniqlo','Material impermeable de alta calidad','Disponible del talle S al XXL','Confección cómoda y resistente','Precio imbatible $25.000'],
     sizes:['S','M','L','XL','XXL'],
     tag:null
   },
   { id:'campera-impermeable-oferta', categoria:'camperas', name:'Campera Impermeable — Oferta Limitada', price:35000,
     image:'https://i.ibb.co/zVHHrw0V/Imagen-de-Whats-App-2025-09-04-a-las-11-06-23-83ac75f2.jpg',
-    description:'Oferta limitada: del talle S al doble XL. Precio promocional $35.000.',
-    features:['Impermeable de alta calidad','Oferta limitada','Del S al XXL','Precio especial $35.000'],
+    description:'Campera impermeable. Oferta limitada desde el talle S al doble XL. Precio promocional $35.000 (transferencia o efectivo).',
+    features:['Impermeable de alta calidad','Oferta limitada','Disponible desde talle S hasta doble XL','Precio promocional especial $35.000','Pagando con transferencia o efectivo'],
     sizes:['S','M','L','XL','XXL'],
     tag:'especial'
   },
   { id:'campera-rompevientos', categoria:'camperas', name:'Rompevientos Buckingham Polo Club', price:40000,
     image:'https://i.ibb.co/DPQ8mYZm/Imagen-de-Whats-App-2025-09-04-a-las-10-33-16-0ff45917.jpg',
-    description:'Varios modelos, talles y colores, del Small al XXL. ¡Oferta $40.000!',
-    features:['Rompevientos liviano','Varios modelos y colores','Talles S al XXL','Secado rápido'],
+    description:'Varios modelos, talles y colores, del Small al XXL. ¡Increíble oferta $40.000!',
+    features:['Rompevientos liviano','Varios modelos y colores','Talles S al XXL','Secado rápido','Excelente relación precio-calidad'],
     sizes:['S','M','L','XL','XXL'],
     tag:'especial'
   },
   { id:'chaleco-impermeable', categoria:'chalecos', name:'Chaleco Impermeable Buckingham Polo Club', price:35000,
     image:'https://i.ibb.co/JwPW5XPS/Imagen-de-Whats-App-2025-09-04-a-las-10-33-17-ba7943c4.jpg',
     description:'Único color. Precio $35.000.',
-    features:['Tejido impermeable','Único color','Marca Buckingham Polo Club','Liviano y cómodo'],
+    features:['Tejido impermeable','Único color','Marca Buckingham Polo Club','Liviano y cómodo','Ideal para lluvia y viento'],
     sizes:['S','M','L','XL','XXL'],
     tag:'especial'
   },
@@ -251,6 +247,13 @@ const PRODUCTS=[
     description:'Últimas unidades. Del talle S al XL.',
     features:['Forrado en corderito','Últimas unidades','Del S al XL','Abrigo suave y cómodo'],
     sizes:['S','M','L','XL'],
+    tag:'especial'
+  },
+  { id:'remera-mc-premium', categoria:'remeras', name:'Remera Manga Corta - Primera Marca (Algodón Peinado)', price:20000,
+    image:'https://i.ibb.co/xt46TZWH/Imagen-de-Whats-App-2025-09-04-a-las-17-45-03-9d3f8beb.jpg',
+    description:'Oferta especial. Algodón peinado, calidad primera marca.',
+    features:['Algodón peinado','Primera marca','Oferta especial','Corte clásico y cómodo'],
+    sizes:['XS','S','M','L','XL','XXL'],
     tag:'especial'
   }
 ];
@@ -262,7 +265,6 @@ function makeBadge(tag){
 }
 
 function card(p){
-  const sizes=(p.sizes||[]).map(s=>`<span class='size-chip muted' title='Talle ${s}'>${s}</span>`).join('');
   return `
     ${makeBadge(p.tag)}
     <img referrerpolicy="no-referrer" src="${p.image}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/240x160?text=Sin+Imagen'">
@@ -350,9 +352,9 @@ function showProductDetail(id, silent=false){
   // Render talles seleccionables
   const szCont=document.getElementById('detailSizes'); szCont.innerHTML='';
   (p.sizes||[]).forEach(s=>{
-    const chip=document.createElement('span'); chip.className='size-chip selectable'; chip.textContent=s;
+    const chip=document.createElement('span'); chip.className='size-chip'; chip.textContent=s;
     chip.setAttribute('role','button'); chip.setAttribute('tabindex','0'); chip.setAttribute('aria-label','Seleccionar talle '+s);
-    const select=()=>{ selectedSize=s; szCont.querySelectorAll('.size-chip.selectable').forEach(c=>c.classList.remove('selected')); chip.classList.add('selected'); };
+    const select=()=>{ selectedSize=s; szCont.querySelectorAll('.size-chip').forEach(c=>c.classList.remove('selected')); chip.classList.add('selected'); const warn=document.getElementById('sizeWarning'); if(warn) warn.style.display='none'; };
     chip.addEventListener('click', select);
     chip.addEventListener('keydown', ev=>{ if(ev.key==='Enter'||ev.key===' '){ ev.preventDefault(); select(); } });
     szCont.appendChild(chip);
@@ -400,15 +402,13 @@ function goToProducts(){
 // Carrito
 function addToCart(p){
   if(!p) return;
-  // exigir talle seleccionado
   if(!selectedSize){
     const warn=document.getElementById('sizeWarning'); if(warn) warn.style.display='block';
     return;
   }
   const key = p.id + '::' + selectedSize;
-  const found = cart.find(i=> i.key===key);
-  if(found){ found.qty++; }
-  else { cart.push({...p, qty:1, key, size:selectedSize}); }
+  const found=cart.find(i=>i.key===key);
+  if(found){ found.qty++; } else { cart.push({...p,qty:1,key,size:selectedSize}); }
   updateCartDisplay();
   const fab=document.getElementById('cartFab'); if(fab){fab.classList.add('bounce'); setTimeout(()=>fab.classList.remove('bounce'),600);}
 }
