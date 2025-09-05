@@ -21,7 +21,7 @@ section{padding:100px 20px}
 #inicio{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:linear-gradient(160deg,#eafff8,#a9efcf);min-height:60vh;padding-top:100px}
 #inicio h1{font-family:'Poppins',sans-serif;font-size:4rem;font-weight:600;color:#1e3a2e;text-shadow:2px 2px 6px rgba(0,0,0,0.25);margin:0}
 .btn{padding:10px 16px;border-radius:8px;cursor:pointer;border:none;font-weight:bold}
-.btn-primary{background:var(--verde-oscuro);color:#fff}
+.btn-primary{background:var(--verde-medio);color:#fff}
 /* Catalog index */
 .catalogo-indice{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:10px 0 20px}
 .catalogo-indice .btn{background:#fff;border:1px solid #dcdcdc;color:#333}
@@ -175,7 +175,7 @@ const PRODUCTS=[
   { id:'campera-buckingham', categoria:'camperas', name:'Campera Doble Pechera Buckingham Polo Club', price:45000,
     image:'https://i.ibb.co/8DCZtDLT/Imagen-de-Whats-App-2025-09-02-a-las-15-04-22-d86e4fea.jpg',
     description:'Campera doble pechera de la marca Buckingham Polo Club, pensada para brindar abrigo y estilo. Disponible en talle XL.',
-    features:['Diseño de doble pechera para mayor protección térmica','Marca Buckingham Polo Club, símbolo de elegancia','Materiales resistentes y costuras reforzadas','Disponible en talle XL','10% OFF pagando en efectivo o transferencia'],
+    features:['Diseño de doble pechera para mayor protección térmica','Marca Buckingham Polo Club','Materiales resistentes y costuras reforzadas','Disponible en talle XL','10% OFF pagando en efectivo o transferencia'],
     sizes:['XL'],
     tag:'off'
   },
@@ -196,14 +196,14 @@ const PRODUCTS=[
   { id:'campera-buckingham-reversible', categoria:'camperas', name:'Campera Buckingham Polo Club — Reversible', price:35000,
     image:'https://i.ibb.co/60gWC3Cg/Imagen-de-Whats-App-2025-09-02-a-las-15-04-22-9543c4f7.jpg',
     description:'Campera reversible de Buckingham Polo Club, ideal para diferentes estilos y situaciones. Disponible en talles S a doble XL.',
-    features:['Diseño reversible para dos estilos','Marca Buckingham Polo Club, sinónimo de calidad','Ideal para climas fríos y moderados','Disponible en talles desde S hasta doble XL','Precio increíble de $35,000'],
+    features:['Diseño reversible para dos estilos','Marca Buckingham Polo Club','Ideal para climas fríos y moderados','Disponible en talles desde S a XXL','Precio increíble $35.000'],
     sizes:['S','M','L','XL','XXL'],
     tag:null
   },
   { id:'campera-engomada', categoria:'camperas', name:'Campera Engomada Buckingham Polo Club', price:45000,
     image:'https://i.ibb.co/xShQ1PGx/Imagen-de-Whats-App-2025-09-02-a-las-15-04-23-01309848.jpg',
     description:'Campera engomada Buckingham Polo Club, del talle S al doble XL. Terminación engomada con excelente resistencia y estilo.',
-    features:['Terminación engomada de alta resistencia','Marca Buckingham Polo Club','Disponible del talle S al doble XL','Interior cómodo para uso diario','Precio especial $45.000'],
+    features:['Terminación engomada de alta resistencia','Marca Buckingham Polo Club','Disponible del S al XXL','Interior cómodo para uso diario','Precio especial $45.000'],
     sizes:['S','M','L','XL','XXL'],
     tag:null
   },
@@ -250,7 +250,7 @@ const PRODUCTS=[
     tag:'especial'
   },
   { id:'remera-mc-premium', categoria:'remeras', name:'Remera Manga Corta - Primera Marca (Algodón Peinado)', price:20000,
-    image:'https://i.ibb.co/xt46TZWH/Imagen-de-Whats-App-2025-09-04-a-las-17-45-03-9d3f8beb.jpg',
+    image:'https://i.ibb.co/k62gp4Zw/Imagen-de-Whats-App-2025-09-04-a-las-22-34-46-2e91c20e.jpg',
     description:'Oferta especial. Algodón peinado, calidad primera marca.',
     features:['Algodón peinado','Primera marca','Oferta especial','Corte clásico y cómodo'],
     sizes:['XS','S','M','L','XL','XXL'],
@@ -458,6 +458,9 @@ document.addEventListener('click', (e)=>{
   const btn=e.target.closest('#backHome'); if(btn){ e.preventDefault(); goHome(); }
 });
 document.getElementById('btnVerProductos').addEventListener('click', (e)=>{ e.preventDefault(); goToProducts(); });
+
+// Levantar FAB WhatsApp al alcanzar el footer
+(function(){const fab=document.getElementById('whatsappFab');const footer=document.querySelector('footer');if(fab&&footer&&'IntersectionObserver'in window){const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){fab.classList.add('lifted')}else{fab.classList.remove('lifted')}})}, {root:null,threshold:0});io.observe(footer);}})();
 
 // History/back
 window.addEventListener('popstate', (event)=>{
