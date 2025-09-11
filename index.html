@@ -195,7 +195,7 @@ history.scrollRestoration='manual';
 
 const WA_NUMBER='5491161521424';
 const CURRENCY={style:'currency',currency:'ARS',maximumFractionDigits:0,minimumFractionDigits:0};
-const fmt=(n)=> n.toLocaleString('es-AR',{style:'currency',currency:'ARS',minimumFractionDigits:0,maximumFractionDigits:0});
+const fmt=(n)=> n.toLocaleString('es-AR',CURRENCY);
 
 // State
 let cart=[]; let currentProduct=null; let prevScrollY=0; let selectedSize=null; let selectedModel=null;
@@ -226,48 +226,48 @@ const PRODUCTS=[
   { id:'campera-buckingham-reversible', categoria:'camperas', name:'Campera Buckingham Polo Club — Reversible', price:35000,
     image:'https://i.ibb.co/60gWC3Cg/Imagen-de-Whats-App-2025-09-02-a-las-15-04-22-9543c4f7.jpg',
     description:'Campera reversible de Buckingham Polo Club, ideal para diferentes estilos y situaciones. Disponible en talles S a doble XL.',
-    features:['Diseño reversible para dos estilos','Marca Buckingham Polo Club, sinónimo de calidad','Ideal para climas fríos y moderados','Disponible en talles desde S a XXL','Precio increíble $36.000'],
+    features:['Diseño reversible para dos estilos','Marca Buckingham Polo Club, sinónimo de calidad','Ideal para climas fríos y moderados','Disponible en talles desde S a XXL','Precio increíble $35.000'],
     sizes:['S','M','L','XL','XXL'],
     tag:null
   },
   { id:'campera-engomada', categoria:'camperas', name:'Campera Engomada Buckingham Polo Club', price:45000,
     image:'https://i.ibb.co/xShQ1PGx/Imagen-de-Whats-App-2025-09-02-a-las-15-04-23-01309848.jpg',
     description:'Campera engomada Buckingham Polo Club, del talle S al doble XL. Terminación engomada con excelente resistencia y estilo.',
-    features:['Terminación engomada de alta resistencia','Marca Buckingham Polo Club','Disponible del S al XXL','Interior cómodo para uso diario','Precio especial $46.000'],
+    features:['Terminación engomada de alta resistencia','Marca Buckingham Polo Club','Disponible del S al XXL','Interior cómodo para uso diario','Precio especial $45.000'],
     sizes:['S','M','L','XL','XXL'],
     tag:null
   },
   { id:'campera-capucha-desmontable', categoria:'camperas', name:'Campera Buckingham Polo Club — Capucha Desmontable', price:40000,
     image:'https://i.ibb.co/tw0QJtkp/Imagen-de-Whats-App-2025-09-02-a-las-15-04-23-995082e4.jpg',
     description:'Campera con capucha desmontable e impermeable de Buckingham Polo Club, con precio increíble. Ideal para lluvia y uso diario.',
-    features:['Capucha desmontable para mayor versatilidad','Tejido impermeable para lluvia','Marca Buckingham Polo Club','Confección cómoda para uso diario','Precio increíble: $41.000'],
+    features:['Capucha desmontable para mayor versatilidad','Tejido impermeable para lluvia','Marca Buckingham Polo Club','Confección cómoda para uso diario','Precio increíble: $40.000'],
     sizes:['S','M','L','XL','XXL'],
     tag:null
   },
   { id:'campera-uniqlo-impermeable', categoria:'camperas', name:'Campera Impermeable Símil Uniqlo Buckingham Polo Club', price:25000,
     image:'https://i.ibb.co/nN4sKcMj/Imagen-de-Whats-App-2025-09-02-a-las-15-04-23-bf6f3281.jpg',
-    description:'Campera impermeable símil Uniqlo de Buckingham Polo Club, disponible del talle S al XXL. Precio imbatible: $26.000.',
-    features:['Inspirada en el estilo Uniqlo','Material impermeable de alta calidad','Disponible del talle S al XXL','Confección cómoda y resistente','Precio imbatible $26.000'],
+    description:'Campera impermeable símil Uniqlo de Buckingham Polo Club, disponible del talle S al XXL. Precio imbatible: $25.000.',
+    features:['Inspirada en el estilo Uniqlo','Material impermeable de alta calidad','Disponible del talle S al XXL','Confección cómoda y resistente','Precio imbatible $25.000'],
     sizes:['S','M','L','XL','XXL'],
     tag:null
   },
   { id:'campera-impermeable-oferta', categoria:'camperas', name:'Campera Impermeable — Oferta Limitada', price:35000,
     image:'https://i.ibb.co/zVHHrw0V/Imagen-de-Whats-App-2025-09-04-a-las-11-06-23-83ac75f2.jpg',
-    description:'Campera impermeable. Oferta limitada desde el talle S al doble XL. Precio promocional $36.000 (transferencia o efectivo).',
-    features:['Impermeable de alta calidad','Oferta limitada','Disponible desde talle S hasta doble XL','Precio promocional especial $36.000','Pagando con transferencia o efectivo'],
+    description:'Campera impermeable. Oferta limitada desde el talle S al doble XL. Precio promocional $35.000 (transferencia o efectivo).',
+    features:['Impermeable de alta calidad','Oferta limitada','Disponible desde talle S hasta doble XL','Precio promocional especial $35.000','Pagando con transferencia o efectivo'],
     sizes:['S','M','L','XL','XXL'],
     tag:'especial'
   },
   { id:'campera-rompevientos', categoria:'camperas', name:'Rompevientos Buckingham Polo Club', price:40000,
     image:'https://i.ibb.co/DPQ8mYZm/Imagen-de-Whats-App-2025-09-04-a-las-10-33-16-0ff45917.jpg',
-    description:'Varios modelos, talles y colores, del Small al XXL. ¡Increíble oferta $41.000!',
+    description:'Varios modelos, talles y colores, del Small al XXL. ¡Increíble oferta $40.000!',
     features:['Rompevientos liviano','Varios modelos y colores','Talles S al XXL','Secado rápido','Excelente relación precio-calidad'],
     sizes:['S','M','L','XL','XXL'],
     tag:'especial'
   },
   { id:'chaleco-impermeable', categoria:'chalecos', name:'Chaleco Impermeable Buckingham Polo Club', price:35000,
     image:'https://i.ibb.co/JwPW5XPS/Imagen-de-Whats-App-2025-09-04-a-las-10-33-17-ba7943c4.jpg',
-    description:'Único color. Precio $36.000.',
+    description:'Único color. Precio $35.000.',
     features:['Tejido impermeable','Único color','Marca Buckingham Polo Club','Liviano y cómodo','Ideal para lluvia y viento'],
     sizes:['S','M','L','XL','XXL'],
     tag:'especial'
@@ -294,22 +294,25 @@ const PRODUCTS=[
       {src:'https://i.ibb.co/BHFDdnGT/Imagen-de-Whats-App-2025-09-09-a-las-23-41-40-cdb0bb08.jpg', model:'blanca con cuadraditos azules'},
       {src:'https://i.ibb.co/DDpnsxc3/Imagen-de-Whats-App-2025-09-09-a-las-23-41-40-a689e4c3.jpg', model:'blanca con cuadraditos celestes'},
       {src:'https://i.ibb.co/0yzWkbfg/Imagen-de-Whats-App-2025-09-09-a-las-23-41-40-9e7fafbe.jpg', model:'gris con cuadraditos'},
-      {src:'https://i.ibb.co/mVQMfzy2/Imagen-de-Whats-App-2025-09-09-a-las-23-41-41-e4f63b4d.jpg', model:'celeste rayada'}
+      {src:'https://i.ibb.co/mVQMfzy2/Imagen-de-Whats-App-2025-09-09-a-las-23-41-41-e4f63b4d.jpg', model:'celeste rayada'},
+      {src:'https://i.ibb.co/sDTfj5w/Imagen-de-Whats-App-2025-09-11-a-las-17-19-20-3f1a47d0.jpg', model:'azul rayada'},
+      {src:'https://i.ibb.co/tTMVZ4y5/Imagen-de-Whats-App-2025-09-11-a-las-17-19-21-22aaa98f.jpg', model:'marron lisa'},
+      {src:'https://i.ibb.co/Mx2F0PXH/Imagen-de-Whats-App-2025-09-11-a-las-17-19-21-9ea15da8.jpg', model:'blanca lisa'}
     ],
     description:'Marca Rochas. 80% algodón. Varios tonos. Talles del S al XXL.',
     features:['Marca Rochas','80% algodón','Varios tonos disponibles','Talles del S al XXL','Consultá el precio'],
     sizes:['S','M','L','XL','XXL'],
     tag:'especial'
   },
-  /* Nueva: Camisa Rocco con múltiples fotos y precio */
+  /* Camisa Rocco con NUEVAS fotos + modelos, y precio 39.999 */
   { id:'camisa-rocco', categoria:'camisas', name:'Camisa marca Rocco — Oferta especial', price:39999,
     image:'https://i.ibb.co/gZv8X62R/Imagen-de-Whats-App-2025-09-10-a-las-16-31-37-d034c8e0.jpg',
     images:[
-      {src:'https://i.ibb.co/RkTYFdPW/Imagen-de-Whats-App-2025-09-10-a-las-14-48-20-cf197536.jpg', model:'blanca con rayas'},
-      {src:'https://i.ibb.co/MwgthY5/Imagen-de-Whats-App-2025-09-10-a-las-14-48-21-f8be4714.jpg', model:'negra con cuadraditos'},
-      {src:'https://i.ibb.co/rfb3cfdB/Imagen-de-Whats-App-2025-09-10-a-las-14-48-21-8f23e9b5.jpg', model:'celeste lisa'},
-      {src:'https://i.ibb.co/8n4VBF88/Imagen-de-Whats-App-2025-09-10-a-las-14-48-21-264332f7.jpg', model:'blanca lisa'},
-      {src:'https://i.ibb.co/V0XRdgFk/Imagen-de-Whats-App-2025-09-10-a-las-14-48-22-a0a19e03.jpg', model:'negra con rayas'}
+      {src:'https://i.ibb.co/gZv8X62R/Imagen-de-Whats-App-2025-09-10-a-las-16-31-37-d034c8e0.jpg', model:'blanca con rayas'},
+      {src:'https://i.ibb.co/mrM7mpgh/Imagen-de-Whats-App-2025-09-10-a-las-16-31-38-4ab03b07.jpg', model:'negra con cuadraditos'},
+      {src:'https://i.ibb.co/xq52DPBJ/Imagen-de-Whats-App-2025-09-10-a-las-16-31-38-99aed11c.jpg', model:'celeste lisa'},
+      {src:'https://i.ibb.co/tTmYf0T4/Imagen-de-Whats-App-2025-09-10-a-las-16-31-38-dd398098.jpg', model:'blanca lisa'},
+      {src:'https://i.ibb.co/23M4Gwv0/Imagen-de-Whats-App-2025-09-10-a-las-16-31-39-0476913f.jpg', model:'negra con rayas'}
     ],
     description:'Camisas marca Rocco. Oferta especial $39.999. Talles del S al XXL.',
     features:['Marca Rocco','Varios tonos y diseños','Talles del S al XXL','Oferta especial $39.999'],
@@ -352,11 +355,10 @@ function renderProductsGrid(list){
   });
 }
 
-// Build index
+// Build index (sin emojis, orden fijo)
 function buildIndex(){
   const cont = document.getElementById('catalogoIndice');
   const cats = Array.from(new Set(PRODUCTS.map(p=>p.categoria)));
-  // Orden fijo deseado
   const ORDER = ['camperas','camisas','remeras','chalecos','pantalones'];
   const ordered = ORDER.filter(c=>cats.includes(c)).concat(cats.filter(c=>!ORDER.includes(c)));
   cont.innerHTML = '';
