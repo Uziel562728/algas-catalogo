@@ -35,7 +35,7 @@ background:linear-gradient(160deg,#eafff8,#a9efcf);min-height:60vh;padding-top:1
 
 /* Grid */
 .grid{display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
-@media (max-width: 768px){ .grid{ grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 768px){ .grid{ grid-template-columns: repeat(2, 1fr);}}
 .card{position:relative;background:#fff;border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,0.1);
 padding:14px;text-align:center;min-height:360px;display:flex;flex-direction:column;justify-content:flex-start;cursor:pointer}
 .card img{width:100%;height:auto;max-height:240px;object-fit:contain;display:block;margin:0 auto 10px;border-radius:8px;background:#f4f4f4}
@@ -68,9 +68,9 @@ ul{padding-left:20px;margin:10px 0}
 
 /* Carousel (detail) */
 .carousel{position:relative;width:100%;height:auto;overflow:hidden}
-.carousel-track{display:flex;transition:transform .35s ease;gap:10px}
-.carousel-slide{min-width:100%;user-select:none}
-.carousel-slide img{width:100%;height:auto;max-height:70vh;object-fit:contain;border-radius:12px;background:#f4f4f4}
+.carousel-track{display:flex;transition:transform .35s ease; will-change:transform; gap:0;}
+.carousel-slide{min-width:100%;user-select:none flex:0 0 100%;}
+.carousel-slide img{width:100%;height:auto;max-height:70vh;object-fit:contain;border-radius:12px;background:#f4f4f4 display:block;}
 .carousel-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.6);color:#fff;border:2px solid rgba(255,255,255,.85);
 box-shadow:0 2px 8px rgba(0,0,0,.35);z-index:2;border-radius:50%;width:42px;height:42px;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:saturate(140%) blur(2px)}
 .carousel-btn.prev{left:8px}
@@ -207,85 +207,73 @@ const PRODUCTS=[
     description:'Campera doble pechera de la marca Buckingham Polo Club, pensada para brindar abrigo y estilo. Disponible en talle XL.',
     features:['Diseño de doble pechera para mayor protección térmica','Marca Buckingham Polo Club, símbolo de elegancia','Materiales resistentes y costuras reforzadas','Disponible en talle XL','10% OFF pagando en efectivo o transferencia'],
     sizes:['XL'],
-    tag:'off'
-  },
+    tag:'off'},
   { id:'campera-impermeable', categoria:'camperas', name:'Campera Impermeable con Capucha Desmontable Buckingham Polo Club', price:40000,
     image:'https://i.ibb.co/j9m1hd5s/Imagen-de-Whats-App-2025-09-02-a-las-15-04-22-3e106fdf.jpg',
     description:'Campera impermeable con capucha desmontable de Buckingham Polo Club. Ideal para lluvia y frío. Disponible en XL y color azul.',
     features:['Material impermeable de alta calidad','Capucha desmontable con cierre oculto','Confección resistente y cómoda','Marca Buckingham Polo Club','Disponible en talle XL y en color azul'],
     sizes:['XL'],
-    tag:null
-  },
+    tag:null},
   { id:'campera-backing', categoria:'camperas', name:'Campera Backing Polo Club — Oferta Especial', price:25000,
     image:'https://i.ibb.co/nNZkfLKQ/Imagen-de-Whats-App-2025-09-02-a-las-15-04-22-98e2bc66.jpg',
     description:'Campera Backing Polo Club en color único. Oferta especial desde talle S hasta doble XL.',
     features:['Diseño exclusivo de Backing Polo Club','Oferta limitada a un único color','Disponible desde talle S hasta doble XL','Confección resistente y cómoda','Precio promocional especial'],
     sizes:['S','M','L','XL','XXL'],
-    tag:'especial'
-  },
+    tag:'especial'},
   { id:'campera-buckingham-reversible', categoria:'camperas', name:'Campera Buckingham Polo Club — Reversible', price:35000,
     image:'https://i.ibb.co/60gWC3Cg/Imagen-de-Whats-App-2025-09-02-a-las-15-04-22-9543c4f7.jpg',
     description:'Campera reversible de Buckingham Polo Club, ideal para diferentes estilos y situaciones. Disponible en talles S a doble XL.',
     features:['Diseño reversible para dos estilos','Marca Buckingham Polo Club, sinónimo de calidad','Ideal para climas fríos y moderados','Disponible en talles desde S a XXL','Precio increíble $35.000'],
     sizes:['S','M','L','XL','XXL'],
-    tag:null
-  },
+    tag:null},
   { id:'campera-engomada', categoria:'camperas', name:'Campera Engomada Buckingham Polo Club', price:45000,
     image:'https://i.ibb.co/xShQ1PGx/Imagen-de-Whats-App-2025-09-02-a-las-15-04-23-01309848.jpg',
     description:'Campera engomada Buckingham Polo Club, del talle S al doble XL. Terminación engomada con excelente resistencia y estilo.',
     features:['Terminación engomada de alta resistencia','Marca Buckingham Polo Club','Disponible del S al XXL','Interior cómodo para uso diario','Precio especial $45.000'],
     sizes:['S','M','L','XL','XXL'],
-    tag:null
-  },
+    tag:null},
   { id:'campera-capucha-desmontable', categoria:'camperas', name:'Campera Buckingham Polo Club — Capucha Desmontable', price:40000,
     image:'https://i.ibb.co/tw0QJtkp/Imagen-de-Whats-App-2025-09-02-a-las-15-04-23-995082e4.jpg',
     description:'Campera con capucha desmontable e impermeable de Buckingham Polo Club, con precio increíble. Ideal para lluvia y uso diario.',
     features:['Capucha desmontable para mayor versatilidad','Tejido impermeable para lluvia','Marca Buckingham Polo Club','Confección cómoda para uso diario','Precio increíble: $40.000'],
     sizes:['S','M','L','XL','XXL'],
-    tag:null
-  },
+    tag:null},
   { id:'campera-uniqlo-impermeable', categoria:'camperas', name:'Campera Impermeable Símil Uniqlo Buckingham Polo Club', price:25000,
     image:'https://i.ibb.co/nN4sKcMj/Imagen-de-Whats-App-2025-09-02-a-las-15-04-23-bf6f3281.jpg',
     description:'Campera impermeable símil Uniqlo de Buckingham Polo Club, disponible del talle S al XXL. Precio imbatible: $25.000.',
     features:['Inspirada en el estilo Uniqlo','Material impermeable de alta calidad','Disponible del talle S al XXL','Confección cómoda y resistente','Precio imbatible $25.000'],
     sizes:['S','M','L','XL','XXL'],
-    tag:null
-  },
+    tag:null},
   { id:'campera-impermeable-oferta', categoria:'camperas', name:'Campera Impermeable — Oferta Limitada', price:35000,
     image:'https://i.ibb.co/zVHHrw0V/Imagen-de-Whats-App-2025-09-04-a-las-11-06-23-83ac75f2.jpg',
     description:'Campera impermeable. Oferta limitada desde el talle S al doble XL. Precio promocional $35.000 (transferencia o efectivo).',
     features:['Impermeable de alta calidad','Oferta limitada','Disponible desde talle S hasta doble XL','Precio promocional especial $35.000','Pagando con transferencia o efectivo'],
     sizes:['S','M','L','XL','XXL'],
-    tag:'especial'
-  },
+    tag:'especial'},
   { id:'campera-rompevientos', categoria:'camperas', name:'Rompevientos Buckingham Polo Club', price:40000,
     image:'https://i.ibb.co/DPQ8mYZm/Imagen-de-Whats-App-2025-09-04-a-las-10-33-16-0ff45917.jpg',
     description:'Varios modelos, talles y colores, del Small al XXL. ¡Increíble oferta $40.000!',
     features:['Rompevientos liviano','Varios modelos y colores','Talles S al XXL','Secado rápido','Excelente relación precio-calidad'],
     sizes:['S','M','L','XL','XXL'],
-    tag:'especial'
-  },
+    tag:'especial'},
   { id:'chaleco-impermeable', categoria:'chalecos', name:'Chaleco Impermeable Buckingham Polo Club', price:35000,
     image:'https://i.ibb.co/JwPW5XPS/Imagen-de-Whats-App-2025-09-04-a-las-10-33-17-ba7943c4.jpg',
     description:'Único color. Precio $35.000.',
     features:['Tejido impermeable','Único color','Marca Buckingham Polo Club','Liviano y cómodo','Ideal para lluvia y viento'],
     sizes:['S','M','L','XL','XXL'],
-    tag:'especial'
-  },
+    tag:'especial'},
   { id:'camisaco-corderito', categoria:'camperas', name:'Camisaco forrado en Corderito', price:35000,
     image:'https://i.ibb.co/jqdFsKW/Imagen-de-Whats-App-2025-09-04-a-las-10-33-17-1b371c5b.jpg',
     description:'Últimas unidades. Del talle S al XL.',
     features:['Forrado en corderito','Últimas unidades','Del S al XL','Abrigo suave y cómodo'],
     sizes:['S','M','L','XL'],
-    tag:'especial'
-  },
+    tag:'especial'},
   { id:'remera-mc-premium', categoria:'remeras', name:'Remera Manga Corta - Primera Marca (Algodón Peinado)', price:20000,
     image:'https://i.ibb.co/k62gp4Zw/Imagen-de-Whats-App-2025-09-04-a-las-22-34-46-2e91c20e.jpg',
     description:'Oferta especial. Algodón peinado, calidad primera marca.',
     features:['Algodón peinado','Primera marca','Oferta especial','Corte clásico y cómodo'],
     sizes:['XS','S','M','L','XL','XXL'],
-    tag:'especial'
-  },
+    tag:'especial'},
   /* Camisa Rochas con modelos y precio a consultar (no se agrega al carrito) */
   { id:'camisa-rochas', categoria:'camisas', name:'Camisa primera marca Rochas', price:null,
     image:'https://i.ibb.co/qMzbzg3g/Imagen-de-Whats-App-2025-09-09-a-las-23-41-40-dc17556f.jpg',
@@ -302,8 +290,7 @@ const PRODUCTS=[
     description:'Marca Rochas. 80% algodón. Varios tonos. Talles del S al XXL.',
     features:['Marca Rochas','80% algodón','Varios tonos disponibles','Talles del S al XXL','Consultá el precio'],
     sizes:['S','M','L','XL','XXL'],
-    tag:'especial'
-  },
+    tag:'especial'},
   /* Camisa Rocco con NUEVAS fotos + modelos, y precio 39.999 */
   { id:'camisa-rocco', categoria:'camisas', name:'Camisa marca Rocco — Oferta especial', price:39999,
     image:'https://i.ibb.co/gZv8X62R/Imagen-de-Whats-App-2025-09-10-a-las-16-31-37-d034c8e0.jpg',
@@ -317,8 +304,7 @@ const PRODUCTS=[
     description:'Camisas marca Rocco. Oferta especial $39.999. Talles del S al XXL.',
     features:['Marca Rocco','Varios tonos y diseños','Talles del S al XXL','Oferta especial $39.999'],
     sizes:['S','M','L','XL','XXL'],
-    tag:'especial'
-  }
+    tag:'especial'}
 ];
 
 // Helpers
@@ -338,8 +324,7 @@ function renderProductsGrid(list){
   const productos = list && Array.isArray(list) ? list : PRODUCTS;
   if(productos.length===0){
     const ph=document.createElement('div'); ph.className='card'; ph.innerHTML='<strong>Sin productos</strong>';
-    grid.appendChild(ph); return;
-  }
+    grid.appendChild(ph); return;}
   productos.forEach(p=>{
     const el=document.createElement('div');
     el.className='card product-card';
@@ -350,10 +335,8 @@ function renderProductsGrid(list){
     el.innerHTML=card(p);
     const open=()=>showProductDetail(p.id);
     el.addEventListener('click', open);
-    el.addEventListener('keydown', ev=>{ if(ev.key==='Enter'||ev.key===' '){ ev.preventDefault(); open(); } });
-    grid.appendChild(el);
-  });
-}
+    el.addEventListener('keydown', ev=>{ if(ev.key==='Enter'||ev.key===' '){ ev.preventDefault(); open();}});
+    grid.appendChild(el);});}
 
 // Build index (sin emojis, orden fijo)
 function buildIndex(){
@@ -374,8 +357,7 @@ function buildIndex(){
     b.className='btn';
     b.dataset.cat=c;
     b.textContent = c.charAt(0).toUpperCase()+c.slice(1);
-    cont.appendChild(b);
-  });
+    cont.appendChild(b);});
 
   cont.addEventListener('click', e=>{
     const btn=e.target.closest('button[data-cat]'); if(!btn) return;
@@ -385,9 +367,7 @@ function buildIndex(){
     renderProductsGrid(cat==='all'?PRODUCTS:PRODUCTS.filter(p=>p.categoria===cat));
     const header=document.querySelector('header'); const offset=(header?header.offsetHeight:70)+10;
     const y=document.getElementById('productos').getBoundingClientRect().top + window.scrollY - offset;
-    window.scrollTo({behavior:'smooth', top:y});
-  });
-}
+    window.scrollTo({behavior:'smooth', top:y});});}
 
 // Carousel
 function buildCarousel(images){
@@ -402,8 +382,7 @@ function buildCarousel(images){
       <button class="carousel-btn next" aria-label="Siguiente" data-dir="1">›</button>
       <div class="carousel-dots" id="carouselDots">${dots}</div>
       <div id="carouselCaption" style="text-align:center;margin-top:6px;font-weight:bold;color:#2d5a42"></div>
-    </div>`;
-}
+    </div>`;}
 
 let carouselIndex = 0;
 function attachCarouselHandlers(){
@@ -414,36 +393,30 @@ function attachCarouselHandlers(){
   const caption = document.getElementById('carouselCaption');
   const update = ()=>{
     track.style.transform = `translateX(${-carouselIndex*100}%)`;
-    dots.forEach((d,i)=>{ d.classList.toggle('active', i===carouselIndex); });
+    dots.forEach((d,i)=>{ d.classList.toggle('active', i===carouselIndex);});
     if(currentProduct && (currentProduct.id==='camisa-rochas' || currentProduct.id==='camisa-rocco') && Array.isArray(currentProduct.images)){
       const obj = currentProduct.images[carouselIndex];
       const label = (obj && (obj.model||obj.alt)) ? (obj.model||obj.alt) : '';
       selectedModel = label || null;
-      if(caption){ caption.textContent = label ? `Modelo: ${label}` : ''; }
-    }else{
+      if(caption){ caption.textContent = label ? `Modelo: ${label}` : '';}}else{
       selectedModel = null;
-      if(caption){ caption.textContent=''; }
-    }
-  };
-  if(prev) prev.onclick = ()=>{ carouselIndex = Math.max(0, carouselIndex-1); update(); };
-  if(next) next.onclick = ()=>{ const total = dots.length; carouselIndex = Math.min(total-1, carouselIndex+1); update(); };
-  dots.forEach((d,i)=> d.onclick = ()=>{ carouselIndex = i; update(); });
+      if(caption){ caption.textContent='';}}};
+  if(prev) prev.onclick = ()=>{ carouselIndex = Math.max(0, carouselIndex-1); update();};
+  if(next) next.onclick = ()=>{ const total = dots.length; carouselIndex = Math.min(total-1, carouselIndex+1); update();};
+  dots.forEach((d,i)=> d.onclick = ()=>{ carouselIndex = i; update();});
 
   // Swipe
   let startX=0, dx=0;
   const el = document.getElementById('carousel');
   if(el){
-    el.addEventListener('touchstart', e=>{ startX = e.touches[0].clientX; }, {passive:true});
-    el.addEventListener('touchmove', e=>{ dx = e.touches[0].clientX - startX; }, {passive:true});
+    el.addEventListener('touchstart', e=>{ startX = e.touches[0].clientX;}, {passive:true});
+    el.addEventListener('touchmove', e=>{ dx = e.touches[0].clientX - startX;}, {passive:true});
     el.addEventListener('touchend', ()=>{
       const total = dots.length;
       if(dx < -40) carouselIndex = Math.min(total-1, carouselIndex+1);
       if(dx > 40) carouselIndex = Math.max(0, carouselIndex-1);
-      dx = 0; update();
-    });
-  }
-  update();
-}
+      dx = 0; update();});}
+  update();}
 
 // Detalle
 function showProductDetail(id, silent=false){
@@ -463,53 +436,44 @@ function showProductDetail(id, silent=false){
     carouselIndex = 0;
     document.getElementById('detailImage').innerHTML = buildCarousel(p.images);
     if((p.id==='camisa-rochas' || p.id==='camisa-rocco') && p.images[0] && (p.images[0].model||p.images[0].alt)){
-      selectedModel = p.images[0].model||p.images[0].alt;
-    }
-    setTimeout(attachCarouselHandlers, 0);
-  }else{
-    document.getElementById('detailImage').innerHTML=`<img referrerpolicy="no-referrer" src="${p.image}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/500x400?text=Sin+Imagen'">`;
-  }
+      selectedModel = p.images[0].model||p.images[0].alt;}
+    setTimeout(attachCarouselHandlers, 0);}else{
+    document.getElementById('detailImage').innerHTML=`<img referrerpolicy="no-referrer" src="${p.image}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/500x400?text=Sin+Imagen'">`;}
 
   document.getElementById('detailName').textContent=p.name;
   document.getElementById('detailPrice').textContent = priceLabel(p);
   document.getElementById('detailDesc').textContent=p.description;
 
   const ul=document.getElementById('detailFeatures'); ul.innerHTML='';
-  (p.features||[]).forEach(f=>{ const li=document.createElement('li'); li.textContent=f; ul.appendChild(li); });
+  (p.features||[]).forEach(f=>{ const li=document.createElement('li'); li.textContent=f; ul.appendChild(li);});
 
   // Talles
   const szCont=document.getElementById('detailSizes'); szCont.innerHTML='';
   (p.sizes||[]).forEach(s=>{
     const chip=document.createElement('span'); chip.className='size-chip'; chip.textContent=s;
     chip.setAttribute('role','button'); chip.setAttribute('tabindex','0'); chip.setAttribute('aria-label','Seleccionar talle '+s);
-    const select=()=>{ selectedSize=s; szCont.querySelectorAll('.size-chip').forEach(c=>c.classList.remove('selected')); chip.classList.add('selected'); const warn=document.getElementById('sizeWarning'); if(warn) warn.style.display='none'; };
+    const select=()=>{ selectedSize=s; szCont.querySelectorAll('.size-chip').forEach(c=>c.classList.remove('selected')); chip.classList.add('selected'); const warn=document.getElementById('sizeWarning'); if(warn) warn.style.display='none';};
     chip.addEventListener('click', select);
-    chip.addEventListener('keydown', ev=>{ if(ev.key==='Enter'||ev.key===' '){ ev.preventDefault(); select(); } });
-    szCont.appendChild(chip);
-  });
+    chip.addEventListener('keydown', ev=>{ if(ev.key==='Enter'||ev.key===' '){ ev.preventDefault(); select();}});
+    szCont.appendChild(chip);});
 
   // Botón carrito: deshabilitar para precio null (p.ej. camisas Rochas)
   const addBtn=document.getElementById('addBtn');
   if(addBtn){
     if(p.price==null){
       addBtn.setAttribute('disabled','disabled');
-      addBtn.textContent='🛒 No disponible (consultar precio)';
-    }else{
+      addBtn.textContent='🛒 No disponible (consultar precio)';}else{
       addBtn.removeAttribute('disabled');
-      addBtn.textContent='🛒 Agregar al Carrito';
-    }
-  }
+      addBtn.textContent='🛒 Agregar al Carrito';}}
 
   // Scroll justo bajo el header (hasta donde termina el fondo verde)
   requestAnimationFrame(()=>{
     const header = document.querySelector('header');
     const offset = (header ? header.offsetHeight : 70) + 10;
     const y = detail.getBoundingClientRect().top + window.scrollY - offset;
-    window.scrollTo({top:y, behavior:'smooth'});
-  });
+    window.scrollTo({top:y, behavior:'smooth'});});
 
-  if(!silent){ history.pushState({view:'detail', productId:id}, '', '#detalle-'+id); }
-}
+  if(!silent){ history.pushState({view:'detail', productId:id}, '', '#detalle-'+id);}}
 
 function goHome(){
   selectedModel = null;
@@ -519,9 +483,8 @@ function goHome(){
   if(detail) detail.style.display='none';
   if(hero) hero.style.display='block';
   if(productos) productos.style.display='block';
-  requestAnimationFrame(()=>{ window.scrollTo({ top: prevScrollY, behavior:'smooth' }); });
-  history.replaceState({view:'grid'}, document.title, window.location.pathname + window.location.search);
-}
+  requestAnimationFrame(()=>{ window.scrollTo({ top: prevScrollY, behavior:'smooth'});});
+  history.replaceState({view:'grid'}, document.title, window.location.pathname + window.location.search);}
 
 function goToProducts(){
   selectedModel = null;
@@ -535,23 +498,20 @@ function goToProducts(){
   const offset=(header?header.offsetHeight:70)+10;
   const y=productos.getBoundingClientRect().top + window.scrollY - offset;
   window.scrollTo({top:y, behavior:'smooth'});
-  history.replaceState({view:'grid'}, document.title, window.location.pathname + window.location.search);
-}
+  history.replaceState({view:'grid'}, document.title, window.location.pathname + window.location.search);}
 
 // Carrito
 function addToCart(p){
   if(!p) return;
-  if(p.price==null){ return; } // bloquea productos sin precio
+  if(p.price==null){ return;} // bloquea productos sin precio
   if(!selectedSize){
     const warn=document.getElementById('sizeWarning'); if(warn) warn.style.display='block';
-    return;
-  }
+    return;}
   const key = p.id + '::' + selectedSize;
   const found=cart.find(i=>i.key===key);
-  if(found){ found.qty++; } else { cart.push({...p,qty:1,key,size:selectedSize}); }
+  if(found){ found.qty++;} else { cart.push({...p,qty:1,key,size:selectedSize});}
   updateCartDisplay();
-  const fab=document.getElementById('cartFab'); if(fab){fab.classList.add('bounce'); setTimeout(()=>fab.classList.remove('bounce'),600);}
-}
+  const fab=document.getElementById('cartFab'); if(fab){fab.classList.add('bounce'); setTimeout(()=>fab.classList.remove('bounce'),600);}}
 
 function updateCartDisplay(){
   const count=document.getElementById('cartCount'); if(count) count.textContent=cart.reduce((a,b)=>a+b.qty,0);
@@ -566,19 +526,17 @@ function updateCartDisplay(){
         <button type="button" onclick="updateQuantity(${i},1)">+</button>
       </div>
       <span>${labelSub}</span>`;
-    items.appendChild(div);
-  });
+    items.appendChild(div);});
   const total=cart.reduce((s,it)=>s+(it.price==null?0:it.price*it.qty),0);
-  const totalEl=document.getElementById('cartTotal'); if(totalEl) totalEl.textContent='Total: '+fmt(total);
-}
+  const totalEl=document.getElementById('cartTotal'); if(totalEl) totalEl.textContent='Total: '+fmt(total);}
 
-function updateQuantity(i,change){ cart[i].qty+=change; if(cart[i].qty<=0){cart.splice(i,1);} updateCartDisplay(); }
-function clearCart(){ cart = []; updateCartDisplay(); }
-function toggleCart(){ const m=document.getElementById('cartModal'); if(!m) return; m.style.display=(m.style.display==='flex')?'none':'flex'; }
+function updateQuantity(i,change){ cart[i].qty+=change; if(cart[i].qty<=0){cart.splice(i,1);} updateCartDisplay();}
+function clearCart(){ cart = []; updateCartDisplay();}
+function toggleCart(){ const m=document.getElementById('cartModal'); if(!m) return; m.style.display=(m.style.display==='flex')?'none':'flex';}
 
 // Checkout agrupando talles por producto
 function checkout(){
-  if(cart.length===0){ alert('El carrito está vacío'); return; }
+  if(cart.length===0){ alert('El carrito está vacío'); return;}
 
   // Agrupar por producto (id + precio) y consolidar talles
   const groups = {};
@@ -590,14 +548,11 @@ function checkout(){
         name: it.name,
         price: hasPrice ? it.price : null,
         sizes: {},
-        qtyTotal: 0
-      };
-    }
+        qtyTotal: 0};}
     const g = groups[key];
     const sz = it.size || '-';
     g.sizes[sz] = (g.sizes[sz]||0) + it.qty;
-    g.qtyTotal += it.qty;
-  });
+    g.qtyTotal += it.qty;});
 
   let lines = [
     '¡Hola buenas! Quiero hacer un pedido de las siguientes prendas:',
@@ -615,18 +570,14 @@ function checkout(){
 
     lines.push(`• ${g.name}`);
     Object.keys(g.sizes).forEach(talle=>{
-      lines.push(`   - Talle ${talle}: ${g.sizes[talle]} unidades`);
-    });
+      lines.push(`   - Talle ${talle}: ${g.sizes[talle]} unidades`);});
 
     if(hasPrice){
       lines.push(`  Precio unitario: ${unit}`);
       lines.push(`  Subtotal: ${fmt(subtotal)}`);
-      total += subtotal;
-    }else{
-      lines.push(`  Precio: A consultar`);
-    }
-    lines.push('');
-  });
+      total += subtotal;}else{
+      lines.push(`  Precio: A consultar`);}
+    lines.push('');});
 
   lines.push('━━━━━━━━━━━━━━━━━━━━');
   lines.push(`💰 TOTAL: ${fmt(total)}`);
@@ -634,13 +585,11 @@ function checkout(){
   lines.push('¡Espero su confirmación! 😊');
 
   const msg = encodeURIComponent(lines.join('\n'));
-  window.open(`https://wa.me/${WA_NUMBER}?text=${msg}`,'_blank');
-}
+  window.open(`https://wa.me/${WA_NUMBER}?text=${msg}`,'_blank');}
 
 // WhatsApp FAB & botón detalle
 document.getElementById('whatsappFab').addEventListener('click',()=>{
-  const msg=encodeURIComponent('¡Hola! Me interesa conocer más sobre los productos de Algas.'); window.open(`https://wa.me/${WA_NUMBER}?text=${msg}`,'_blank');
-});
+  const msg=encodeURIComponent('¡Hola! Me interesa conocer más sobre los productos de Algas.'); window.open(`https://wa.me/${WA_NUMBER}?text=${msg}`,'_blank');});
 
 function consultarWhatsApp(){
   if(!currentProduct) return;
@@ -650,14 +599,12 @@ function consultarWhatsApp(){
   const talla = selectedSize ? `\n📏 Talle ${selectedSize}: ¿hay disponibilidad?` : '';
   const modelo = (currentProduct && (currentProduct.id==='camisa-rochas' || currentProduct.id==='camisa-rocco') && selectedModel) ? `\n🧵 Modelo: ${selectedModel}` : '';
   const msg=encodeURIComponent(base + talla + modelo);
-  window.open(`https://wa.me/${WA_NUMBER}?text=${msg}`,'_blank');
-}
+  window.open(`https://wa.me/${WA_NUMBER}?text=${msg}`,'_blank');}
 
 // Navegación
 document.addEventListener('click', (e)=>{
-  const btn=e.target.closest('#backHome'); if(btn){ e.preventDefault(); goHome(); }
-});
-document.getElementById('btnVerProductos').addEventListener('click', (e)=>{ e.preventDefault(); goToProducts(); });
+  const btn=e.target.closest('#backHome'); if(btn){ e.preventDefault(); goHome();}});
+document.getElementById('btnVerProductos').addEventListener('click', (e)=>{ e.preventDefault(); goToProducts();});
 
 // FAB de WhatsApp sube al detectar footer
 (function(){const fab=document.getElementById('whatsappFab');const footer=document.querySelector('footer');if(fab&&footer&&'IntersectionObserver'in window){const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){fab.classList.add('lifted')}else{fab.classList.remove('lifted')}})}, {root:null,threshold:0});io.observe(footer);}})();
@@ -666,14 +613,11 @@ document.getElementById('btnVerProductos').addEventListener('click', (e)=>{ e.pr
 window.addEventListener('popstate', (event)=>{
   if(event.state && event.state.view==='detail'){
     const pid = event.state.productId;
-    showProductDetail(pid, true);
-  }else{
+    showProductDetail(pid, true);}else{
     document.getElementById('productDetail').style.display='none';
     document.getElementById('productos').style.display='block';
     document.getElementById('inicio').style.display='block';
-    requestAnimationFrame(()=>{ window.scrollTo({ top: prevScrollY, behavior:'smooth' }); });
-  }
-});
+    requestAnimationFrame(()=>{ window.scrollTo({ top: prevScrollY, behavior:'smooth'});});}});
 
 // Init
 document.addEventListener('DOMContentLoaded', ()=>{
@@ -690,12 +634,9 @@ document.addEventListener('DOMContentLoaded', ()=>{
   if(hash.startsWith('#detalle-')){
     const pid = hash.replace('#detalle-','');
     const p = PRODUCTS.find(x=>x.id===pid);
-    if(p){ showProductDetail(pid, true); history.replaceState({view:'detail', productId:pid}, '', '#detalle-'+pid); }
-    else { history.replaceState({view:'grid'}, document.title, window.location.pathname + window.location.search); }
-  }else{
-    history.replaceState({view:'grid'}, document.title, window.location.pathname + window.location.search);
-  }
-});
+    if(p){ showProductDetail(pid, true); history.replaceState({view:'detail', productId:pid}, '', '#detalle-'+pid);}
+    else { history.replaceState({view:'grid'}, document.title, window.location.pathname + window.location.search);}}else{
+    history.replaceState({view:'grid'}, document.title, window.location.pathname + window.location.search);}});
 </script>
 </body>
 </html>
