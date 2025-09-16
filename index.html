@@ -296,9 +296,36 @@ const PRODUCTS=[
     sizes:['S','M','L','XL','XXL'],
     tag:'especial'
   }
+  ,
+  { id:'camisa-ysl', categoria:'camisas', name:'Camisa Yves Saint Laurent — 100% Algodón', priceRange:[50000,70000],
+    image:'https://i.ibb.co/tM3rFddt/Imagen-de-Whats-App-2025-09-15-a-las-16-22-09-bd64a629.jpg',
+    images:[
+      {src:'https://i.ibb.co/tM3rFddt/Imagen-de-Whats-App-2025-09-15-a-las-16-22-09-bd64a629.jpg', model:'modelo 01'},
+      {src:'https://i.ibb.co/LzyYt9L1/Imagen-de-Whats-App-2025-09-15-a-las-16-22-10-14e1a743.jpg', model:'modelo 02'},
+      {src:'https://i.ibb.co/xqGrQLNV/Imagen-de-Whats-App-2025-09-15-a-las-16-22-10-d9c3ca50.jpg', model:'modelo 03'},
+      {src:'https://i.ibb.co/YBzK92Bw/Imagen-de-Whats-App-2025-09-15-a-las-16-22-10-478a6c88.jpg', model:'modelo 04'},
+      {src:'https://i.ibb.co/mV3NyWv7/Imagen-de-Whats-App-2025-09-15-a-las-16-22-10-62b4189e.jpg', model:'modelo 05'},
+      {src:'https://i.ibb.co/27LnnSdj/Imagen-de-Whats-App-2025-09-15-a-las-16-22-11-3591d70d.jpg', model:'modelo 06'},
+      {src:'https://i.ibb.co/pvhHXhpx/Imagen-de-Whats-App-2025-09-15-a-las-16-22-11-c53aee86.jpg', model:'modelo 07'},
+      {src:'https://i.ibb.co/xcFR2w4/Imagen-de-Whats-App-2025-09-15-a-las-16-22-11-3050943c.jpg', model:'modelo 08'},
+      {src:'https://i.ibb.co/3ydTxVQ1/Imagen-de-Whats-App-2025-09-15-a-las-16-22-12-feb4e7e4.jpg', model:'modelo 09'},
+      {src:'https://i.ibb.co/TxWMdDVR/Imagen-de-Whats-App-2025-09-15-a-las-16-22-12-d79c3e84.jpg', model:'modelo 10'},
+      {src:'https://i.ibb.co/BVxSvKFC/Imagen-de-Whats-App-2025-09-15-a-las-16-22-12-abdb9f42.jpg', model:'modelo 11'},
+      {src:'https://i.ibb.co/8LTFT59N/Imagen-de-Whats-App-2025-09-15-a-las-16-22-13-744a2e8e.jpg', model:'modelo 12'},
+      {src:'https://i.ibb.co/qqfVWnC/Imagen-de-Whats-App-2025-09-15-a-las-16-22-13-35fe9016.jpg', model:'modelo 13'},
+      {src:'https://i.ibb.co/TMNmnWkD/Imagen-de-Whats-App-2025-09-15-a-las-16-22-13-47d26d6f.jpg', model:'modelo 14'},
+      {src:'https://i.ibb.co/ZDnW7rj/Imagen-de-Whats-App-2025-09-15-a-las-16-22-13-395d716f.jpg', model:'modelo 15'},
+      {src:'https://i.ibb.co/mLchkJf/Imagen-de-Whats-App-2025-09-15-a-las-16-22-14-e09a9aaf.jpg', model:'modelo 16'},
+      {src:'https://i.ibb.co/hxLX8fDt/Imagen-de-Whats-App-2025-09-15-a-las-16-22-14-3f416705.jpg', model:'modelo 17'}
+    ],
+    description:'Sastrería de lujo en algodón 100% de fibra larga. Terminación impecable en cuello y puños; corte moderno con estructura clásica.',
+    features:['100% algodón premium','Costuras reforzadas','Conserva forma y color','Corte moderno'],
+    sizes:['S','M','L','XL','XXL'],
+    tag:'especial'
+  }
 ];
 // Helpers
-const priceLabel = (p)=> (p.price==null ? 'Consultar precio' : fmt(p.price));
+const priceLabel = (p)=>{ if(typeof p.price==='number') return fmt(p.price); if(Array.isArray(p.priceRange)&&p.priceRange.length===2) return fmt(p.priceRange[0])+'–'+fmt(p.priceRange[1]); return 'Consultar precio'; };
 const makeBadge = (tag)=> tag==='off'?"<span class='badge off'>OFF</span>":(tag==='especial'?"<span class='badge especial'>ESPECIAL</span>":"");
 const card = (p)=>`
   ${makeBadge(p.tag)}
@@ -372,6 +399,57 @@ function buildCarousel(images){
       <div id="carouselCaption" style="text-align:center;margin-top:6px;font-weight:bold;color:#2d5a42"></div>
     </div>`;
 }
+// === Precios por modelo (YSL) ===
+const MODEL_PRICES = {
+  'camisa-ysl': {
+    'modelo 01': 50000,
+    'modelo 02': 60000,
+    'modelo 03': 50000,
+    'modelo 04': 50000,
+    'modelo 05': 60000,
+    'modelo 06': 50000,
+    'modelo 07': 60000,
+    'modelo 08': 60000,
+    'modelo 09': 50000,
+    'modelo 10': 50000,
+    'modelo 11': 50000,
+    'modelo 12': 50000,
+    'modelo 13': 60000,
+    'modelo 14': 70000,
+    'modelo 15': 60000,
+    'modelo 16': 70000,
+    'modelo 17': 60000
+  }
+};
+// Helpers de precio en detalle (sin tocar tu lógica de render)
+function detailPriceForSelection(){
+  if(!currentProduct) return null;
+  if(selectedModel && MODEL_PRICES[currentProduct.id] && typeof MODEL_PRICES[currentProduct.id][selectedModel]==='number'){
+    return MODEL_PRICES[currentProduct.id][selectedModel];
+  }
+  if(typeof currentProduct.price==='number') return currentProduct.price;
+  if(Array.isArray(currentProduct.priceRange)) return null; // para YSL sin modelo, evitamos mostrar rango en detalle
+  return null;
+}
+function updateDetailPriceUI(){
+  const el = document.getElementById('detailPrice');
+  const addBtn = document.getElementById('addBtn');
+  if(!el) return;
+  const priceNum = detailPriceForSelection();
+  if(typeof priceNum==='number'){
+    el.textContent = fmt(priceNum);
+    if(addBtn){ addBtn.removeAttribute('disabled'); addBtn.disabled=false; addBtn.textContent='🛒 Agregar al Carrito'; }
+  }else{
+    // Si no hay precio (p.ej. YSL sin modelo seleccionado aún), elegimos la primera imagen como default
+    if(currentProduct && currentProduct.id==='camisa-ysl' && currentProduct.images && currentProduct.images[0]){
+      selectedModel = currentProduct.images[0].model || currentProduct.images[0].alt || 'modelo 01';
+      const p = detailPriceForSelection();
+      if(typeof p==='number'){ el.textContent = fmt(p); if(addBtn){ addBtn.removeAttribute('disabled'); addBtn.disabled=false; addBtn.textContent='🛒 Agregar al Carrito'; } return; }
+    }
+    el.textContent = 'Consultar precio';
+    if(addBtn){ addBtn.setAttribute('disabled','disabled'); addBtn.disabled=true; addBtn.textContent='🛒 No disponible'; }
+  }
+}
 let carouselIndex = 0;
 function attachCarouselHandlers(){
   const track = document.getElementById('carouselTrack');
@@ -381,12 +459,17 @@ function attachCarouselHandlers(){
   const caption = document.getElementById('carouselCaption');
   const update = ()=>{
     track.style.transform = `translateX(${-carouselIndex*100}%)`;
-    dots.forEach((d,i)=>{ d.classList.toggle('active', i===carouselIndex); });
-    if(currentProduct && (currentProduct.id==='camisa-rochas' || currentProduct.id==='camisa-rocco') && Array.isArray(currentProduct.images)){
+    dots.forEach((d,i)=>{ d.classList.toggle('active', i===carouselIndex); 
+   updateModelAndPrice(); // -- YSL: setear modelo según slide actual
+  try{ if(currentProduct && currentProduct.images && currentProduct.images[carouselIndex]){ const it=currentProduct.images[carouselIndex]; selectedModel = (it.model||it.alt)||selectedModel; } }catch(e){}
+  if(typeof updateDetailPriceUI==='function') updateDetailPriceUI();
+});
+    if(currentProduct && Array.isArray(currentProduct.images)){
       const obj = currentProduct.images[carouselIndex];
       const label = (obj && (obj.model||obj.alt)) ? (obj.model||obj.alt) : '';
       selectedModel = label || null;
       if(caption){ caption.textContent = label ? `Modelo: ${label}` : ''; }
+      updateDetailPriceUI();
     }else{
       selectedModel = null;
       if(caption){ caption.textContent=''; }
@@ -412,6 +495,25 @@ function attachCarouselHandlers(){
 }
 // Detalle
 function showProductDetail(id, silent=false){
+  // -- Init modelo+precio YSL
+  setTimeout(updateModelAndPrice, 0);
+  // -- Reatach WhatsApp con precio
+  try{
+    const ask = document.getElementById('btnAsk');
+    if(ask){ ask.onclick = (ev)=>{ ev.preventDefault();
+      const p = window.currentProduct;
+      if(!p) return;
+      let text = `Hola! Consulto por ${p.name}.`;
+      const m = getCurrentModelLabel(p);
+      if(m) text += `\nModelo: ${m}`;
+      const num = getPriceForCurrent(p);
+      if(typeof num==='number') text += `\nPrecio: ${num.toLocaleString('es-AR',{style:'currency','currency':'ARS'})}`;
+      const url = 'https://wa.me/5491161521424?text=' + encodeURIComponent(text);
+      window.open(url,'_blank');
+    }; }
+  }catch(e){}
+  // -- setear modelo inicial si hay imágenes
+  try{ if(p && p.images && p.images[0]){ selectedModel = p.images[0].model || p.images[0].alt || selectedModel; } }catch(e){}
   prevScrollY = window.scrollY || window.pageYOffset || 0;
   const p=PRODUCTS.find(x=>x.id===id); if(!p) return;
   currentProduct=p; selectedSize=null; selectedModel=null;
@@ -424,7 +526,7 @@ function showProductDetail(id, silent=false){
   if(p.images && p.images.length){
     carouselIndex = 0;
     document.getElementById('detailImage').innerHTML = buildCarousel(p.images);
-    if((p.id==='camisa-rochas' || p.id==='camisa-rocco') && p.images[0] && (p.images[0].model||p.images[0].alt)){
+    if(p.images && p.images[0] && (p.images[0].model||p.images[0].alt)){
       selectedModel = p.images[0].model||p.images[0].alt;
     }
     setTimeout(attachCarouselHandlers, 0);
@@ -433,6 +535,7 @@ function showProductDetail(id, silent=false){
   }
   document.getElementById('detailName').textContent=p.name;
   document.getElementById('detailPrice').textContent = priceLabel(p);
+    updateDetailPriceUI();
   document.getElementById('detailDesc').textContent=p.description;
   const ul=document.getElementById('detailFeatures'); ul.innerHTML='';
   (p.features||[]).forEach(f=>{ const li=document.createElement('li'); li.textContent=f; ul.appendChild(li); });
@@ -486,7 +589,8 @@ function goToProducts(){
 // Carrito (una fila por talle)
 function addToCart(p){
   if(!p) return;
-  if(p.price==null){ return; }
+  const priceNum = (typeof detailPriceForSelection==='function') ? detailPriceForSelection() : p.price;
+  if(priceNum==null){ return; }
   if(!selectedSize){
     const warn=document.getElementById('sizeWarning'); if(warn) warn.style.display='block';
     return;
@@ -589,6 +693,451 @@ document.addEventListener('DOMContentLoaded', ()=>{
     history.replaceState({view:'grid'}, document.title, window.location.pathname + window.location.search);
   }
 });
+document.getElementById('btnAsk').addEventListener('click', ()=>{
+  if(!currentProduct) return;
+  let text = `Hola! Consulto por ${currentProduct.name}.`;
+  if(selectedModel) text += `
+Modelo: ${selectedModel}`;
+  let priceNum = null;
+  // 1) Intentar precio directo del helper
+  if(typeof detailPriceForSelection==='function') priceNum = detailPriceForSelection();
+  // 2) Forzar precio por modelo para YSL si aún no lo tenemos
+  if(priceNum==null && currentProduct && currentProduct.id==='camisa-ysl' && typeof MODEL_PRICES!=='undefined' && selectedModel && MODEL_PRICES['camisa-ysl'][selectedModel]!=null){
+    priceNum = MODEL_PRICES['camisa-ysl'][selectedModel];
+  }
+  if(typeof priceNum==='number') text += `
+Precio: ${fmt(priceNum)}`;
+  const url = 'https://wa.me/5491161521424?text=' + encodeURIComponent(text);
+  window.open(url,'_blank');
+});
+
+// ====== PATCH: Consulta WhatsApp SIEMPRE con precio y modelo actual ======
+(function(){
+  function getPriceNumber() {
+    try {
+      // 1) Si existe el texto en #detailPrice, parsearlo a número
+      const el = document.getElementById('detailPrice');
+      if (el && el.textContent) {
+        const t = el.textContent.replace(/[^\d,.-]/g,'').replace(/\./g,'').replace(',', '.');
+        const n = parseFloat(t);
+        if (!isNaN(n) && isFinite(n)) return n;
+      }
+    } catch(e){}
+    try {
+      // 2) Cálculo por modelo (YSL) o price fijo
+      if (typeof currentProduct!=='undefined' && currentProduct) {
+        if (currentProduct.id === 'camisa-ysl' && typeof MODEL_PRICES!=='undefined') {
+          let model = (typeof selectedModel!=='undefined' && selectedModel) ? selectedModel : null;
+          if (!model && typeof carouselIndex==='number' && currentProduct.images && currentProduct.images[carouselIndex]) {
+            model = currentProduct.images[carouselIndex].model || currentProduct.images[carouselIndex].alt || null;
+          }
+          if (!model && currentProduct.images && currentProduct.images[0]) {
+            model = currentProduct.images[0].model || currentProduct.images[0].alt || null;
+          }
+          if (model && MODEL_PRICES['camisa-ysl'] && typeof MODEL_PRICES['camisa-ysl'][model]==='number') {
+            return MODEL_PRICES['camisa-ysl'][model];
+          }
+        }
+        if (typeof currentProduct.price==='number') return currentProduct.price;
+      }
+    } catch(e){}
+    return null;
+  }
+
+  function getModelLabel(){
+    try{
+      if (typeof selectedModel!=='undefined' && selectedModel) return selectedModel;
+      if (typeof currentProduct!=='undefined' && currentProduct && currentProduct.images){
+        if (typeof carouselIndex==='number' && currentProduct.images[carouselIndex]){
+          return currentProduct.images[carouselIndex].model || currentProduct.images[carouselIndex].alt || null;
+        }
+        if (currentProduct.images[0]){
+          return currentProduct.images[0].model || currentProduct.images[0].alt || null;
+        }
+      }
+    }catch(e){}
+    return null;
+  }
+
+  function sendWhatsAppWithPrice(){
+    if (!window.currentProduct) return;
+    let text = `Hola! Consulto por ${currentProduct.name}.`;
+    const model = getModelLabel();
+    if (model) text += `\nModelo: ${model}`;
+    const priceNum = getPriceNumber();
+    if (typeof priceNum === 'number') {
+      try {
+        const priceText = priceNum.toLocaleString('es-AR', {style:'currency', currency:'ARS'});
+        text += `\nPrecio: ${priceText}`;
+      } catch(e) {
+        text += `\nPrecio: ${priceNum}`;
+      }
+    }
+    const url = 'https://wa.me/5491161521424?text=' + encodeURIComponent(text);
+    window.open(url, '_blank');
+  }
+
+  // Listener robusto: captura clicks en #btnAsk y en cualquier [data-role="ask"]
+  document.addEventListener('click', function(ev){
+    const t = ev.target.closest('#btnAsk,[data-role=\"ask\"]');
+    if (t) {
+      ev.preventDefault();
+      sendWhatsAppWithPrice();
+    }
+  }, true);
+})();
+// ====== /PATCH ======
+
+
+// === Helpers robustos YSL ===
+function getCurrentModelLabel(p){
+  try{
+    if (typeof selectedModel!=='undefined' && selectedModel) return selectedModel;
+    if (!p || !p.images) return null;
+    if (typeof carouselIndex==='number' && p.images[carouselIndex]){
+      return p.images[carouselIndex].model || p.images[carouselIndex].alt || null;
+    }
+    if (p.images[0]) return p.images[0].model || p.images[0].alt || null;
+  }catch(e){}
+  return null;
+}
+
+function getPriceForCurrent(p){
+  try{
+    // 1) Si en UI ya hay un precio, es la verdad visible
+    const el = document.getElementById('detailPrice');
+    if(el && el.textContent){
+      const t = el.textContent.replace(/[^\d,.-]/g,'').replace(/\./g,'').replace(',', '.');
+      const n = parseFloat(t);
+      if(!isNaN(n) && isFinite(n)) return n;
+    }
+  }catch(e){}
+  try{
+    // 2) Calcular por datos
+    if(!p) return null;
+    if (p.id==='camisa-ysl' && typeof MODEL_PRICES!=='undefined'){
+      const m = getCurrentModelLabel(p) || 'modelo 01';
+      if (MODEL_PRICES['camisa-ysl'] && typeof MODEL_PRICES['camisa-ysl'][m]==='number'){
+        return MODEL_PRICES['camisa-ysl'][m];
+      }
+    }
+    if (typeof p.price==='number') return p.price;
+  }catch(e){}
+  return null;
+}
+
+function updateModelAndPrice(){
+  try{
+    if(!window.currentProduct) return;
+    // sincronizar modelo desde la slide actual
+    if (currentProduct && currentProduct.images){
+      if (typeof carouselIndex==='number' && currentProduct.images[carouselIndex]){
+        const it = currentProduct.images[carouselIndex];
+        selectedModel = (it.model||it.alt)||selectedModel||null;
+      }else if(currentProduct.images[0]){
+        selectedModel = currentProduct.images[0].model||currentProduct.images[0].alt||selectedModel||null;
+      }
+    }
+    // actualizar texto de precio en el detalle (nunca rango para YSL)
+    const priceEl = document.getElementById('detailPrice');
+    if(priceEl){
+      const n = getPriceForCurrent(currentProduct);
+      if(typeof n==='number'){
+        priceEl.textContent = n.toLocaleString('es-AR', {style:'currency', currency:'ARS'});
+      }
+    }
+  }catch(e){}
+}
+
+
+// Garantizar botón #btnAsk en el detalle
+(function(){
+  const container = document.querySelector('#detail .detail-right') || document.getElementById('detailRight');
+  if(container && !document.getElementById('btnAsk')){
+    const b = document.createElement('button');
+    b.id='btnAsk'; b.className='btn'; b.style.background='#25d366'; b.style.color='#fff'; b.style.marginLeft='8px'; b.textContent='WhatsApp';
+    const row = container.querySelector('div[style*="gap"]') || container;
+    row.appendChild(b);
+  }
+})();
+
 </script>
+
+<!-- PATCH: WhatsApp con modelo y precio garantizados -->
+<script>
+(function(){
+  // Cálculo de modelo actual (prioriza selectedModel; si no, lee del carrusel)
+  function _getModelLabel(){
+    try{
+      if (typeof selectedModel!=='undefined' && selectedModel) return selectedModel;
+      if (typeof currentProduct!=='undefined' && currentProduct && currentProduct.images){
+        if (typeof carouselIndex==='number' && currentProduct.images[carouselIndex]){
+          return currentProduct.images[carouselIndex].model || currentProduct.images[carouselIndex].alt || null;
+        }
+        if (currentProduct.images[0]){
+          return currentProduct.images[0].model || currentProduct.images[0].alt || null;
+        }
+      }
+    }catch(e){}
+    return null;
+  }
+  // Cálculo de precio en ARS para el producto/modelo actual (especial YSL)
+  function _getPriceNumber(){
+    try{
+      // Leer lo que ve el usuario en detalle
+      const el = document.getElementById('detailPrice');
+      if (el && el.textContent){
+        const t = el.textContent.replace(/[^\d,.-]/g,'').replace(/\./g,'').replace(',', '.');
+        const n = parseFloat(t);
+        if (!isNaN(n) && isFinite(n)) return n;
+      }
+    }catch(e){}
+    try{
+      if (typeof currentProduct!=='undefined' && currentProduct){
+        if (currentProduct.id==='camisa-ysl' && typeof MODEL_PRICES!=='undefined'){
+          const m = _getModelLabel() || 'modelo 01';
+          if (MODEL_PRICES['camisa-ysl'] && typeof MODEL_PRICES['camisa-ysl'][m]==='number'){
+            return MODEL_PRICES['camisa-ysl'][m];
+          }
+        }
+        if (typeof currentProduct.price==='number') return currentProduct.price;
+      }
+    }catch(e){}
+    return null;
+  }
+  // Handler que arma el mensaje y abre WhatsApp
+  function _sendWA(){
+    if (!window.currentProduct) return;
+    let text = `Hola! Consulto por ${currentProduct.name}.`;
+    const m = _getModelLabel();
+    if (m) text += `\nModelo: ${m}`;
+    const num = _getPriceNumber();
+    if (typeof num==='number'){
+      try{
+        text += `\nPrecio: ${num.toLocaleString('es-AR',{style:'currency',currency:'ARS'})}`;
+      }catch(e){
+        text += `\nPrecio: ${num}`;
+      }
+    }
+    const url = 'https://wa.me/5491161521424?text=' + encodeURIComponent(text);
+    window.open(url,'_blank');
+  }
+  // Binder robusto: asegura que exista un botón para consultar y tenga nuestro handler
+  function _ensureAskButton(){
+    let btn = document.getElementById('btnAsk');
+    if (!btn){
+      // Intentar encontrar un botón de WhatsApp cercano al detalle
+      btn = document.querySelector('#detail button[id*=\"Ask\"], #detail button[title*=\"WhatsApp\" i], #detail button:nth-of-type(2)');
+    }
+    if (!btn){
+      // Crear uno si no existe
+      const container = document.querySelector('#detail .detail-right div[style*=\"gap\"]') || document.querySelector('#detail .detail-right');
+      if (container){
+        const b = document.createElement('button');
+        b.id = 'btnAsk';
+        b.className = 'btn';
+        b.style.background = '#25d366'; b.style.color='#fff';
+        b.textContent = 'WhatsApp';
+        container.appendChild(b);
+        btn = b;
+      }
+    }
+    if (btn){
+      btn.onclick = (ev)=>{ ev.preventDefault(); _sendWA(); };
+      btn.setAttribute('data-role','ask');
+    }
+  }
+  // Observa cuando se abre el detalle y actualiza binding
+  const obs = new MutationObserver(()=>{ _ensureAskButton(); });
+  obs.observe(document.body, {subtree:true, childList:true});
+  // Primer intento inmediato
+  _ensureAskButton();
+})();
+
+// === Helpers robustos YSL ===
+function getCurrentModelLabel(p){
+  try{
+    if (typeof selectedModel!=='undefined' && selectedModel) return selectedModel;
+    if (!p || !p.images) return null;
+    if (typeof carouselIndex==='number' && p.images[carouselIndex]){
+      return p.images[carouselIndex].model || p.images[carouselIndex].alt || null;
+    }
+    if (p.images[0]) return p.images[0].model || p.images[0].alt || null;
+  }catch(e){}
+  return null;
+}
+
+function getPriceForCurrent(p){
+  try{
+    // 1) Si en UI ya hay un precio, es la verdad visible
+    const el = document.getElementById('detailPrice');
+    if(el && el.textContent){
+      const t = el.textContent.replace(/[^\d,.-]/g,'').replace(/\./g,'').replace(',', '.');
+      const n = parseFloat(t);
+      if(!isNaN(n) && isFinite(n)) return n;
+    }
+  }catch(e){}
+  try{
+    // 2) Calcular por datos
+    if(!p) return null;
+    if (p.id==='camisa-ysl' && typeof MODEL_PRICES!=='undefined'){
+      const m = getCurrentModelLabel(p) || 'modelo 01';
+      if (MODEL_PRICES['camisa-ysl'] && typeof MODEL_PRICES['camisa-ysl'][m]==='number'){
+        return MODEL_PRICES['camisa-ysl'][m];
+      }
+    }
+    if (typeof p.price==='number') return p.price;
+  }catch(e){}
+  return null;
+}
+
+function updateModelAndPrice(){
+  try{
+    if(!window.currentProduct) return;
+    // sincronizar modelo desde la slide actual
+    if (currentProduct && currentProduct.images){
+      if (typeof carouselIndex==='number' && currentProduct.images[carouselIndex]){
+        const it = currentProduct.images[carouselIndex];
+        selectedModel = (it.model||it.alt)||selectedModel||null;
+      }else if(currentProduct.images[0]){
+        selectedModel = currentProduct.images[0].model||currentProduct.images[0].alt||selectedModel||null;
+      }
+    }
+    // actualizar texto de precio en el detalle (nunca rango para YSL)
+    const priceEl = document.getElementById('detailPrice');
+    if(priceEl){
+      const n = getPriceForCurrent(currentProduct);
+      if(typeof n==='number'){
+        priceEl.textContent = n.toLocaleString('es-AR', {style:'currency', currency:'ARS'});
+      }
+    }
+  }catch(e){}
+}
+
+
+// Garantizar botón #btnAsk en el detalle
+(function(){
+  const container = document.querySelector('#detail .detail-right') || document.getElementById('detailRight');
+  if(container && !document.getElementById('btnAsk')){
+    const b = document.createElement('button');
+    b.id='btnAsk'; b.className='btn'; b.style.background='#25d366'; b.style.color='#fff'; b.style.marginLeft='8px'; b.textContent='WhatsApp';
+    const row = container.querySelector('div[style*="gap"]') || container;
+    row.appendChild(b);
+  }
+})();
+
+</script>
+<!-- /PATCH -->
+
+
+<script>
+// === PATCH PLUS: vinculación férrea de WhatsApp con Modelo+Precio en YSL ===
+(function(){
+  function _readDetailPriceNumber(){
+    try{
+      const el = document.getElementById('detailPrice');
+      if(el && el.textContent){
+        const t = el.textContent.replace(/[^\d,.-]/g,'').replace(/\./g,'').replace(',', '.');
+        const n = parseFloat(t);
+        if(!isNaN(n) && isFinite(n)) return n;
+      }
+    }catch(e){}
+    return null;
+  }
+  function _readActiveModelFromDOM(){
+    // 1) selectedModel
+    if (typeof selectedModel!=='undefined' && selectedModel) return selectedModel;
+    // 2) slide activa con data-model
+    try{
+      const dots = document.querySelectorAll('#dots .dot');
+      let idx = -1;
+      dots.forEach((d,i)=>{ if(d.classList.contains('active')) idx=i; });
+      if(idx>=0){
+        const slide = document.querySelector(`#track .slide:nth-child(${idx+1}) img`);
+        if(slide){
+          const dm = slide.getAttribute('data-model');
+          if(dm) return dm;
+        }
+      }
+    }catch(e){}
+    // 3) caption "Modelo: X"
+    try{
+      const cap = document.getElementById('modelCaption');
+      if(cap && cap.textContent){
+        const m = cap.textContent.trim().replace(/^Modelo:\s*/i,'');
+        if(m) return m;
+      }
+    }catch(e){}
+    // 4) primera imagen
+    try{
+      const first = document.querySelector('#track .slide:first-child img');
+      if(first){
+        const dm = first.getAttribute('data-model');
+        if(dm) return dm;
+      }
+    }catch(e){}
+    return null;
+  }
+  function _priceForModel(product, model){
+    try{
+      if(product && product.id==='camisa-ysl' && typeof MODEL_PRICES!=='undefined' && model && MODEL_PRICES['camisa-ysl'][model]!=null){
+        return MODEL_PRICES['camisa-ysl'][model];
+      }
+      if(product && typeof product.price==='number') return product.price;
+    }catch(e){}
+    return null;
+  }
+  function _ensureSlidesCarryModel(){
+    // Añade data-model a cada slide IMG para que podamos leerlo fácil
+    try{
+      if(!currentProduct || !currentProduct.images) return;
+      const imgs = document.querySelectorAll('#track .slide img');
+      imgs.forEach((im, i)=>{
+        const m = currentProduct.images[i] && (currentProduct.images[i].model || currentProduct.images[i].alt);
+        if(m) im.setAttribute('data-model', m);
+      });
+    }catch(e){}
+  }
+  // Hook en showProductDetail: asegurar data-model en las slides
+  const _origShow = window.showProductDetail;
+  window.showProductDetail = function(p){
+    _origShow && _origShow(p);
+    try{
+      setTimeout(()=>{ _ensureSlidesCarryModel(); }, 50);
+    }catch(e){}
+  };
+
+  // Reatach del botón: lee SIEMPRE modelo+precio al momento del click
+  function _bindAsk(){
+    const btn = document.getElementById('btnAsk');
+    if(!btn) return;
+    btn.onclick = (ev)=>{
+      ev.preventDefault();
+      if(!window.currentProduct) return;
+      const product = window.currentProduct;
+      let text = `Hola! Consulto por ${product.name}.`;
+      const model = _readActiveModelFromDOM() || 'modelo 01';
+      if(model) text += `\nModelo: ${model}`;
+      // precio: primero leo lo visible, si no, calculo
+      let priceNum = _readDetailPriceNumber();
+      if(priceNum==null) priceNum = _priceForModel(product, model);
+      if(typeof priceNum==='number'){
+        try{ text += `\nPrecio: ${priceNum.toLocaleString('es-AR',{style:'currency',currency:'ARS'})}`; }
+        catch(e){ text += `\nPrecio: ${priceNum}`; }
+      }
+      const url = 'https://wa.me/5491161521424?text=' + encodeURIComponent(text);
+      window.open(url,'_blank');
+    };
+  }
+  // Observer para reatachar cuando se abre el detalle
+  const mo = new MutationObserver(()=>{ _bindAsk(); _ensureSlidesCarryModel(); });
+  mo.observe(document.body, {subtree:true, childList:true});
+  // Primer intento
+  _bindAsk();
+  _ensureSlidesCarryModel();
+})();
+// === /PATCH PLUS ===
+</script>
+
 </body>
 </html>
