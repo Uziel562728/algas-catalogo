@@ -28,6 +28,20 @@ background:linear-gradient(160deg,#eafff8,#a9efcf);min-height:60vh;padding-top:1
 .catalogo-indice{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:10px 0 20px}
 .catalogo-indice .btn{background:#fff;border:1px solid #dcdcdc;color:#333}
 .catalogo-indice .btn.active{background:var(--verde-medio);color:#fff;border-color:var(--verde-medio)}
+
+/* Promo/Notas Camisas (restaurado) */
+.promo-camisas{display:none;margin:10px auto 18px;max-width:1100px;padding:10px 14px;border:2px dashed #2d5a42;
+background:#eef9f4;color:#1e3a2e;border-radius:10px;text-align:center;font-weight:700;letter-spacing:.3px}
+.promo-camisas small{display:block;font-weight:normal;opacity:.85;margin-top:4px}
+.promo-camisas-detail{display:none;margin:8px 0 12px;padding:10px 12px;border:2px dashed #2d5a42;
+background:#eef9f4;color:#1e3a2e;border-radius:10px;font-weight:600}
+
+
+.cart-items span{
+  white-space: normal !important;
+  word-break: break-word !important;
+}
+
 /* Grid */
 .grid{display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
 @media (max-width: 768px){ .grid{ grid-template-columns: repeat(2, 1fr); } }
@@ -39,7 +53,7 @@ padding:14px;text-align:center;min-height:360px;display:flex;flex-direction:colu
 /* Badges */
 .badge{position:absolute;top:10px;left:10px;width:70px;height:70px;display:flex;align-items:center;justify-content:center;
 font-size:0.8rem;font-weight:bold;color:#fff;text-transform:uppercase;border-radius:50%;animation:pulse 1.5s infinite;z-index:5}
-.badge.off{background:#e74c3c;box-shadow:0 0 12px rgba(231,76,60,0.8)}
+.badge.{background:#e74c3c;box-shadow:0 0 12px rgba(231,76,60,0.8)}
 .badge.especial{background:#2d5a42;box-shadow:0 0 12px rgba(45,90,66,0.8)}
 @keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.1)}100%{transform:scale(1)}}
 /* Detail */
@@ -118,6 +132,7 @@ footer a{color:#fff;text-decoration:underline}
 <section id="productos">
   <h2 class="section-title">Nuestros Productos</h2>
   <div id="catalogoIndice" class="catalogo-indice"></div>
+  <div id="promoCamisas" class="promo-camisas">El PRECIO mostrado en Camisas corresponde a abonar en 3 cuotas o con Transferencia 10% de descuento.</div>
   <div id="productsGrid" class="grid"></div>
 </section>
 <section id="productDetail">
@@ -127,14 +142,14 @@ footer a{color:#fff;text-decoration:underline}
       <div class="detail-header"><button id="backHome" class="back-btn" aria-label="Volver al inicio">← Volver</button></div>
       <h2 id="detailName"></h2>
       <div class="price" id="detailPrice"></div>
+<div id="detailModelInfo" style="margin:6px 0;font-size:0.95rem;color:#2d5a42;font-weight:600"></div>
       <div class="payment-note">
         <strong>Medios de pago</strong>
         <ul style="margin-top:6px;list-style:none;padding-left:0;">
           <li>efectivo 💵</li>
-          <li>tarjeta 💳 (en un pago)</li>
-          <li>transferencia</li>
-        </ul>
+          <li id='pagoTarjeta'>tarjeta 💳</li><li id='pagoTransferencia'>transferencia</li></ul>
       </div>
+<div id="paymentPriceNote" class="promo-camisas-detail" style="display:none;margin-top:8px;">El <strong>PRECIO mostrado en Camisas</strong> corresponde a abonar en <strong>3 cuotas</strong> o con <strong>Transferencia 10% de descuento</strong>.</div>
       <div id="detailSizes" class="sizes"></div>
       <div id="sizeWarning" class="size-warning">⚠️ Seleccioná un talle antes de agregar al carrito.</div>
       <p id="detailDesc"></p>
@@ -170,6 +185,64 @@ footer a{color:#fff;text-decoration:underline}
 <button id="cartFab" onclick="toggleCart()">🛒 Carrito <span id="cartCount" class="fab-count">0</span></button>
 <button id="whatsappFab" aria-label="Abrir WhatsApp"><img src="https://i.ibb.co/BV91S86b/image.png" alt="WhatsApp"></button>
 <script>
+
+// === Modelo + Precio dinámico ===
+function updateModelInfo(modelo, precio){
+  try{
+    const info=document.getElementById('detailModelInfo');
+    if(info){
+      if(modelo){
+        info.textContent='Modelo seleccionado: '+modelo+' — $'+precio;
+      }else{
+        info.textContent='';
+      }
+    }
+    // También actualizar la nota de promo si es camisa
+    const promo=document.getElementById('paymentPriceNote');
+    if(promo && currentProduct && currentProduct.categoria==='camisas'){
+      if(modelo){
+        promo.innerHTML='El <strong>PRECIO mostrado en Camisas</strong> (Modelo '+modelo+') corresponde a abonar en <strong>3 cuotas</strong> o con <strong>Transferencia 10% de descuento</strong>.';
+      }else{
+        promo.innerHTML='El <strong>PRECIO mostrado en Camisas</strong> corresponde a abonar en <strong>3 cuotas</strong> o con <strong>Transferencia 10% de descuento</strong>.';
+      }
+    }
+  }catch(e){}
+}
+
+
+// Ajustar medios de pago solo para camisas
+function updateMediosPago(isCamisa){
+  try{
+    const liTarjeta=document.getElementById('pagoTarjeta');
+    const liTrans=document.getElementById('pagoTransferencia');
+    if(!liTarjeta||!liTrans) return;
+    if(isCamisa){
+      liTarjeta.textContent='tarjeta 💳 (en 3 cuotas)';
+      liTrans.textContent='transferencia (10% de descuento en Camisas)';
+    }else{
+      liTarjeta.textContent='tarjeta 💳';
+      liTrans.textContent='transferencia';
+    }
+  }catch(e){}
+}
+
+
+// === Helpers PROMO CAMISAS (restaurado) ===
+function showCamisasPromoInGrid(cat){
+  try{
+    const el = document.getElementById('promoCamisas');
+    if(!el) return;
+    el.style.display = (cat==='camisas' || cat==='all') ? 'block' : 'none';
+  }catch(e){}
+}
+function showCamisasPromoInDetail(isCamisa){
+  try{
+    const el = document.getElementById('paymentPriceNote');
+    if(!el) return;
+    el.style.display = isCamisa ? 'block' : 'none';
+  }catch(e){}
+}
+
 history.scrollRestoration='manual';
 const WA_NUMBER='5491161521424';
 const CURRENCY={style:'currency',currency:'ARS',maximumFractionDigits:0,minimumFractionDigits:0};
@@ -184,9 +257,9 @@ const PRODUCTS=[
   { id:'campera-buckingham', categoria:'camperas', name:'Campera Doble Pechera Buckingham Polo Club', price:45000,
     image:'https://i.ibb.co/8DCZtDLT/Imagen-de-Whats-App-2025-09-02-a-las-15-04-22-d86e4fea.jpg',
     description:'Campera doble pechera de la marca Buckingham Polo Club, pensada para brindar abrigo y estilo. Disponible en talle XL.',
-    features:['Diseño de doble pechera para mayor protección térmica','Marca Buckingham Polo Club, símbolo de elegancia','Materiales resistentes y costuras reforzadas','Disponible en talle XL','10% OFF pagando en efectivo o transferencia'],
+    features:['Diseño de doble pechera para mayor protección térmica','Marca Buckingham Polo Club, símbolo de elegancia','Materiales resistentes y costuras reforzadas','Disponible en talle XL','10%  pagando en efectivo o transferencia'],
     sizes:['XL'],
-    tag:'off'
+    tag:''
   },
   { id:'campera-impermeable', categoria:'camperas', name:'Campera Impermeable con Capucha Desmontable Buckingham Polo Club', price:40000,
     image:'https://i.ibb.co/j9m1hd5s/Imagen-de-Whats-App-2025-09-02-a-las-15-04-22-3e106fdf.jpg',
@@ -326,7 +399,7 @@ const PRODUCTS=[
 ];
 // Helpers
 const priceLabel = (p)=>{ if(typeof p.price==='number') return fmt(p.price); if(Array.isArray(p.priceRange)&&p.priceRange.length===2) return fmt(p.priceRange[0])+'–'+fmt(p.priceRange[1]); return 'Consultar precio'; };
-const makeBadge = (tag)=> tag==='off'?"<span class='badge off'>OFF</span>":(tag==='especial'?"<span class='badge especial'>ESPECIAL</span>":"");
+const makeBadge = (tag)=> tag===''?"<span class='badge '></span>":(tag==='especial'?"<span class='badge especial'>ESPECIAL</span>":"");
 const card = (p)=>`
   ${makeBadge(p.tag)}
   <img referrerpolicy="no-referrer" src="${p.image}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/240x160?text=Sin+Imagen'">
@@ -379,7 +452,7 @@ function buildIndex(){
     btn.classList.add('active','btn-primary');
     const cat=btn.dataset.cat;
     renderProductsGrid(cat==='all'?PRODUCTS:PRODUCTS.filter(p=>p.categoria===cat));
-    const header=document.querySelector('header'); const offset=(header?header.offsetHeight:70)+10;
+    showCamisasPromoInGrid(cat);const header=document.querySelector('header'); const offset=(header?header.offsetHeight:70)+10;
     const y=document.getElementById('productos').getBoundingClientRect().top + window.scrollY - offset;
     window.scrollTo({behavior:'smooth', top:y});
   });
@@ -516,7 +589,7 @@ function showProductDetail(id, silent=false){
   try{ if(p && p.images && p.images[0]){ selectedModel = p.images[0].model || p.images[0].alt || selectedModel; } }catch(e){}
   prevScrollY = window.scrollY || window.pageYOffset || 0;
   const p=PRODUCTS.find(x=>x.id===id); if(!p) return;
-  currentProduct=p; selectedSize=null; selectedModel=null;
+  currentProduct=p; selectedSize=null; selectedModel=null; updateModelInfo(p.modelo||'', p.precio||''); try{window.scrollTo(0,0);document.documentElement.scrollTop=0;document.body.scrollTop=0;}catch(e){} showCamisasPromoInDetail(p.categoria==='camisas'); updateMediosPago(p.categoria==='camisas');
   const productos=document.getElementById('productos');
   const detail=document.getElementById('productDetail');
   const hero=document.getElementById('inicio');
@@ -608,13 +681,15 @@ function updateCartDisplay(){
     const lineTotal = (item.price==null)? 0 : item.price*item.qty;
     const priceLabel = (item.price==null)? 'A consultar' : fmt(lineTotal);
     const div=document.createElement('div'); div.className='cart-item';
-    div.innerHTML=`<span>${item.name} <small style='opacity:.8'>(Talle ${item.size||'-'})</small></span>
-      <div class="cart-controls">
-        <button type="button" onclick="updateQuantity(${i},-1)">-</button>
-        <span>${item.qty}</span>
-        <button type="button" onclick="updateQuantity(${i},1)">+</button>
-      </div>
-      <span>${priceLabel}</span>`;
+    div.innerHTML = `
+  <span>${item.name}${item.modelo ? ' — ' + item.modelo : ''} ${item.size ? '(Talle ' + item.size + ')' : ''}</span>
+  <div class="cart-controls">
+    <button type="button" onclick="updateQuantity(${i},-1)">-</button>
+    <span>${item.qty}</span>
+    <button type="button" onclick="updateQuantity(${i},1)">+</button>
+  </div>
+  <span>${fmt(item.price)} c/u — ${priceLabel}</span>
+`;
     items.appendChild(div);
   });
   const total=cart.reduce((s,it)=> s + (it.price==null?0:it.price*it.qty), 0);
@@ -682,7 +757,7 @@ window.addEventListener('popstate', (event)=>{
 // Init
 document.addEventListener('DOMContentLoaded', ()=>{
   window.scrollTo(0,0); setTimeout(()=>window.scrollTo(0,0),0);
-  buildIndex(); renderProductsGrid(PRODUCTS); updateCartDisplay();
+  buildIndex(); renderProductsGrid(PRODUCTS); showCamisasPromoInGrid('all'); updateCartDisplay();
   const hash = location.hash || '';
   if(hash.startsWith('#detalle-')){
     const pid = hash.replace('#detalle-','');
