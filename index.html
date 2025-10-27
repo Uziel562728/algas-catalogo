@@ -142,19 +142,12 @@ footer a{color:#fff;text-decoration:underline}
       <div class="detail-header"><button id="backHome" class="back-btn" aria-label="Volver al inicio">← Volver</button></div>
       <h2 id="detailName"></h2>
       <div class="price" id="detailPrice"></div>
-<div id="colorSelector" style="display:none; margin: 15px 0;">
-    <h4 style="font-size: 1rem; color: #1e3a2e; margin-bottom: 8px;">COLOR: <span id="selectedColorName" style="font-weight: bold;"></span></h4>
-    <div id="colorChipsContainer" style="display: flex; gap: 12px; align-items: center;">
-        </div>
-</div>
 <div id="detailModelInfo" style="margin:6px 0;font-size:0.95rem;color:#2d5a42;font-weight:600"></div>
       <div class="payment-note">
         <strong>Medios de pago</strong>
-<ul style="margin-top:6px;list-style:none;padding-left:0;">
-          <li id='pagoEfectivo'>Efectivo 💵</li>
-          <li id='pagoTarjeta'>Tarjeta 💳</li>
-          <li id='pagoTransferencia'>Transferencia</li>
-        </ul>
+        <ul style="margin-top:6px;list-style:none;padding-left:0;">
+          <li>efectivo 💵</li>
+          <li id='pagoTarjeta'>tarjeta 💳</li><li id='pagoTransferencia'>transferencia</li></ul>
       </div>
 <div id="paymentPriceNote" class="promo-camisas-detail" style="display:none;margin-top:8px;">El <strong>PRECIO mostrado en Camisas</strong> corresponde a abonar en <strong>3 cuotas</strong> o con <strong>Transferencia 10% de descuento</strong>.</div>
       <div id="detailSizes" class="sizes"></div>
@@ -215,30 +208,19 @@ function updateModelInfo(modelo, precio){
   }catch(e){}
 }
 
-// Ajustar medios de pago solo para camisas Y CHOMBAS
-function updateMediosPago(categoria){
+// Ajustar medios de pago solo para camisas
+function updateMediosPago(isCamisa){
   try{
-    const liEfectivo=document.getElementById('pagoEfectivo'); 
     const liTarjeta=document.getElementById('pagoTarjeta');
     const liTrans=document.getElementById('pagoTransferencia');
     if(!liTarjeta||!liTrans) return;
-
-    // Valores por defecto
-    if(liEfectivo) liEfectivo.textContent='efectivo 💵';
-    liTarjeta.textContent='tarjeta 💳';
-    liTrans.textContent='transferencia';
-    
-    if(categoria==='camisas'){
+    if(isCamisa){
       liTarjeta.textContent='tarjeta 💳 (en 3 cuotas)';
       liTrans.textContent='transferencia (10% de descuento en Camisas)';
-    } 
-    // === LÓGICA AGREGADA PARA LA CHOMBA ===
-    else if(currentProduct && currentProduct.id === 'chomba-algodon-premium-colores'){
-      if(liEfectivo) liEfectivo.innerHTML='efectivo 💵 <span style="font-weight:bold; color: #e74c3c;">($20.000)</span>';
-      liTarjeta.innerHTML='tarjeta 💳 <span style="font-weight:bold; color: #2d5a42;">($25.000 en 3 cuotas)</span>';
-      liTrans.innerHTML='transferencia <span style="font-weight:bold; color: #e74c3c;">($20.000)</span>';
+    }else{
+      liTarjeta.textContent='tarjeta 💳';
+      liTrans.textContent='transferencia';
     }
-    // ======================================
   }catch(e){}
 }
 
@@ -411,34 +393,6 @@ const PRODUCTS=[
     features:['100% algodón premium','Costuras reforzadas','Conserva forma y color','Corte moderno'],
     sizes:['S','M','L','XL','XXL'],
     tag:'especial'
-  }
-  ,
-  {
-    id: 'chomba-algodon-premium-colores',
-    categoria: 'chombas',
-    name: 'Chomba 100% Algodón (Varios Colores)',
-    price: 25000,
-    
-    image: 'https://i.ibb.co/nGq637f/Imagen-de-Whats-App-2025-10-26-a-las-15-09-30-ca057623.jpg', 
-    images:[
-      {src: 'https://i.ibb.co/nGq637f/Imagen-de-Whats-App-2025-10-26-a-las-15-09-30-ca057623.jpg', model: 'Gris'},
-      {src: 'https://i.ibb.co/xKdJ0pHj/Imagen-de-Whats-App-2025-10-26-a-las-16-28-04-0908ebeb.jpg', model: 'Rosa'},
-      {src: 'https://i.ibb.co/DPX5DP9h/Imagen-de-Whats-App-2025-10-26-a-las-16-39-34-6555552d.jpg', model: 'Negro'},
-      {src: 'https://i.ibb.co/Dg6Bfycy/Imagen-de-Whats-App-2025-10-26-a-las-16-43-49-eeb476ee.jpg', model: 'Blanco'},
-      {src: 'https://i.ibb.co/8n6Ftqvz/Imagen-de-Whats-App-2025-10-26-a-las-18-10-17-385cf442.jpg', model: 'Naranja'},
-      {src: 'https://i.ibb.co/mV7RgNV4/Imagen-de-Whats-App-2025-10-26-a-las-18-10-17-5dbb78fe.jpg', model: 'Bordo'},
-      {src: 'https://i.ibb.co/TqPrQPZ1/Imagen-de-Whats-App-2025-10-26-a-las-18-10-17-73d49d04.jpg', model: 'Celeste'},
-      {src: 'https://i.ibb.co/707vBmd/Imagen-de-Whats-App-2025-10-26-a-las-18-10-17-9c9a251f.jpg', model: 'Mostaza'}
-    ],
-    description: 'Una chomba premium confeccionada en 100% algodón puro, ofreciendo una suavidad y durabilidad excepcionales. Calidad superior con increíbles resultados en confort y calce.',
-    features: [
-      'Confección 100% algodón premium',
-      'Calidad superior: increíbles resultados y confort',
-      'Amplia variedad de colores disponibles',
-      'Talles disponibles del S al XXL'
-    ],
-    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
-    tag: 'especial'
   }
 ];
 // Helpers
@@ -640,34 +594,16 @@ function showProductDetail(id, silent=false){
   if(productos) productos.style.display='none';
   if(hero) hero.style.display='none';
   if(detail) detail.style.display='block';
-// === LÓGICA CONDICIONAL DE IMAGEN ===
-    
-    // Primero, limpiar el selector de colores por si el producto anterior lo usó
-    const selector = document.getElementById('colorSelector');
-    if (selector) selector.style.display = 'none';
-
-    // Opción 1: Selector de colores para Chombas (o futuras categorías 'chombas')
-    if (p.categoria === 'chombas' && p.images && p.images.length > 1) { 
-        document.getElementById('detailImage').innerHTML = ''; 
-        buildColorSelector(p); // Llama a la nueva función
-    
-    // Opción 2: Carrusel (para Camisas YSL, Rocco, etc.)
-    } else if (p.images && p.images.length > 1) {
-        carouselIndex = 0;
-        document.getElementById('detailImage').innerHTML = buildCarousel(p.images);
-        
-        // Settear el selectedModel inicial para el carrusel
-        if (p.images && p.images[0] && (p.images[0].model || p.images[0].alt)) {
-            selectedModel = p.images[0].model || p.images[0].alt;
-        }
-        
-        setTimeout(attachCarouselHandlers, 0);
-    
-    // Opción 3: Imagen única (para Campera, Remera, etc.)
-    } else {
-        document.getElementById('detailImage').innerHTML = <img referrerpolicy="no-referrer" src="${p.image}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/500x400?text=Sin+Imagen'">;
+  if(p.images && p.images.length){
+    carouselIndex = 0;
+    document.getElementById('detailImage').innerHTML = buildCarousel(p.images);
+    if(p.images && p.images[0] && (p.images[0].model||p.images[0].alt)){
+      selectedModel = p.images[0].model||p.images[0].alt;
     }
-    // === FIN LÓGICA CONDICIONAL ===
+    setTimeout(attachCarouselHandlers, 0);
+  }else{
+    document.getElementById('detailImage').innerHTML=<img referrerpolicy="no-referrer" src="${p.image}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/500x400?text=Sin+Imagen'">;
+  }
   document.getElementById('detailName').textContent=p.name;
   document.getElementById('detailPrice').textContent = priceLabel(p);
     updateDetailPriceUI();
@@ -989,88 +925,6 @@ function updateModelAndPrice(){
     }
   }catch(e){}
 }
-// === NUEVA FUNCIÓN: GENERAR SELECTOR DE COLORES (CÍRCULOS) ===
-function buildColorSelector(product) {
-    const selector = document.getElementById('colorSelector');
-    const container = document.getElementById('colorChipsContainer');
-    const nameDisplay = document.getElementById('selectedColorName');
-    const detailImageContainer = document.getElementById('detailImage');
-    
-    // Ocultar si no es un producto con esta lógica
-    if (product.categoria !== 'chombas') {
-        if (selector) selector.style.display = 'none';
-        return;
-    }
-
-    if (!product.images || product.images.length < 2) {
-        if (selector) selector.style.display = 'none';
-        return;
-    }
-    
-    // Mostrar selector y limpiar contenedor
-    selector.style.display = 'block';
-    container.innerHTML = '';
-
-    product.images.forEach((img, index) => {
-        const colorName = img.model || 'Color ' + (index + 1);
-        
-        // Mapeo simple de nombres a códigos de color
-        let colorCode = '#555'; // Color por defecto
-        if (colorName === 'Gris') colorCode = '#999';
-        else if (colorName === 'Negro') colorCode = '#000';
-        else if (colorName === 'Blanco') colorCode = '#fff';
-        else if (colorName === 'Rosa') colorCode = '#e0a9b0';
-        else if (colorName === 'Naranja') colorCode = '#ff8c00';
-        else if (colorName === 'Bordo') colorCode = '#800000';
-        else if (colorName === 'Celeste') colorCode = '#87ceeb';
-        else if (colorName === 'Mostaza') colorCode = '#ffdb58';
-
-
-        const chip = document.createElement('span');
-        chip.style.width = '30px';
-        chip.style.height = '30px';
-        chip.style.borderRadius = '50%';
-        chip.style.border = index === 0 ? '3px solid #1e3a2e' : '2px solid #ccc';
-        chip.style.backgroundColor = colorCode;
-        chip.style.cursor = 'pointer';
-        chip.dataset.index = index;
-        chip.dataset.colorName = colorName;
-        chip.dataset.imageSrc = img.src;
-        chip.style.boxShadow = '0 0 4px rgba(0,0,0,0.2)';
-
-        // La función de cambio
-        chip.onclick = function() {
-            // 1. Resetear el borde de todos
-            container.querySelectorAll('span').forEach(c => c.style.border = '2px solid #ccc');
-            // 2. Marcar el seleccionado
-            this.style.border = '3px solid #1e3a2e';
-            // 3. Cambiar la imagen principal
-            detailImageContainer.innerHTML = <img referrerpolicy="no-referrer" src="${this.dataset.imageSrc}" alt="${product.name} - ${colorName}">;
-            // 4. Actualizar el nombre del color
-            nameDisplay.textContent = this.dataset.colorName.toUpperCase();
-            
-            // 5. CORRECCIÓN: Actualizar las variables globales correctas para carrito/WA
-            selectedModel = this.dataset.colorName;
-            carouselIndex = parseInt(this.dataset.index);
-            
-            if (typeof updateDetailPriceUI === 'function') updateDetailPriceUI();
-        };
-
-        container.appendChild(chip);
-    });
-
-    // Settear el estado inicial (el primer color)
-    if (product.images.length > 0) {
-        const firstColorName = product.images[0].model || 'Color 1';
-        nameDisplay.textContent = firstColorName.toUpperCase();
-        detailImageContainer.innerHTML = <img referrerpolicy="no-referrer" src="${product.images[0].src}" alt="${product.name} - ${firstColorName}">;
-        
-        // CORRECCIÓN: Settear las variables globales correctas
-        selectedModel = firstColorName;
-        carouselIndex = 0;
-    }
-}
-// === FIN NUEVA FUNCIÓN ===
 
 // Garantizar botón #btnAsk en el detalle
 (function(){
