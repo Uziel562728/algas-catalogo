@@ -215,28 +215,36 @@ function updateModelInfo(modelo, precio){
   }catch(e){ console.error("Error en updateModelInfo:", e); }
 }
 
-// Ajustar medios de pago solo para camisas Y CHOMBAS
+// Ajustar medios de pago solo para camisas, CHOMBAS Y TRAJES
 function updateMediosPago(categoria){
   try{
     const liEfectivo=document.getElementById('pagoEfectivo');
     const liTarjeta=document.getElementById('pagoTarjeta');
     const liTrans=document.getElementById('pagoTransferencia');
-    if(!liTarjeta||!liTrans) return;
+    if(!liTarjeta || !liTrans || !liEfectivo) return; // Salir si falta algún elemento
 
-    // Valores por defecto con mayúscula inicial
-    if(liEfectivo) liEfectivo.textContent='Efectivo 💵';
+    // Resetear a valores por defecto
+    liEfectivo.textContent='Efectivo 💵';
     liTarjeta.textContent='Tarjeta 💳';
     liTrans.textContent='Transferencia';
 
+    // Lógica específica por categoría o ID
     if(categoria==='camisas'){
       liTarjeta.textContent='Tarjeta 💳 (en 3 cuotas)';
       liTrans.textContent='Transferencia (10% de descuento en Camisas)';
     }
     else if(currentProduct && currentProduct.id === 'chomba-algodon-premium-colores'){
-      if(liEfectivo) liEfectivo.innerHTML='Efectivo 💵 <span style="font-weight:bold; color: #e74c3c;">($20.000)</span>';
+      liEfectivo.innerHTML='Efectivo 💵 <span style="font-weight:bold; color: #e74c3c;">($20.000)</span>';
       liTarjeta.innerHTML='Tarjeta 💳 <span style="font-weight:bold; color: #2d5a42;">($25.000 en 3 cuotas)</span>';
       liTrans.innerHTML='Transferencia <span style="font-weight:bold; color: #e74c3c;">($20.000)</span>';
     }
+    // === NUEVA LÓGICA PARA EL TRAJE ===
+    else if(currentProduct && currentProduct.id === 'traje-thomson-williams-soft'){
+      liEfectivo.innerHTML='Efectivo 💵 <span style="font-weight:bold; color: #e74c3c;">($230.000)</span>';
+      liTarjeta.innerHTML='Tarjeta 💳 <span style="font-weight:bold; color: #2d5a42;">($260.000 en 3 pagos)</span>';
+      liTrans.innerHTML='Transferencia <span style="font-weight:bold; color: #e74c3c;">($230.000)</span>';
+    }
+    // ===================================
   }catch(e){ console.error("Error en updateMediosPago:", e); }
 }
 
@@ -444,6 +452,39 @@ const PRODUCTS=[
     sizes: ['S', 'M', 'L', 'XL', 'XXL'],
     tag: 'especial'
   }
+  ,
+  {
+    id: 'traje-thomson-williams-soft', // ID único
+    categoria: 'trajes', // Nueva categoría
+    name: 'Traje Soft Thomson & Williams', // Nombre del producto
+    price: 260000, // Precio de lista (tarjeta)
+
+    // --- IMÁGENES ---
+    // Imagen principal para la grilla (Verde)
+    image: 'https://i.ibb.co/3yV4d7px/Imagen-de-Whats-App-2025-10-27-a-las-16-46-31-86af5f26.jpg',
+
+    // Imágenes para el carrusel (como las camisas)
+    images: [
+      {src: 'https://i.ibb.co/3yV4d7px/Imagen-de-Whats-App-2025-10-27-a-las-16-46-31-86af5f26.jpg', model: 'Verde'},
+      {src: 'https://i.ibb.co/GfCt2RCv/Imagen-de-Whats-App-2025-10-27-a-las-16-46-31-f1ff27e2.jpg', model: 'Bordo'},
+      {src: 'https://i.ibb.co/Fbkq9XG6/Imagen-de-Whats-App-2025-10-27-a-las-16-46-32-f15817f9.jpg', model: 'Gris'},
+      {src: 'https://i.ibb.co/hFLjb4sD/Imagen-de-Whats-App-2025-10-27-a-las-16-46-32-1bce43b6.jpg', model: 'Celeste'}
+    ],
+    // --- FIN IMÁGENES ---
+
+    description: 'Traje soft de calidad insuperable de la marca Thomson & Williams. Un corte moderno y cómodo, perfecto para cualquier ocasión formal. Disponible en una amplia gama de talles.',
+    features: [
+      'Marca: Thomson & Williams',
+      'Calidad insuperable',
+      'Corte soft moderno y confortable',
+      'Precio Tarjeta: $260.000 (3 pagos)',
+      'Promo Efectivo/Transferencia: $230.000',
+      'Talles disponibles: 46 al 66'
+    ],
+    // Generamos los talles del 46 al 66
+    sizes: ['46', '48', '50', '52', '54', '56', '58', '60', '62', '64', '66'],
+    tag: 'especial' // Etiqueta por la promoción
+  } // <-- NO pongas coma si este es el último producto de la lista
 ];
 // Helpers
 const priceLabel = (p)=>{ if(typeof p.price==='number') return fmt(p.price); if(Array.isArray(p.priceRange)&&p.priceRange.length===2) return fmt(p.priceRange[0])+'–'+fmt(p.priceRange[1]); return 'Consultar precio'; };
@@ -482,7 +523,7 @@ function buildIndex(){
   const cont = document.getElementById('catalogoIndice');
   const cats = Array.from(new Set(PRODUCTS.map(p=>p.categoria)));
   // CORREGIDO: Agregar 'chombas' al orden deseado
-  const ORDER = ['camperas','camisas','remeras','chombas','chalecos','pantalones'];
+const ORDER = ['camperas','camisas','remeras','chombas','trajes','chalecos','pantalones']; 
   const ordered = ORDER.filter(c=>cats.includes(c)).concat(cats.filter(c=>!ORDER.includes(c)));
   cont.innerHTML = '';
   const btnAll = document.createElement('button');
@@ -887,22 +928,19 @@ document.getElementById('btnVerProductos').addEventListener('click', (e)=>{ e.pr
     io.observe(footer);
   }
 })();
-// History/back
+// History/back - CORREGIDO para usar goHome()
 window.addEventListener('popstate', (event)=>{
-  if(event.state && event.state.view==='detail'){
+  // Verifica si el estado al que volvemos es la vista de detalle
+  // (esto maneja el caso de usar el botón "Adelante" del navegador)
+  if(event.state && event.state.view==='detail'){
     const pid = event.state.productId;
-    showProductDetail(pid, true); // Mostrar detalle sin afectar historial
-  }else{
-    // Volver a la vista de grilla
-    const detail = document.getElementById('productDetail');
-    const productos = document.getElementById('productos');
-    const hero = document.getElementById('inicio');
-    if(detail) detail.style.display='none';
-    if(productos) productos.style.display='block';
-    if(hero) hero.style.display='block';
-    // No hacer scroll automático al usar back, dejar que el navegador restaure
-    // requestAnimationFrame(()=>{ window.scrollTo({ top: prevScrollY, behavior:'smooth' }); });
-  }
+    // Si vamos HACIA un detalle, lo mostramos (sin scroll suave)
+    showProductDetail(pid, true); // true evita añadir más historial
+  } else {
+    // SI NO es un estado 'detail', significa que estamos volviendo DESDE un detalle HACIA la grilla.
+    // Llamamos a goHome() que ya contiene la lógica de ocultar/mostrar y el scroll suave.
+    goHome();
+  }
 });
 // Init
 document.addEventListener('DOMContentLoaded', ()=>{
