@@ -142,16 +142,23 @@ footer a{color:#fff;text-decoration:underline}
       <div class="detail-header"><button id="backHome" class="back-btn" aria-label="Volver al inicio">← Volver</button></div>
       <h2 id="detailName"></h2>
       <div class="price" id="detailPrice"></div>
+<div id="colorSelector" style="display:none; margin: 15px 0;">
+    <h4 style="font-size: 1rem; color: #1e3a2e; margin-bottom: 8px;">COLOR: <span id="selectedColorName" style="font-weight: bold;"></span></h4>
+    <div id="colorChipsContainer" style="display: flex; gap: 12px; align-items: center;">
+        </div>
+</div>
 <div id="detailModelInfo" style="margin:6px 0;font-size:0.95rem;color:#2d5a42;font-weight:600"></div>
       <div class="payment-note">
         <strong>Medios de pago</strong>
-        <ul style="margin-top:6px;list-style:none;padding-left:0;">
-          <li>efectivo 💵</li>
-          <li id='pagoTarjeta'>tarjeta 💳</li><li id='pagoTransferencia'>transferencia</li></ul>
+<ul style="margin-top:6px;list-style:none;padding-left:0;">
+          <li id='pagoEfectivo'>Efectivo 💵</li>
+          <li id='pagoTarjeta'>Tarjeta 💳</li>
+          <li id='pagoTransferencia'>Transferencia</li>
+        </ul>
       </div>
 <div id="paymentPriceNote" class="promo-camisas-detail" style="display:none;margin-top:8px;">El <strong>PRECIO mostrado en Camisas</strong> corresponde a abonar en <strong>3 cuotas</strong> o con <strong>Transferencia 10% de descuento</strong>.</div>
       <div id="detailSizes" class="sizes"></div>
-      <div id="sizeWarning" class="size-warning">⚠ Seleccioná un talle antes de agregar al carrito.</div>
+      <div id="sizeWarning" class="size-warning">⚠️ Seleccioná un talle antes de agregar al carrito.</div>
       <p id="detailDesc"></p>
       <ul id="detailFeatures"></ul>
       <div class="detail-buttons">
@@ -170,7 +177,7 @@ footer a{color:#fff;text-decoration:underline}
     <div id="cartItems"></div>
     <div class="cart-total" id="cartTotal"></div>
     <div class="cart-actions">
-      <button class="btn" style="background:#e74c3c;color:#fff" onclick="clearCart()">🗑 Vaciar Carrito</button>
+      <button class="btn" style="background:#e74c3c;color:#fff" onclick="clearCart()">🗑️ Vaciar Carrito</button>
       <button class="btn" style="background:#25d366;color:#fff" onclick="checkout()">📱 Finalizar Compra</button>
     </div>
   </div>
@@ -187,58 +194,66 @@ footer a{color:#fff;text-decoration:underline}
 <script>
 // === Modelo + Precio dinámico ===
 function updateModelInfo(modelo, precio){
-  try{
-    const info=document.getElementById('detailModelInfo');
-    if(info){
-      if(modelo){
-        info.textContent='Modelo seleccionado: '+modelo+' — $'+precio;
-      }else{
-        info.textContent='';
-      }
-    }
-    // También actualizar la nota de promo si es camisa
-    const promo=document.getElementById('paymentPriceNote');
-    if(promo && currentProduct && currentProduct.categoria==='camisas'){
-      if(modelo){
-        promo.innerHTML='El <strong>PRECIO mostrado en Camisas</strong> (Modelo '+modelo+') corresponde a abonar en <strong>3 cuotas</strong> o con <strong>Transferencia 10% de descuento</strong>.';
-      }else{
-        promo.innerHTML='El <strong>PRECIO mostrado en Camisas</strong> corresponde a abonar en <strong>3 cuotas</strong> o con <strong>Transferencia 10% de descuento</strong>.';
-      }
-    }
-  }catch(e){}
+  try{
+    const info=document.getElementById('detailModelInfo');
+    if(info){
+      if(modelo){
+        // Corregido: Usar backticks para template literal (si aplica, aunque aquí no era necesario)
+        info.textContent='Modelo seleccionado: '+modelo+' — $'+precio;
+      }else{
+        info.textContent='';
+      }
+    }
+    const promo=document.getElementById('paymentPriceNote');
+    if(promo && currentProduct && currentProduct.categoria==='camisas'){
+      if(modelo){
+        promo.innerHTML=`El <strong>PRECIO mostrado en Camisas</strong> (Modelo ${modelo}) corresponde a abonar en <strong>3 cuotas</strong> o con <strong>Transferencia 10% de descuento</strong>.`; // Usar backticks si hay ${}
+      }else{
+        promo.innerHTML='El <strong>PRECIO mostrado en Camisas</strong> corresponde a abonar en <strong>3 cuotas</strong> o con <strong>Transferencia 10% de descuento</strong>.';
+      }
+    }
+  }catch(e){ console.error("Error en updateModelInfo:", e); }
 }
 
-// Ajustar medios de pago solo para camisas
-function updateMediosPago(isCamisa){
-  try{
-    const liTarjeta=document.getElementById('pagoTarjeta');
-    const liTrans=document.getElementById('pagoTransferencia');
-    if(!liTarjeta||!liTrans) return;
-    if(isCamisa){
-      liTarjeta.textContent='tarjeta 💳 (en 3 cuotas)';
-      liTrans.textContent='transferencia (10% de descuento en Camisas)';
-    }else{
-      liTarjeta.textContent='tarjeta 💳';
-      liTrans.textContent='transferencia';
-    }
-  }catch(e){}
-}
+// Ajustar medios de pago solo para camisas Y CHOMBAS
+function updateMediosPago(categoria){
+  try{
+    const liEfectivo=document.getElementById('pagoEfectivo');
+    const liTarjeta=document.getElementById('pagoTarjeta');
+    const liTrans=document.getElementById('pagoTransferencia');
+    if(!liTarjeta||!liTrans) return;
 
+    // Valores por defecto con mayúscula inicial
+    if(liEfectivo) liEfectivo.textContent='Efectivo 💵';
+    liTarjeta.textContent='Tarjeta 💳';
+    liTrans.textContent='Transferencia';
+
+    if(categoria==='camisas'){
+      liTarjeta.textContent='Tarjeta 💳 (en 3 cuotas)';
+      liTrans.textContent='Transferencia (10% de descuento en Camisas)';
+    }
+    else if(currentProduct && currentProduct.id === 'chomba-algodon-premium-colores'){
+      if(liEfectivo) liEfectivo.innerHTML='Efectivo 💵 <span style="font-weight:bold; color: #e74c3c;">($20.000)</span>';
+      liTarjeta.innerHTML='Tarjeta 💳 <span style="font-weight:bold; color: #2d5a42;">($25.000 en 3 cuotas)</span>';
+      liTrans.innerHTML='Transferencia <span style="font-weight:bold; color: #e74c3c;">($20.000)</span>';
+    }
+  }catch(e){ console.error("Error en updateMediosPago:", e); }
+}
 
 // === Helpers PROMO CAMISAS (restaurado) ===
 function showCamisasPromoInGrid(cat){
-  try{
-    const el = document.getElementById('promoCamisas');
-    if(!el) return;
-    el.style.display = (cat==='camisas' || cat==='all') ? 'block' : 'none';
-  }catch(e){}
+  try{
+    const el = document.getElementById('promoCamisas');
+    if(!el) return;
+    el.style.display = (cat==='camisas' || cat==='all') ? 'block' : 'none';
+  }catch(e){ console.error("Error en showCamisasPromoInGrid:", e); }
 }
 function showCamisasPromoInDetail(isCamisa){
-  try{
-    const el = document.getElementById('paymentPriceNote');
-    if(!el) return;
-    el.style.display = isCamisa ? 'block' : 'none';
-  }catch(e){}
+  try{
+    const el = document.getElementById('paymentPriceNote');
+    if(!el) return;
+    el.style.display = isCamisa ? 'block' : 'none';
+  }catch(e){ console.error("Error en showCamisasPromoInDetail:", e); }
 }
 
 history.scrollRestoration='manual';
@@ -248,694 +263,811 @@ const fmt=(n)=> n.toLocaleString('es-AR',CURRENCY);
 // State
 let cart=[]; let currentProduct=null; let prevScrollY=0; let selectedSize=null; let selectedModel=null;
 let __cartLockScrollY=0;
-function lockBodyScroll(){ __cartLockScrollY = window.scrollY || window.pageYOffset || 0; document.body.classList.add('modal-open'); document.body.style.top = -${__cartLockScrollY}px; }
-function unlockBodyScroll(){ document.body.classList.remove('modal-open'); const y = __cartLockScrollY || 0; document.body.style.top=''; window.scrollTo(0, y); }
+function lockBodyScroll(){
+  __cartLockScrollY = window.scrollY || window.pageYOffset || 0;
+  document.body.classList.add('modal-open');
+  // CORREGIDO: Usar backticks
+  document.body.style.top = `-${__cartLockScrollY}px`;
+}
+function unlockBodyScroll(){
+  document.body.classList.remove('modal-open');
+  const y = __cartLockScrollY || 0;
+  document.body.style.top='';
+  window.scrollTo(0, y);
+}
 // ===== CATÁLOGO =====
 const PRODUCTS=[
-  { id:'campera-buckingham', categoria:'camperas', name:'Campera Doble Pechera Buckingham Polo Club', price:45000,
-    image:'https://i.ibb.co/8DCZtDLT/Imagen-de-Whats-App-2025-09-02-a-las-15-04-22-d86e4fea.jpg',
-    description:'Campera doble pechera de la marca Buckingham Polo Club, pensada para brindar abrigo y estilo. Disponible en talle XL.',
-    features:['Diseño de doble pechera para mayor protección térmica','Marca Buckingham Polo Club, símbolo de elegancia','Materiales resistentes y costuras reforzadas','Disponible en talle XL','10%  pagando en efectivo o transferencia'],
-    sizes:['XL'],
-    tag:''
-  },
-  { id:'campera-impermeable', categoria:'camperas', name:'Campera Impermeable con Capucha Desmontable Buckingham Polo Club', price:40000,
-    image:'https://i.ibb.co/j9m1hd5s/Imagen-de-Whats-App-2025-09-02-a-las-15-04-22-3e106fdf.jpg',
-    description:'Campera impermeable con capucha desmontable de Buckingham Polo Club. Ideal para lluvia y frío. Disponible en XL y color azul.',
-    features:['Material impermeable de alta calidad','Capucha desmontable con cierre oculto','Confección resistente y cómoda','Marca Buckingham Polo Club','Disponible en talle XL y en color azul'],
-    sizes:['XL'],
-    tag:null
-  },
-  { id:'campera-backing', categoria:'camperas', name:'Campera Backing Polo Club — Oferta Especial', price:25000,
-    image:'https://i.ibb.co/nNZkfLKQ/Imagen-de-Whats-App-2025-09-02-a-las-15-04-22-98e2bc66.jpg',
-    description:'Campera Backing Polo Club en color único. Oferta especial desde talle S hasta doble XL.',
-    features:['Diseño exclusivo de Backing Polo Club','Oferta limitada a un único color','Disponible desde talle S hasta doble XL','Confección resistente y cómoda','Precio promocional especial'],
-    sizes:['S','M','L','XL','XXL'],
-    tag:'especial'
-  },
-  { id:'campera-buckingham-reversible', categoria:'camperas', name:'Campera Buckingham Polo Club — Reversible', price:35000,
-    image:'https://i.ibb.co/60gWC3Cg/Imagen-de-Whats-App-2025-09-02-a-las-15-04-22-9543c4f7.jpg',
-    description:'Campera reversible de Buckingham Polo Club, ideal para diferentes estilos y situaciones. Disponible en talles S a doble XL.',
-    features:['Diseño reversible para dos estilos','Marca Buckingham Polo Club, sinónimo de calidad','Ideal para climas fríos y moderados','Disponible en talles desde S a XXL','Precio increíble $35.000'],
-    sizes:['S','M','L','XL','XXL'],
-    tag:null
-  },
-  { id:'campera-engomada', categoria:'camperas', name:'Campera Engomada Buckingham Polo Club', price:45000,
-    image:'https://i.ibb.co/xShQ1PGx/Imagen-de-Whats-App-2025-09-02-a-las-15-04-23-01309848.jpg',
-    description:'Campera engomada Buckingham Polo Club, del talle S al doble XL. Terminación engomada con excelente resistencia y estilo.',
-    features:['Terminación engomada de alta resistencia','Marca Buckingham Polo Club','Disponible del S al XXL','Interior cómodo para uso diario','Precio especial $45.000'],
-    sizes:['S','M','L','XL','XXL'],
-    tag:null
-  },
-  { id:'campera-capucha-desmontable', categoria:'camperas', name:'Campera Buckingham Polo Club — Capucha Desmontable', price:40000,
-    image:'https://i.ibb.co/tw0QJtkp/Imagen-de-Whats-App-2025-09-02-a-las-15-04-23-995082e4.jpg',
-    description:'Campera con capucha desmontable e impermeable de Buckingham Polo Club, con precio increíble. Ideal para lluvia y uso diario.',
-    features:['Capucha desmontable para mayor versatilidad','Tejido impermeable para lluvia','Marca Buckingham Polo Club','Confección cómoda para uso diario','Precio increíble: $40.000'],
-    sizes:['S','M','L','XL','XXL'],
-    tag:null
-  },
-  { id:'campera-uniqlo-impermeable', categoria:'camperas', name:'Campera Impermeable Símil Uniqlo Buckingham Polo Club', price:25000,
-    image:'https://i.ibb.co/nN4sKcMj/Imagen-de-Whats-App-2025-09-02-a-las-15-04-23-bf6f3281.jpg',
-    description:'Campera impermeable símil Uniqlo de Buckingham Polo Club, disponible del talle S al XXL. Precio imbatible: $25.000.',
-    features:['Inspirada en el estilo Uniqlo','Material impermeable de alta calidad','Disponible del talle S al XXL','Confección cómoda y resistente','Precio imbatible $25.000'],
-    sizes:['S','M','L','XL','XXL'],
-    tag:null
-  },
-  { id:'campera-impermeable-oferta', categoria:'camperas', name:'Campera Impermeable — Oferta Limitada', price:35000,
-    image:'https://i.ibb.co/zVHHrw0V/Imagen-de-Whats-App-2025-09-04-a-las-11-06-23-83ac75f2.jpg',
-    description:'Campera impermeable. Oferta limitada desde el talle S al doble XL. Precio promocional $35.000 (transferencia o efectivo).',
-    features:['Impermeable de alta calidad','Oferta limitada','Disponible desde talle S hasta doble XL','Precio promocional especial $35.000','Pagando con transferencia o efectivo'],
-    sizes:['S','M','L','XL','XXL'],
-    tag:'especial'
-  },
-  { id:'campera-rompevientos', categoria:'camperas', name:'Rompevientos Buckingham Polo Club', price:40000,
-    image:'https://i.ibb.co/DPQ8mYZm/Imagen-de-Whats-App-2025-09-04-a-las-10-33-16-0ff45917.jpg',
-    description:'Varios modelos, talles y colores, del Small al XXL. ¡Increíble oferta $40.000!',
-    features:['Rompevientos liviano','Varios modelos y colores','Talles S al XXL','Secado rápido','Excelente relación precio-calidad'],
-    sizes:['S','M','L','XL','XXL'],
-    tag:'especial'
-  },
-  { id:'chaleco-impermeable', categoria:'chalecos', name:'Chaleco Impermeable Buckingham Polo Club', price:35000,
-    image:'https://i.ibb.co/JwPW5XPS/Imagen-de-Whats-App-2025-09-04-a-las-10-33-17-ba7943c4.jpg',
-    description:'Único color. Precio $35.000.',
-    features:['Tejido impermeable','Único color','Marca Buckingham Polo Club','Liviano y cómodo','Ideal para lluvia y viento'],
-    sizes:['S','M','L','XL','XXL'],
-    tag:'especial'
-  },
-  { id:'camisaco-corderito', categoria:'camperas', name:'Camisaco forrado en Corderito', price:35000,
-    image:'https://i.ibb.co/jqdFsKW/Imagen-de-Whats-App-2025-09-04-a-las-10-33-17-1b371c5b.jpg',
-    description:'Últimas unidades. Del talle S al XL.',
-    features:['Forrado en corderito','Últimas unidades','Del S al XL','Abrigo suave y cómodo'],
-    sizes:['S','M','L','XL'],
-    tag:'especial'
-  },
-  { id:'remera-mc-premium', categoria:'remeras', name:'Remera Manga Corta - Primera Marca (Algodón Peinado)', price:20000,
-    image:'https://i.ibb.co/k62gp4Zw/Imagen-de-Whats-App-2025-09-04-a-las-22-34-46-2e91c20e.jpg',
-    description:'Oferta especial. Algodón peinado, calidad primera marca.',
-    features:['Algodón peinado','Primera marca','Oferta especial','Corte clásico y cómodo'],
-    sizes:['XS','S','M','L','XL','XXL'],
-    tag:'especial'
-  },
-  { id:'camisa-rochas', categoria:'camisas', name:'Camisa primera marca Rochas', price:null,
-    image:'https://i.ibb.co/qMzbzg3g/Imagen-de-Whats-App-2025-09-09-a-las-23-41-40-dc17556f.jpg',
-    images:[
-      {src:'https://i.ibb.co/qMzbzg3g/Imagen-de-Whats-App-2025-09-09-a-las-23-41-40-dc17556f.jpg', model:'blanca con rayas'},
-      {src:'https://i.ibb.co/BHFDdnGT/Imagen-de-Whats-App-2025-09-09-a-las-23-41-40-cdb0bb08.jpg', model:'blanca con cuadraditos azules'},
-      {src:'https://i.ibb.co/DDpnsxc3/Imagen-de-Whats-App-2025-09-09-a-las-23-41-40-a689e4c3.jpg', model:'blanca con cuadraditos celestes'},
-      {src:'https://i.ibb.co/0yzWkbfg/Imagen-de-Whats-App-2025-09-09-a-las-23-41-40-9e7fafbe.jpg', model:'gris con cuadraditos'},
-      {src:'https://i.ibb.co/mVQMfzy2/Imagen-de-Whats-App-2025-09-09-a-las-23-41-41-e4f63b4d.jpg', model:'celeste rayada'},
-      {src:'https://i.ibb.co/sDTfj5w/Imagen-de-Whats-App-2025-09-11-a-las-17-19-20-3f1a47d0.jpg', model:'azul rayada'},
-      {src:'https://i.ibb.co/tTMVZ4y5/Imagen-de-Whats-App-2025-09-11-a-las-17-19-21-22aaa98f.jpg', model:'marron lisa'},
-      {src:'https://i.ibb.co/Mx2F0PXH/Imagen-de-Whats-App-2025-09-11-a-las-17-19-21-9ea15da8.jpg', model:'blanca lisa'}
-    ],
-    description:'Marca Rochas. 80% algodón. Varios tonos. Talles del S al XXL.',
-    features:['Marca Rochas','80% algodón','Varios tonos disponibles','Talles del S al XXL','Consultá el precio'],
-    sizes:['S','M','L','XL','XXL'],
-    tag:'especial'
-  },
-  { id:'camisa-rocco', categoria:'camisas', name:'Camisa marca Rocco — Oferta especial', price:39999,
-    image:'https://i.ibb.co/gZv8X62R/Imagen-de-Whats-App-2025-09-10-a-las-16-31-37-d034c8e0.jpg',
-    images:[
-      {src:'https://i.ibb.co/gZv8X62R/Imagen-de-Whats-App-2025-09-10-a-las-16-31-37-d034c8e0.jpg', model:'blanca con rayas'},
-      {src:'https://i.ibb.co/mrM7mpgh/Imagen-de-Whats-App-2025-09-10-a-las-16-31-38-4ab03b07.jpg', model:'negra con cuadraditos'},
-      {src:'https://i.ibb.co/xq52DPBJ/Imagen-de-Whats-App-2025-09-10-a-las-16-31-38-99aed11c.jpg', model:'celeste lisa'},
-      {src:'https://i.ibb.co/tTmYf0T4/Imagen-de-Whats-App-2025-09-10-a-las-16-31-38-dd398098.jpg', model:'blanca lisa'},
-      {src:'https://i.ibb.co/23M4Gwv0/Imagen-de-Whats-App-2025-09-10-a-las-16-31-39-0476913f.jpg', model:'negra con rayas'}
-    ],
-    description:'Camisas marca Rocco. Oferta especial $39.999. Talles del S al XXL.',
-    features:['Marca Rocco','Varios tonos y diseños','Talles del S al XXL','Oferta especial $39.999'],
-    sizes:['S','M','L','XL','XXL'],
-    tag:'especial'
-  }
-  ,
-  { id:'camisa-ysl', categoria:'camisas', name:'Camisa Yves Saint Laurent — 100% Algodón', priceRange:[50000,70000],
-    image:'https://i.ibb.co/tM3rFddt/Imagen-de-Whats-App-2025-09-15-a-las-16-22-09-bd64a629.jpg',
-    images:[
-      {src:'https://i.ibb.co/tM3rFddt/Imagen-de-Whats-App-2025-09-15-a-las-16-22-09-bd64a629.jpg', model:'modelo 01'},
-      {src:'https://i.ibb.co/LzyYt9L1/Imagen-de-Whats-App-2025-09-15-a-las-16-22-10-14e1a743.jpg', model:'modelo 02'},
-      {src:'https://i.ibb.co/xqGrQLNV/Imagen-de-Whats-App-2025-09-15-a-las-16-22-10-d9c3ca50.jpg', model:'modelo 03'},
-      {src:'https://i.ibb.co/YBzK92Bw/Imagen-de-Whats-App-2025-09-15-a-las-16-22-10-478a6c88.jpg', model:'modelo 04'},
-      {src:'https://i.ibb.co/mV3NyWv7/Imagen-de-Whats-App-2025-09-15-a-las-16-22-10-62b4189e.jpg', model:'modelo 05'},
-      {src:'https://i.ibb.co/27LnnSdj/Imagen-de-Whats-App-2025-09-15-a-las-16-22-11-3591d70d.jpg', model:'modelo 06'},
-      {src:'https://i.ibb.co/pvhHXhpx/Imagen-de-Whats-App-2025-09-15-a-las-16-22-11-c53aee86.jpg', model:'modelo 07'},
-      {src:'https://i.ibb.co/xcFR2w4/Imagen-de-Whats-App-2025-09-15-a-las-16-22-11-3050943c.jpg', model:'modelo 08'},
-      {src:'https://i.ibb.co/3ydTxVQ1/Imagen-de-Whats-App-2025-09-15-a-las-16-22-12-feb4e7e4.jpg', model:'modelo 09'},
-      {src:'https://i.ibb.co/TxWMdDVR/Imagen-de-Whats-App-2025-09-15-a-las-16-22-12-d79c3e84.jpg', model:'modelo 10'},
-      {src:'https://i.ibb.co/BVxSvKFC/Imagen-de-Whats-App-2025-09-15-a-las-16-22-12-abdb9f42.jpg', model:'modelo 11'},
-      {src:'https://i.ibb.co/8LTFT59N/Imagen-de-Whats-App-2025-09-15-a-las-16-22-13-744a2e8e.jpg', model:'modelo 12'},
-      {src:'https://i.ibb.co/qqfVWnC/Imagen-de-Whats-App-2025-09-15-a-las-16-22-13-35fe9016.jpg', model:'modelo 13'},
-      {src:'https://i.ibb.co/TMNmnWkD/Imagen-de-Whats-App-2025-09-15-a-las-16-22-13-47d26d6f.jpg', model:'modelo 14'},
-      {src:'https://i.ibb.co/ZDnW7rj/Imagen-de-Whats-App-2025-09-15-a-las-16-22-13-395d716f.jpg', model:'modelo 15'},
-      {src:'https://i.ibb.co/mLchkJf/Imagen-de-Whats-App-2025-09-15-a-las-16-22-14-e09a9aaf.jpg', model:'modelo 16'},
-      {src:'https://i.ibb.co/hxLX8fDt/Imagen-de-Whats-App-2025-09-15-a-las-16-22-14-3f416705.jpg', model:'modelo 17'}
-    ],
-    description:'Sastrería de lujo en algodón 100% de fibra larga. Terminación impecable en cuello y puños; corte moderno con estructura clásica.',
-    features:['100% algodón premium','Costuras reforzadas','Conserva forma y color','Corte moderno'],
-    sizes:['S','M','L','XL','XXL'],
-    tag:'especial'
-  }
+  { id:'campera-buckingham', categoria:'camperas', name:'Campera Doble Pechera Buckingham Polo Club', price:45000,
+    image:'https://i.ibb.co/8DCZtDLT/Imagen-de-Whats-App-2025-09-02-a-las-15-04-22-d86e4fea.jpg',
+    description:'Campera doble pechera de la marca Buckingham Polo Club, pensada para brindar abrigo y estilo. Disponible en talle XL.',
+    features:['Diseño de doble pechera para mayor protección térmica','Marca Buckingham Polo Club, símbolo de elegancia','Materiales resistentes y costuras reforzadas','Disponible en talle XL','10%  pagando en efectivo o transferencia'],
+    sizes:['XL'],
+    tag:''
+  },
+  { id:'campera-impermeable', categoria:'camperas', name:'Campera Impermeable con Capucha Desmontable Buckingham Polo Club', price:40000,
+    image:'https://i.ibb.co/j9m1hd5s/Imagen-de-Whats-App-2025-09-02-a-las-15-04-22-3e106fdf.jpg',
+    description:'Campera impermeable con capucha desmontable de Buckingham Polo Club. Ideal para lluvia y frío. Disponible en XL y color azul.',
+    features:['Material impermeable de alta calidad','Capucha desmontable con cierre oculto','Confección resistente y cómoda','Marca Buckingham Polo Club','Disponible en talle XL y en color azul'],
+    sizes:['XL'],
+    tag:null
+  },
+  { id:'campera-backing', categoria:'camperas', name:'Campera Backing Polo Club — Oferta Especial', price:25000,
+    image:'https://i.ibb.co/nNZkfLKQ/Imagen-de-Whats-App-2025-09-02-a-las-15-04-22-98e2bc66.jpg',
+    description:'Campera Backing Polo Club en color único. Oferta especial desde talle S hasta doble XL.',
+    features:['Diseño exclusivo de Backing Polo Club','Oferta limitada a un único color','Disponible desde talle S hasta doble XL','Confección resistente y cómoda','Precio promocional especial'],
+    sizes:['S','M','L','XL','XXL'],
+    tag:'especial'
+  },
+  { id:'campera-buckingham-reversible', categoria:'camperas', name:'Campera Buckingham Polo Club — Reversible', price:35000,
+    image:'https://i.ibb.co/60gWC3Cg/Imagen-de-Whats-App-2025-09-02-a-las-15-04-22-9543c4f7.jpg',
+    description:'Campera reversible de Buckingham Polo Club, ideal para diferentes estilos y situaciones. Disponible en talles S a doble XL.',
+    features:['Diseño reversible para dos estilos','Marca Buckingham Polo Club, sinónimo de calidad','Ideal para climas fríos y moderados','Disponible en talles desde S a XXL','Precio increíble $35.000'],
+    sizes:['S','M','L','XL','XXL'],
+    tag:null
+  },
+  { id:'campera-engomada', categoria:'camperas', name:'Campera Engomada Buckingham Polo Club', price:45000,
+    image:'https://i.ibb.co/xShQ1PGx/Imagen-de-Whats-App-2025-09-02-a-las-15-04-23-01309848.jpg',
+    description:'Campera engomada Buckingham Polo Club, del talle S al doble XL. Terminación engomada con excelente resistencia y estilo.',
+    features:['Terminación engomada de alta resistencia','Marca Buckingham Polo Club','Disponible del S al XXL','Interior cómodo para uso diario','Precio especial $45.000'],
+    sizes:['S','M','L','XL','XXL'],
+    tag:null
+  },
+  { id:'campera-capucha-desmontable', categoria:'camperas', name:'Campera Buckingham Polo Club — Capucha Desmontable', price:40000,
+    image:'https://i.ibb.co/tw0QJtkp/Imagen-de-Whats-App-2025-09-02-a-las-15-04-23-995082e4.jpg',
+    description:'Campera con capucha desmontable e impermeable de Buckingham Polo Club, con precio increíble. Ideal para lluvia y uso diario.',
+    features:['Capucha desmontable para mayor versatilidad','Tejido impermeable para lluvia','Marca Buckingham Polo Club','Confección cómoda para uso diario','Precio increíble: $40.000'],
+    sizes:['S','M','L','XL','XXL'],
+    tag:null
+  },
+  { id:'campera-uniqlo-impermeable', categoria:'camperas', name:'Campera Impermeable Símil Uniqlo Buckingham Polo Club', price:25000,
+    image:'https://i.ibb.co/nN4sKcMj/Imagen-de-Whats-App-2025-09-02-a-las-15-04-23-bf6f3281.jpg',
+    description:'Campera impermeable símil Uniqlo de Buckingham Polo Club, disponible del talle S al XXL. Precio imbatible: $25.000.',
+    features:['Inspirada en el estilo Uniqlo','Material impermeable de alta calidad','Disponible del talle S al XXL','Confección cómoda y resistente','Precio imbatible $25.000'],
+    sizes:['S','M','L','XL','XXL'],
+    tag:null
+  },
+  { id:'campera-impermeable-oferta', categoria:'camperas', name:'Campera Impermeable — Oferta Limitada', price:35000,
+    image:'https://i.ibb.co/zVHHrw0V/Imagen-de-Whats-App-2025-09-04-a-las-11-06-23-83ac75f2.jpg',
+    description:'Campera impermeable. Oferta limitada desde el talle S al doble XL. Precio promocional $35.000 (transferencia o efectivo).',
+    features:['Impermeable de alta calidad','Oferta limitada','Disponible desde talle S hasta doble XL','Precio promocional especial $35.000','Pagando con transferencia o efectivo'],
+    sizes:['S','M','L','XL','XXL'],
+    tag:'especial'
+  },
+  { id:'campera-rompevientos', categoria:'camperas', name:'Rompevientos Buckingham Polo Club', price:40000,
+    image:'https://i.ibb.co/DPQ8mYZm/Imagen-de-Whats-App-2025-09-04-a-las-10-33-16-0ff45917.jpg',
+    description:'Varios modelos, talles y colores, del Small al XXL. ¡Increíble oferta $40.000!',
+    features:['Rompevientos liviano','Varios modelos y colores','Talles S al XXL','Secado rápido','Excelente relación precio-calidad'],
+    sizes:['S','M','L','XL','XXL'],
+    tag:'especial'
+  },
+  { id:'chaleco-impermeable', categoria:'chalecos', name:'Chaleco Impermeable Buckingham Polo Club', price:35000,
+    image:'https://i.ibb.co/JwPW5XPS/Imagen-de-Whats-App-2025-09-04-a-las-10-33-17-ba7943c4.jpg',
+    description:'Único color. Precio $35.000.',
+    features:['Tejido impermeable','Único color','Marca Buckingham Polo Club','Liviano y cómodo','Ideal para lluvia y viento'],
+    sizes:['S','M','L','XL','XXL'],
+    tag:'especial'
+  },
+  { id:'camisaco-corderito', categoria:'camperas', name:'Camisaco forrado en Corderito', price:35000,
+    image:'https://i.ibb.co/jqdFsKW/Imagen-de-Whats-App-2025-09-04-a-las-10-33-17-1b371c5b.jpg',
+    description:'Últimas unidades. Del talle S al XL.',
+    features:['Forrado en corderito','Últimas unidades','Del S al XL','Abrigo suave y cómodo'],
+    sizes:['S','M','L','XL'],
+    tag:'especial'
+  },
+  { id:'remera-mc-premium', categoria:'remeras', name:'Remera Manga Corta - Primera Marca (Algodón Peinado)', price:20000,
+    image:'https://i.ibb.co/k62gp4Zw/Imagen-de-Whats-App-2025-09-04-a-las-22-34-46-2e91c20e.jpg',
+    description:'Oferta especial. Algodón peinado, calidad primera marca.',
+    features:['Algodón peinado','Primera marca','Oferta especial','Corte clásico y cómodo'],
+    sizes:['XS','S','M','L','XL','XXL'],
+    tag:'especial'
+  },
+  { id:'camisa-rochas', categoria:'camisas', name:'Camisa primera marca Rochas', price:null,
+    image:'https://i.ibb.co/qMzbzg3g/Imagen-de-Whats-App-2025-09-09-a-las-23-41-40-dc17556f.jpg',
+    images:[
+      {src:'https://i.ibb.co/qMzbzg3g/Imagen-de-Whats-App-2025-09-09-a-las-23-41-40-dc17556f.jpg', model:'blanca con rayas'},
+      {src:'https://i.ibb.co/BHFDdnGT/Imagen-de-Whats-App-2025-09-09-a-las-23-41-40-cdb0bb08.jpg', model:'blanca con cuadraditos azules'},
+      {src:'https://i.ibb.co/DDpnsxc3/Imagen-de-Whats-App-2025-09-09-a-las-23-41-40-a689e4c3.jpg', model:'blanca con cuadraditos celestes'},
+      {src:'https://i.ibb.co/0yzWkbfg/Imagen-de-Whats-App-2025-09-09-a-las-23-41-40-9e7fafbe.jpg', model:'gris con cuadraditos'},
+      {src:'https://i.ibb.co/mVQMfzy2/Imagen-de-Whats-App-2025-09-09-a-las-23-41-41-e4f63b4d.jpg', model:'celeste rayada'},
+      {src:'https://i.ibb.co/sDTfj5w/Imagen-de-Whats-App-2025-09-11-a-las-17-19-20-3f1a47d0.jpg', model:'azul rayada'},
+      {src:'https://i.ibb.co/tTMVZ4y5/Imagen-de-Whats-App-2025-09-11-a-las-17-19-21-22aaa98f.jpg', model:'marron lisa'},
+      {src:'https://i.ibb.co/Mx2F0PXH/Imagen-de-Whats-App-2025-09-11-a-las-17-19-21-9ea15da8.jpg', model:'blanca lisa'}
+    ],
+    description:'Marca Rochas. 80% algodón. Varios tonos. Talles del S al XXL.',
+    features:['Marca Rochas','80% algodón','Varios tonos disponibles','Talles del S al XXL','Consultá el precio'],
+    sizes:['S','M','L','XL','XXL'],
+    tag:'especial'
+  },
+  { id:'camisa-rocco', categoria:'camisas', name:'Camisa marca Rocco — Oferta especial', price:39999,
+    image:'https://i.ibb.co/gZv8X62R/Imagen-de-Whats-App-2025-09-10-a-las-16-31-37-d034c8e0.jpg',
+    images:[
+      {src:'https://i.ibb.co/gZv8X62R/Imagen-de-Whats-App-2025-09-10-a-las-16-31-37-d034c8e0.jpg', model:'blanca con rayas'},
+      {src:'https://i.ibb.co/mrM7mpgh/Imagen-de-Whats-App-2025-09-10-a-las-16-31-38-4ab03b07.jpg', model:'negra con cuadraditos'},
+      {src:'https://i.ibb.co/xq52DPBJ/Imagen-de-Whats-App-2025-09-10-a-las-16-31-38-99aed11c.jpg', model:'celeste lisa'},
+      {src:'https://i.ibb.co/tTmYf0T4/Imagen-de-Whats-App-2025-09-10-a-las-16-31-38-dd398098.jpg', model:'blanca lisa'},
+      {src:'https://i.ibb.co/23M4Gwv0/Imagen-de-Whats-App-2025-09-10-a-las-16-31-39-0476913f.jpg', model:'negra con rayas'}
+    ],
+    description:'Camisas marca Rocco. Oferta especial $39.999. Talles del S al XXL.',
+    features:['Marca Rocco','Varios tonos y diseños','Talles del S al XXL','Oferta especial $39.999'],
+    sizes:['S','M','L','XL','XXL'],
+    tag:'especial'
+  },
+  { id:'camisa-ysl', categoria:'camisas', name:'Camisa Yves Saint Laurent — 100% Algodón', priceRange:[50000,70000],
+    image:'https://i.ibb.co/tM3rFddt/Imagen-de-Whats-App-2025-09-15-a-las-16-22-09-bd64a629.jpg',
+    images:[
+      {src:'https://i.ibb.co/tM3rFddt/Imagen-de-Whats-App-2025-09-15-a-las-16-22-09-bd64a629.jpg', model:'modelo 01'},
+      {src:'https://i.ibb.co/LzyYt9L1/Imagen-de-Whats-App-2025-09-15-a-las-16-22-10-14e1a743.jpg', model:'modelo 02'},
+      {src:'https://i.ibb.co/xqGrQLNV/Imagen-de-Whats-App-2025-09-15-a-las-16-22-10-d9c3ca50.jpg', model:'modelo 03'},
+      {src:'https://i.ibb.co/YBzK92Bw/Imagen-de-Whats-App-2025-09-15-a-las-16-22-10-478a6c88.jpg', model:'modelo 04'},
+      {src:'https://i.ibb.co/mV3NyWv7/Imagen-de-Whats-App-2025-09-15-a-las-16-22-10-62b4189e.jpg', model:'modelo 05'},
+      {src:'https://i.ibb.co/27LnnSdj/Imagen-de-Whats-App-2025-09-15-a-las-16-22-11-3591d70d.jpg', model:'modelo 06'},
+      {src:'https://i.ibb.co/pvhHXhpx/Imagen-de-Whats-App-2025-09-15-a-las-16-22-11-c53aee86.jpg', model:'modelo 07'},
+      {src:'https://i.ibb.co/xcFR2w4/Imagen-de-Whats-App-2025-09-15-a-las-16-22-11-3050943c.jpg', model:'modelo 08'},
+      {src:'https://i.ibb.co/3ydTxVQ1/Imagen-de-Whats-App-2025-09-15-a-las-16-22-12-feb4e7e4.jpg', model:'modelo 09'},
+      {src:'https://i.ibb.co/TxWMdDVR/Imagen-de-Whats-App-2025-09-15-a-las-16-22-12-d79c3e84.jpg', model:'modelo 10'},
+      {src:'https://i.ibb.co/BVxSvKFC/Imagen-de-Whats-App-2025-09-15-a-las-16-22-12-abdb9f42.jpg', model:'modelo 11'},
+      {src:'https://i.ibb.co/8LTFT59N/Imagen-de-Whats-App-2025-09-15-a-las-16-22-13-744a2e8e.jpg', model:'modelo 12'},
+      {src:'https://i.ibb.co/qqfVWnC/Imagen-de-Whats-App-2025-09-15-a-las-16-22-13-35fe9016.jpg', model:'modelo 13'},
+      {src:'https://i.ibb.co/TMNmnWkD/Imagen-de-Whats-App-2025-09-15-a-las-16-22-13-47d26d6f.jpg', model:'modelo 14'},
+      {src:'https://i.ibb.co/ZDnW7rj/Imagen-de-Whats-App-2025-09-15-a-las-16-22-13-395d716f.jpg', model:'modelo 15'},
+      {src:'https://i.ibb.co/mLchkJf/Imagen-de-Whats-App-2025-09-15-a-las-16-22-14-e09a9aaf.jpg', model:'modelo 16'},
+      {src:'https://i.ibb.co/hxLX8fDt/Imagen-de-Whats-App-2025-09-15-a-las-16-22-14-3f416705.jpg', model:'modelo 17'}
+    ],
+    description:'Sastrería de lujo en algodón 100% de fibra larga. Terminación impecable en cuello y puños; corte moderno con estructura clásica.',
+    features:['100% algodón premium','Costuras reforzadas','Conserva forma y color','Corte moderno'],
+    sizes:['S','M','L','XL','XXL'],
+    tag:'especial'
+  },
+  {
+    id: 'chomba-algodon-premium-colores',
+    categoria: 'chombas',
+    name: 'Chomba 100% Algodón (Varios Colores)',
+    price: 25000,
+    image: 'https://i.ibb.co/nGq637f/Imagen-de-Whats-App-2025-10-26-a-las-15-09-30-ca057623.jpg',
+    images:[
+      {src: 'https://i.ibb.co/nGq637f/Imagen-de-Whats-App-2025-10-26-a-las-15-09-30-ca057623.jpg', model: 'Gris'},
+      {src: 'https://i.ibb.co/xKdJ0pHj/Imagen-de-Whats-App-2025-10-26-a-las-16-28-04-0908ebeb.jpg', model: 'Rosa'},
+      {src: 'https://i.ibb.co/DPX5DP9h/Imagen-de-Whats-App-2025-10-26-a-las-16-39-34-6555552d.jpg', model: 'Negro'},
+      {src: 'https://i.ibb.co/Dg6Bfycy/Imagen-de-Whats-App-2025-10-26-a-las-16-43-49-eeb476ee.jpg', model: 'Blanco'},
+      {src: 'https://i.ibb.co/8n6Ftqvz/Imagen-de-Whats-App-2025-10-26-a-las-18-10-17-385cf442.jpg', model: 'Naranja'},
+      {src: 'https://i.ibb.co/mV7RgNV4/Imagen-de-Whats-App-2025-10-26-a-las-18-10-17-5dbb78fe.jpg', model: 'Bordo'},
+      {src: 'https://i.ibb.co/TqPrQPZ1/Imagen-de-Whats-App-2025-10-26-a-las-18-10-17-73d49d04.jpg', model: 'Celeste'},
+      {src: 'https://i.ibb.co/707vBmd/Imagen-de-Whats-App-2025-10-26-a-las-18-10-17-9c9a251f.jpg', model: 'Mostaza'}
+    ],
+    description: 'Una chomba premium confeccionada en 100% algodón puro, ofreciendo una suavidad y durabilidad excepcionales. Calidad superior con increíbles resultados en confort y calce.',
+    features: [
+      'Confección 100% algodón premium',
+      'Calidad superior: increíbles resultados y confort',
+      'Amplia variedad de colores disponibles',
+      'Talles disponibles del S al XXL'
+    ],
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    tag: 'especial'
+  }
 ];
 // Helpers
 const priceLabel = (p)=>{ if(typeof p.price==='number') return fmt(p.price); if(Array.isArray(p.priceRange)&&p.priceRange.length===2) return fmt(p.priceRange[0])+'–'+fmt(p.priceRange[1]); return 'Consultar precio'; };
 const makeBadge = (tag)=> tag===''?"<span class='badge '></span>":(tag==='especial'?"<span class='badge especial'>ESPECIAL</span>":"");
 const card = (p)=>`
-  ${makeBadge(p.tag)}
-  <img referrerpolicy="no-referrer" src="${p.image}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/240x160?text=Sin+Imagen'">
-  <div class="product-name">${p.name}</div>
-  <div class="product-price">${priceLabel(p)}</div>
-  <div class='btn btn-primary' style='margin-top:auto;'>Ver detalles</div>`;
+  ${makeBadge(p.tag)}
+  <img referrerpolicy="no-referrer" src="${p.image}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/240x160?text=Sin+Imagen'">
+  <div class="product-name">${p.name}</div>
+  <div class="product-price">${priceLabel(p)}</div>
+  <div class='btn btn-primary' style='margin-top:auto;'>Ver detalles</div>`;
 // Render grid
 function renderProductsGrid(list){
-  const grid=document.getElementById('productsGrid');
-  grid.innerHTML='';
-  const productos = list && Array.isArray(list) ? list : PRODUCTS;
-  if(productos.length===0){
-    const ph=document.createElement('div'); ph.className='card'; ph.innerHTML='<strong>Sin productos</strong>';
-    grid.appendChild(ph); return;
-  }
-  productos.forEach(p=>{
-    const el=document.createElement('div');
-    el.className='card product-card';
-    el.dataset.id=p.id;
-    el.setAttribute('role','button');
-    el.setAttribute('tabindex','0');
-    el.setAttribute('aria-label','Ver detalles de ' + p.name);
-    el.innerHTML=card(p);
-    const open=()=>showProductDetail(p.id);
-    el.addEventListener('click', open);
-    el.addEventListener('keydown', ev=>{ if(ev.key==='Enter'||ev.key===' '){ ev.preventDefault(); open(); } });
-    grid.appendChild(el);
-  });
+  const grid=document.getElementById('productsGrid');
+  grid.innerHTML='';
+  const productos = list && Array.isArray(list) ? list : PRODUCTS;
+  if(productos.length===0){
+    const ph=document.createElement('div'); ph.className='card'; ph.innerHTML='<strong>Sin productos</strong>';
+    grid.appendChild(ph); return;
+  }
+  productos.forEach(p=>{
+    const el=document.createElement('div');
+    el.className='card product-card';
+    el.dataset.id=p.id;
+    el.setAttribute('role','button');
+    el.setAttribute('tabindex','0');
+    el.setAttribute('aria-label','Ver detalles de ' + p.name);
+    el.innerHTML=card(p);
+    const open=()=>showProductDetail(p.id);
+    el.addEventListener('click', open);
+    el.addEventListener('keydown', ev=>{ if(ev.key==='Enter'||ev.key===' '){ ev.preventDefault(); open(); } });
+    grid.appendChild(el);
+  });
 }
 // Build index
 function buildIndex(){
-  const cont = document.getElementById('catalogoIndice');
-  const cats = Array.from(new Set(PRODUCTS.map(p=>p.categoria)));
-  const ORDER = ['camperas','camisas','remeras','chalecos','pantalones'];
-  const ordered = ORDER.filter(c=>cats.includes(c)).concat(cats.filter(c=>!ORDER.includes(c)));
-  cont.innerHTML = '';
-  const btnAll = document.createElement('button');
-  btnAll.className='btn btn-primary active';
-  btnAll.dataset.cat='all';
-  btnAll.textContent='Todos';
-  cont.appendChild(btnAll);
-  ordered.forEach(c=>{
-    const b=document.createElement('button');
-    b.className='btn'; b.dataset.cat=c; b.textContent = c.charAt(0).toUpperCase()+c.slice(1);
-    cont.appendChild(b);
-  });
-  cont.addEventListener('click', e=>{
-    const btn=e.target.closest('button[data-cat]'); if(!btn) return;
-    cont.querySelectorAll('button').forEach(b=>b.classList.remove('active','btn-primary'));
-    btn.classList.add('active','btn-primary');
-    const cat=btn.dataset.cat;
-    renderProductsGrid(cat==='all'?PRODUCTS:PRODUCTS.filter(p=>p.categoria===cat));
-    showCamisasPromoInGrid(cat);const header=document.querySelector('header'); const offset=(header?header.offsetHeight:70)+10;
-    const y=document.getElementById('productos').getBoundingClientRect().top + window.scrollY - offset;
-    window.scrollTo({behavior:'smooth', top:y});
-  });
+  const cont = document.getElementById('catalogoIndice');
+  const cats = Array.from(new Set(PRODUCTS.map(p=>p.categoria)));
+  // CORREGIDO: Agregar 'chombas' al orden deseado
+  const ORDER = ['camperas','camisas','remeras','chombas','chalecos','pantalones'];
+  const ordered = ORDER.filter(c=>cats.includes(c)).concat(cats.filter(c=>!ORDER.includes(c)));
+  cont.innerHTML = '';
+  const btnAll = document.createElement('button');
+  btnAll.className='btn btn-primary active';
+  btnAll.dataset.cat='all';
+  btnAll.textContent='Todos';
+  cont.appendChild(btnAll);
+  ordered.forEach(c=>{
+    const b=document.createElement('button');
+    b.className='btn'; b.dataset.cat=c; b.textContent = c.charAt(0).toUpperCase()+c.slice(1);
+    cont.appendChild(b);
+  });
+  cont.addEventListener('click', e=>{
+    const btn=e.target.closest('button[data-cat]'); if(!btn) return;
+    cont.querySelectorAll('button').forEach(b=>b.classList.remove('active','btn-primary'));
+    btn.classList.add('active','btn-primary');
+    const cat=btn.dataset.cat;
+    renderProductsGrid(cat==='all'?PRODUCTS:PRODUCTS.filter(p=>p.categoria===cat));
+    showCamisasPromoInGrid(cat);const header=document.querySelector('header'); const offset=(header?header.offsetHeight:70)+10;
+    const y=document.getElementById('productos').getBoundingClientRect().top + window.scrollY - offset;
+    window.scrollTo({behavior:'smooth', top:y});
+  });
 }
 // Carousel builders
 function buildCarousel(images){
-  const imgs = images && images.length ? images : [];
-  if(!imgs.length) return '<img referrerpolicy="no-referrer" src="https://via.placeholder.com/500x400?text=Sin+Imagen" alt="Imagen">';
-  const slides = imgs.map(obj => <div class="carousel-slide"><img referrerpolicy="no-referrer" src="${(obj.src||obj)}" onerror="this.src='https://via.placeholder.com/500x400?text=Sin+Imagen'"></div>).join('');
-  const dots = imgs.map((_,i)=><span class="carousel-dot${i===0?' active':''}" data-i="${i}"></span>).join('');
-  return `
-    <div class="carousel" id="carousel">
-      <button class="carousel-btn prev" aria-label="Anterior" data-dir="-1">‹</button>
-      <div class="carousel-track" id="carouselTrack">${slides}</div>
-      <button class="carousel-btn next" aria-label="Siguiente" data-dir="1">›</button>
-      <div class="carousel-dots" id="carouselDots">${dots}</div>
-      <div id="carouselCaption" style="text-align:center;margin-top:6px;font-weight:bold;color:#2d5a42"></div>
-    </div>`;
+  const imgs = images && images.length ? images : [];
+  if(!imgs.length) return '<img referrerpolicy="no-referrer" src="https://via.placeholder.com/500x400?text=Sin+Imagen" alt="Imagen">';
+  // CORREGIDO: Usar backticks y cerrar etiquetas correctamente
+  const slides = imgs.map(obj => `<div class="carousel-slide"><img referrerpolicy="no-referrer" src="${(obj.src||obj)}" onerror="this.src='https://via.placeholder.com/500x400?text=Sin+Imagen'"></div>`).join('');
+  const dots = imgs.map((_,i)=> `<span class="carousel-dot${i===0?' active':''}" data-i="${i}"></span>`).join('');
+  return `
+    <div class="carousel" id="carousel">
+      <button class="carousel-btn prev" aria-label="Anterior" data-dir="-1">‹</button>
+      <div class="carousel-track" id="carouselTrack">${slides}</div>
+      <button class="carousel-btn next" aria-label="Siguiente" data-dir="1">›</button>
+      <div class="carousel-dots" id="carouselDots">${dots}</div>
+      <div id="carouselCaption" style="text-align:center;margin-top:6px;font-weight:bold;color:#2d5a42"></div>
+    </div>`;
 }
 // === Precios por modelo (YSL) ===
 const MODEL_PRICES = {
-  'camisa-ysl': {
-    'modelo 01': 50000,
-    'modelo 02': 60000,
-    'modelo 03': 50000,
-    'modelo 04': 50000,
-    'modelo 05': 60000,
-    'modelo 06': 50000,
-    'modelo 07': 60000,
-    'modelo 08': 60000,
-    'modelo 09': 50000,
-    'modelo 10': 50000,
-    'modelo 11': 50000,
-    'modelo 12': 50000,
-    'modelo 13': 60000,
-    'modelo 14': 70000,
-    'modelo 15': 60000,
-    'modelo 16': 70000,
-    'modelo 17': 60000
-  }
+  'camisa-ysl': {
+    'modelo 01': 50000, 'modelo 02': 60000, 'modelo 03': 50000, 'modelo 04': 50000, 'modelo 05': 60000,
+    'modelo 06': 50000, 'modelo 07': 60000, 'modelo 08': 60000, 'modelo 09': 50000, 'modelo 10': 50000,
+    'modelo 11': 50000, 'modelo 12': 50000, 'modelo 13': 60000, 'modelo 14': 70000, 'modelo 15': 60000,
+    'modelo 16': 70000, 'modelo 17': 60000
+  }
 };
 // Helpers de precio en detalle (sin tocar tu lógica de render)
 function detailPriceForSelection(){
-  if(!currentProduct) return null;
-  if(selectedModel && MODEL_PRICES[currentProduct.id] && typeof MODEL_PRICES[currentProduct.id][selectedModel]==='number'){
-    return MODEL_PRICES[currentProduct.id][selectedModel];
-  }
-  if(typeof currentProduct.price==='number') return currentProduct.price;
-  if(Array.isArray(currentProduct.priceRange)) return null; // para YSL sin modelo, evitamos mostrar rango en detalle
-  return null;
+  if(!currentProduct) return null;
+  if(selectedModel && MODEL_PRICES[currentProduct.id] && typeof MODEL_PRICES[currentProduct.id][selectedModel]==='number'){
+    return MODEL_PRICES[currentProduct.id][selectedModel];
+  }
+  if(typeof currentProduct.price==='number') return currentProduct.price;
+  if(Array.isArray(currentProduct.priceRange)) return null;
+  return null;
 }
 function updateDetailPriceUI(){
-  const el = document.getElementById('detailPrice');
-  const addBtn = document.getElementById('addBtn');
-  if(!el) return;
-  const priceNum = detailPriceForSelection();
-  if(typeof priceNum==='number'){
-    el.textContent = fmt(priceNum);
-    if(addBtn){ addBtn.removeAttribute('disabled'); addBtn.disabled=false; addBtn.textContent='🛒 Agregar al Carrito'; }
-  }else{
-    // Si no hay precio (p.ej. YSL sin modelo seleccionado aún), elegimos la primera imagen como default
-    if(currentProduct && currentProduct.id==='camisa-ysl' && currentProduct.images && currentProduct.images[0]){
-      selectedModel = currentProduct.images[0].model || currentProduct.images[0].alt || 'modelo 01';
-      const p = detailPriceForSelection();
-      if(typeof p==='number'){ el.textContent = fmt(p); if(addBtn){ addBtn.removeAttribute('disabled'); addBtn.disabled=false; addBtn.textContent='🛒 Agregar al Carrito'; } return; }
-    }
-    el.textContent = 'Consultar precio';
-    if(addBtn){ addBtn.setAttribute('disabled','disabled'); addBtn.disabled=true; addBtn.textContent='🛒 No disponible'; }
-  }
+  const el = document.getElementById('detailPrice');
+  const addBtn = document.getElementById('addBtn');
+  if(!el) return;
+  const priceNum = detailPriceForSelection();
+  if(typeof priceNum==='number'){
+    el.textContent = fmt(priceNum);
+    if(addBtn){ addBtn.removeAttribute('disabled'); addBtn.disabled=false; addBtn.textContent='🛒 Agregar al Carrito'; }
+  }else{
+    if(currentProduct && currentProduct.id==='camisa-ysl' && currentProduct.images && currentProduct.images[0]){
+      selectedModel = currentProduct.images[0].model || currentProduct.images[0].alt || 'modelo 01';
+      const p = detailPriceForSelection();
+      if(typeof p==='number'){ el.textContent = fmt(p); if(addBtn){ addBtn.removeAttribute('disabled'); addBtn.disabled=false; addBtn.textContent='🛒 Agregar al Carrito'; } return; }
+    }
+    el.textContent = 'Consultar precio';
+    if(addBtn){ addBtn.setAttribute('disabled','disabled'); addBtn.disabled=true; addBtn.textContent='🛒 No disponible'; }
+  }
 }
 let carouselIndex = 0;
 function attachCarouselHandlers(){
-  const track = document.getElementById('carouselTrack');
-  const dots = Array.from(document.querySelectorAll('.carousel-dot'));
-  const prev = document.querySelector('.carousel-btn.prev');
-  const next = document.querySelector('.carousel-btn.next');
-  const caption = document.getElementById('carouselCaption');
-  const update = ()=>{
-    track.style.transform = translateX(${-carouselIndex*100}%);
-    dots.forEach((d,i)=>{ d.classList.toggle('active', i===carouselIndex); 
-   updateModelAndPrice(); // -- YSL: setear modelo según slide actual
-  try{ if(currentProduct && currentProduct.images && currentProduct.images[carouselIndex]){ const it=currentProduct.images[carouselIndex]; selectedModel = (it.model||it.alt)||selectedModel; } }catch(e){}
-  if(typeof updateDetailPriceUI==='function') updateDetailPriceUI();
-});
-    if(currentProduct && Array.isArray(currentProduct.images)){
-      const obj = currentProduct.images[carouselIndex];
-      const label = (obj && (obj.model||obj.alt)) ? (obj.model||obj.alt) : '';
-      selectedModel = label || null;
-      if(caption){ caption.textContent = label ? Modelo: ${label} : ''; }
-      updateDetailPriceUI();
-    }else{
-      selectedModel = null;
-      if(caption){ caption.textContent=''; }
-    }
-  };
-  if(prev) prev.onclick = ()=>{ carouselIndex = Math.max(0, carouselIndex-1); update(); };
-  if(next) next.onclick = ()=>{ const total = dots.length; carouselIndex = Math.min(total-1, carouselIndex+1); update(); };
-  dots.forEach((d,i)=> d.onclick = ()=>{ carouselIndex = i; update(); });
-  // Swipe
-  let startX=0, dx=0;
-  const el = document.getElementById('carousel');
-  if(el){
-    el.addEventListener('touchstart', e=>{ startX = e.touches[0].clientX; }, {passive:true});
-    el.addEventListener('touchmove', e=>{ dx = e.touches[0].clientX - startX; }, {passive:true});
-    el.addEventListener('touchend', ()=>{
-      const total = dots.length;
-      if(dx < -40) carouselIndex = Math.min(total-1, carouselIndex+1);
-      if(dx > 40) carouselIndex = Math.max(0, carouselIndex-1);
-      dx = 0; update();
+  const track = document.getElementById('carouselTrack');
+  const dots = Array.from(document.querySelectorAll('.carousel-dot'));
+  const prev = document.querySelector('.carousel-btn.prev');
+  const next = document.querySelector('.carousel-btn.next');
+  const caption = document.getElementById('carouselCaption');
+  const update = ()=>{
+    // CORREGIDO: Usar backticks
+    track.style.transform = `translateX(${-carouselIndex*100}%)`;
+    dots.forEach((d,i)=>{ d.classList.toggle('active', i===carouselIndex);
+    // Llamada a updateModelAndPrice() quitada de aquí para evitar redundancia
     });
-  }
-  update();
+    // Llamar a updateModelAndPrice solo una vez después de actualizar el índice
+    updateModelAndPrice();
+    if(typeof updateDetailPriceUI==='function') updateDetailPriceUI();
+
+    if(currentProduct && Array.isArray(currentProduct.images) && currentProduct.images[carouselIndex]){
+      const obj = currentProduct.images[carouselIndex];
+      const label = (obj && (obj.model||obj.alt)) ? (obj.model||obj.alt) : '';
+      // No setear selectedModel aquí directamente, dejar que updateModelAndPrice lo haga
+      if(caption){ caption.textContent = label ? `Modelo: ${label}` : ''; }
+      // updateDetailPriceUI(); // Ya se llama arriba
+    } else if (caption) {
+      caption.textContent = '';
+    }
+  };
+  if(prev) prev.onclick = ()=>{ carouselIndex = Math.max(0, carouselIndex-1); update(); };
+  if(next) next.onclick = ()=>{ const total = dots.length; carouselIndex = Math.min(total-1, carouselIndex+1); update(); };
+  dots.forEach((d,i)=> d.onclick = ()=>{ carouselIndex = i; update(); });
+
+  let startX=0, dx=0;
+  const el = document.getElementById('carousel');
+  if(el){
+    el.addEventListener('touchstart', e=>{ startX = e.touches[0].clientX; }, {passive:true});
+    el.addEventListener('touchmove', e=>{ dx = e.touches[0].clientX - startX; }, {passive:true});
+    el.addEventListener('touchend', ()=>{
+      const total = dots.length;
+      if(dx < -40) carouselIndex = Math.min(total-1, carouselIndex+1);
+      if(dx > 40) carouselIndex = Math.max(0, carouselIndex-1);
+      dx = 0; update();
+    });
+  }
+  update(); // Llamada inicial para setear estado
 }
+
 // Detalle
 function showProductDetail(id, silent=false){
-  // -- Init modelo+precio YSL
-  setTimeout(updateModelAndPrice, 0);
-  // -- Reatach WhatsApp con precio
-  try{
-    const ask = document.getElementById('btnAsk');
-    if(ask){ ask.onclick = (ev)=>{ ev.preventDefault();
-      const p = window.currentProduct;
-      if(!p) return;
-      let text = Hola! Consulto por ${p.name}.;
-      const m = getCurrentModelLabel(p);
-      if(m) text += \nModelo: ${m};
-      const num = getPriceForCurrent(p);
-      if(typeof num==='number') text += \nPrecio: ${num.toLocaleString('es-AR',{style:'currency','currency':'ARS'})};
-      const url = 'https://wa.me/5491161521424?text=' + encodeURIComponent(text);
-      window.open(url,'_blank');
-    }; }
-  }catch(e){}
-  // -- setear modelo inicial si hay imágenes
-  try{ if(p && p.images && p.images[0]){ selectedModel = p.images[0].model || p.images[0].alt || selectedModel; } }catch(e){}
-  prevScrollY = window.scrollY || window.pageYOffset || 0;
-  const p=PRODUCTS.find(x=>x.id===id); if(!p) return;
-  currentProduct=p; selectedSize=null; selectedModel=null; updateModelInfo(p.modelo||'', p.precio||''); try{window.scrollTo(0,0);document.documentElement.scrollTop=0;document.body.scrollTop=0;}catch(e){} showCamisasPromoInDetail(p.categoria==='camisas'); updateMediosPago(p.categoria==='camisas');
-  const productos=document.getElementById('productos');
-  const detail=document.getElementById('productDetail');
-  const hero=document.getElementById('inicio');
-  if(productos) productos.style.display='none';
-  if(hero) hero.style.display='none';
-  if(detail) detail.style.display='block';
-  if(p.images && p.images.length){
-    carouselIndex = 0;
-    document.getElementById('detailImage').innerHTML = buildCarousel(p.images);
-    if(p.images && p.images[0] && (p.images[0].model||p.images[0].alt)){
-      selectedModel = p.images[0].model||p.images[0].alt;
-    }
-    setTimeout(attachCarouselHandlers, 0);
-  }else{
-    document.getElementById('detailImage').innerHTML=<img referrerpolicy="no-referrer" src="${p.image}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/500x400?text=Sin+Imagen'">;
+  prevScrollY = window.scrollY || window.pageYOffset || 0;
+  const p=PRODUCTS.find(x=>x.id===id); if(!p) return;
+  currentProduct=p;
+  // Resetear estado antes de mostrar
+  selectedSize=null;
+  selectedModel=null; // Se seteará por buildColorSelector o attachCarouselHandlers
+  carouselIndex = 0; // Resetear índice
+
+  // Scroll to top
+  try{window.scrollTo(0,0);document.documentElement.scrollTop=0;document.body.scrollTop=0;}catch(e){}
+
+  // Mostrar/ocultar secciones
+  const productos=document.getElementById('productos');
+  const detail=document.getElementById('productDetail');
+  const hero=document.getElementById('inicio');
+  if(productos) productos.style.display='none';
+  if(hero) hero.style.display='none';
+  if(detail) detail.style.display='block';
+
+  // --- LÓGICA CONDICIONAL DE IMAGEN ---
+  const selector = document.getElementById('colorSelector');
+  if (selector) selector.style.display = 'none'; // Ocultar por defecto
+
+  if (p.categoria === 'chombas' && p.images && p.images.length > 1) {
+      document.getElementById('detailImage').innerHTML = '';
+      buildColorSelector(p); // Seteará selectedModel y carouselIndex iniciales
+  } else if (p.images && p.images.length > 1) {
+      document.getElementById('detailImage').innerHTML = buildCarousel(p.images);
+      // selectedModel se seteará en attachCarouselHandlers -> update() -> updateModelAndPrice()
+      setTimeout(attachCarouselHandlers, 0);
+  } else {
+      // CORREGIDO: Usar backticks
+      document.getElementById('detailImage').innerHTML = `<img referrerpolicy="no-referrer" src="${p.image}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/500x400?text=Sin+Imagen'">`;
+      selectedModel = null; // No hay modelos/colores
   }
-  document.getElementById('detailName').textContent=p.name;
-  document.getElementById('detailPrice').textContent = priceLabel(p);
+  // --- FIN LÓGICA CONDICIONAL ---
+
+  // Actualizar UI restante
+  document.getElementById('detailName').textContent=p.name;
+  updateDetailPriceUI(); // Actualiza precio después de setear imagen/modelo inicial
+  document.getElementById('detailDesc').textContent=p.description;
+  const ul=document.getElementById('detailFeatures'); ul.innerHTML='';
+  (p.features||[]).forEach(f=>{ const li=document.createElement('li'); li.textContent=f; ul.appendChild(li); });
+
+  // Talles
+  const szCont=document.getElementById('detailSizes'); szCont.innerHTML='';
+  (p.sizes||[]).forEach(s=>{
+    const chip=document.createElement('span'); chip.className='size-chip'; chip.textContent=s;
+    chip.setAttribute('role','button'); chip.setAttribute('tabindex','0');
+    chip.setAttribute('aria-label','Seleccionar talle '+s);
+    const select=()=>{ selectedSize=s; szCont.querySelectorAll('.size-chip').forEach(c=>c.classList.remove('selected')); chip.classList.add('selected'); const warn=document.getElementById('sizeWarning'); if(warn) warn.style.display='none'; };
+    chip.addEventListener('click', select);
+    chip.addEventListener('keydown', ev=>{ if(ev.key==='Enter'||ev.key===' '){ ev.preventDefault(); select(); } });
+    szCont.appendChild(chip);
+  });
+  // Ocultar warning de talle al inicio
+  const sizeWarn = document.getElementById('sizeWarning'); if(sizeWarn) sizeWarn.style.display='none';
+
+  // Botón Agregar
+  const addBtn=document.getElementById('addBtn');
+  if(addBtn){
+    if(p.price==null && !p.priceRange){ addBtn.setAttribute('disabled','disabled'); addBtn.textContent='🛒 No disponible (consultar precio)'; }
+    else{ addBtn.removeAttribute('disabled'); addBtn.textContent='🛒 Agregar al Carrito'; }
+    // Volver a llamar updateDetailPriceUI por si hay modelos con precios (YSL)
     updateDetailPriceUI();
-  document.getElementById('detailDesc').textContent=p.description;
-  const ul=document.getElementById('detailFeatures'); ul.innerHTML='';
-  (p.features||[]).forEach(f=>{ const li=document.createElement('li'); li.textContent=f; ul.appendChild(li); });
-  const szCont=document.getElementById('detailSizes'); szCont.innerHTML='';
-  (p.sizes||[]).forEach(s=>{
-    const chip=document.createElement('span'); chip.className='size-chip'; chip.textContent=s;
-    chip.setAttribute('role','button'); chip.setAttribute('tabindex','0');
-    chip.setAttribute('aria-label','Seleccionar talle '+s);
-    const select=()=>{ selectedSize=s; szCont.querySelectorAll('.size-chip').forEach(c=>c.classList.remove('selected')); chip.classList.add('selected'); const warn=document.getElementById('sizeWarning'); if(warn) warn.style.display='none'; };
-    chip.addEventListener('click', select);
-    chip.addEventListener('keydown', ev=>{ if(ev.key==='Enter'||ev.key===' '){ ev.preventDefault(); select(); } });
-    szCont.appendChild(chip);
-  });
-  const addBtn=document.getElementById('addBtn');
-  if(addBtn){
-    if(p.price==null){ addBtn.setAttribute('disabled','disabled'); addBtn.textContent='🛒 No disponible (consultar precio)'; }
-    else{ addBtn.removeAttribute('disabled'); addBtn.textContent='🛒 Agregar al Carrito'; }
-  }
-  requestAnimationFrame(()=>{
-    const header = document.querySelector('header');
-    const offset = (header ? header.offsetHeight : 70) + 10;
-    const y = detail.getBoundingClientRect().top + window.scrollY - offset;
-    window.scrollTo({top:y, behavior:'smooth'});
-  });
-  if(!silent){ history.pushState({view:'detail', productId:id}, '', '#detalle-'+id); }
+  }
+
+  // Actualizar notas de pago específicas
+  showCamisasPromoInDetail(p.categoria==='camisas');
+  updateMediosPago(p.categoria); // Usa la categoría
+
+  // Scroll suave a la sección
+  requestAnimationFrame(()=>{
+    const header = document.querySelector('header');
+    const offset = (header ? header.offsetHeight : 70) + 10;
+    const y = detail.getBoundingClientRect().top + window.scrollY - offset;
+    window.scrollTo({top:y, behavior:'smooth'});
+  });
+
+  // Actualizar historial
+  if(!silent){ history.pushState({view:'detail', productId:id}, '', `#detalle-${id}`); }
 }
+
 function goHome(){
-  selectedModel = null;
-  const detail=document.getElementById('productDetail');
-  const productos=document.getElementById('productos');
-  const hero=document.getElementById('inicio');
-  if(detail) detail.style.display='none';
-  if(hero) hero.style.display='block';
-  if(productos) productos.style.display='block';
-  requestAnimationFrame(()=>{ window.scrollTo({ top: prevScrollY, behavior:'smooth' }); });
-  history.replaceState({view:'grid'}, document.title, window.location.pathname + window.location.search);
+  selectedModel = null; // Resetear modelo al volver
+  currentProduct = null; // Limpiar producto actual
+  const detail=document.getElementById('productDetail');
+  const productos=document.getElementById('productos');
+  const hero=document.getElementById('inicio');
+  if(detail) detail.style.display='none';
+  if(hero) hero.style.display='block';
+  if(productos) productos.style.display='block';
+  requestAnimationFrame(()=>{ window.scrollTo({ top: prevScrollY, behavior:'smooth' }); });
+  history.replaceState({view:'grid'}, document.title, window.location.pathname + window.location.search);
 }
 function goToProducts(){
-  selectedModel = null;
-  const hero=document.getElementById('inicio');
-  const productos=document.getElementById('productos');
-  const detail=document.getElementById('productDetail');
-  if(detail) detail.style.display='none';
-  if(hero) hero.style.display='block';
-  if(productos) productos.style.display='block';
-  const header=document.querySelector('header');
-  const offset=(header?header.offsetHeight:70)+10;
-  const y=productos.getBoundingClientRect().top + window.scrollY - offset;
-  window.scrollTo({top:y, behavior:'smooth'});
-  history.replaceState({view:'grid'}, document.title, window.location.pathname + window.location.search);
+  selectedModel = null; // Resetear modelo
+  currentProduct = null; // Limpiar producto actual
+  const hero=document.getElementById('inicio');
+  const productos=document.getElementById('productos');
+  const detail=document.getElementById('productDetail');
+  if(detail) detail.style.display='none';
+  if(hero) hero.style.display='block';
+  if(productos) productos.style.display='block';
+  const header=document.querySelector('header');
+  const offset=(header?header.offsetHeight:70)+10;
+  const y=productos.getBoundingClientRect().top + window.scrollY - offset;
+  window.scrollTo({top:y, behavior:'smooth'});
+  history.replaceState({view:'grid'}, document.title, window.location.pathname + window.location.search);
 }
 
 function addToCart(p) {
-  if (!p) return;
+  if (!p) return;
 
-  // 1. Obtener el modelo y precio actualizados, igual que en la función de WhatsApp
-  let modeloActual = null;
-  if (selectedModel) {
-    modeloActual = selectedModel;
-  } else if (p.images && typeof carouselIndex === 'number' && p.images[carouselIndex]) {
-    modeloActual = p.images[carouselIndex].model || null;
-  }
+  // Usar getCurrentModelLabel para asegurar que tomamos el modelo/color correcto
+  let modeloActual = getCurrentModelLabel(p);
+  let precioActual = getPriceForCurrent(p); // Usa la función helper para el precio
 
-  let precioActual = null;
-  if (p.id === 'camisa-ysl' && modeloActual && MODEL_PRICES['camisa-ysl']) {
-    precioActual = MODEL_PRICES['camisa-ysl'][modeloActual];
-  } else if (typeof p.price === 'number') {
-    precioActual = p.price;
-  }
+  // Validar precio y talle
+  if (precioActual === null) {
+    alert('Error: No se pudo determinar el precio. Por favor, selecciona un modelo/color si es necesario.');
+    return;
+  }
+  if (!selectedSize) {
+    const warn = document.getElementById('sizeWarning');
+    if (warn) warn.style.display = 'block';
+    return;
+  }
 
-  // 2. Validar que tengamos un precio y un talle
-  if (precioActual === null) {
-    alert('Error: No se pudo determinar el precio. Por favor, selecciona un modelo.');
-    return;
-  }
-  if (!selectedSize) {
-    const warn = document.getElementById('sizeWarning');
-    if (warn) warn.style.display = 'block';
-    return;
-  }
+  const key = p.id + '::' + (modeloActual || 'default') + '::' + selectedSize; // Añadir default si no hay modelo
+  const found = cart.find(i => i.key === key);
 
-  // 3. Crear una clave única que también incluya el modelo, para diferenciar los artículos
-  const key = p.id + '::' + modeloActual + '::' + selectedSize;
-  const found = cart.find(i => i.key === key);
+  if (found) {
+    found.qty++;
+  } else {
+    const itemParaCarrito = {
+      ...p,
+      qty: 1,
+      key: key,
+      size: selectedSize,
+      modelo: modeloActual,
+      price: precioActual // Asegura usar el precio correcto
+    };
+    // Limpiar 'images' si existe para no guardar data innecesaria en el carrito
+    delete itemParaCarrito.images;
+    cart.push(itemParaCarrito);
+  }
 
-  // 4. Agregar o actualizar la cantidad en el carrito
-  if (found) {
-    found.qty++;
-  } else {
-    // Creamos un objeto NUEVO para el carrito, asegurándonos de que tenga el precio y modelo correctos.
-    const itemParaCarrito = {
-      ...p,                 // Copia las propiedades originales del producto (nombre, id, etc.)
-      qty: 1,
-      key: key,
-      size: selectedSize,
-      modelo: modeloActual, // Añadimos el modelo específico que se seleccionó
-      price: precioActual   // Sobrescribimos el precio con el valor numérico correcto
-    };
-    cart.push(itemParaCarrito);
-  }
-
-  // 5. Actualizar la visualización del carrito
-  updateCartDisplay();
-  const fab = document.getElementById('cartFab');
-  if (fab) {
-    fab.classList.add('bounce');
-    setTimeout(() => fab.classList.remove('bounce'), 600);
-  }
+  updateCartDisplay();
+  const fab = document.getElementById('cartFab');
+  if (fab) {
+    fab.classList.add('bounce');
+    setTimeout(() => fab.classList.remove('bounce'), 600);
+  }
 }
 
 function updateCartDisplay(){
-  const count=document.getElementById('cartCount'); if(count) count.textContent=cart.reduce((a,b)=>a+b.qty,0);
-  const items=document.getElementById('cartItems'); if(!items) return; items.innerHTML='';
-  cart.forEach((item,i)=>{
-    const lineTotal = (item.price==null)? 0 : item.price*item.qty;
-    const priceLabel = (item.price==null)? 'A consultar' : fmt(lineTotal);
-    const div=document.createElement('div'); div.className='cart-item';
-    div.innerHTML = `
-  <span>${item.name}${item.modelo ? ' — ' + item.modelo : ''} ${item.size ? '(Talle ' + item.size + ')' : ''}</span>
-  <div class="cart-controls">
-    <button type="button" onclick="updateQuantity(${i},-1)">-</button>
-    <span>${item.qty}</span>
-    <button type="button" onclick="updateQuantity(${i},1)">+</button>
-  </div>
-  <span>${fmt(item.price)} c/u — ${priceLabel}</span>
+  const count=document.getElementById('cartCount'); if(count) count.textContent=cart.reduce((a,b)=>a+b.qty,0);
+  const items=document.getElementById('cartItems'); if(!items) return; items.innerHTML='';
+  cart.forEach((item,i)=>{
+    const lineTotal = (item.price==null || isNaN(item.price))? 0 : item.price*item.qty; // Validar NaN
+    const unitPriceLabel = (item.price==null || isNaN(item.price))? '' : fmt(item.price);
+    const linePriceLabel = (item.price==null || isNaN(item.price))? 'A consultar' : fmt(lineTotal);
+    const div=document.createElement('div'); div.className='cart-item';
+    // CORREGIDO: Usar backticks y variables correctas
+    div.innerHTML = `
+  <span>${item.name}${item.modelo ? ' — ' + item.modelo : ''} ${item.size ? '(Talle ' + item.size + ')' : ''}</span>
+  <div class="cart-controls">
+    <button type="button" onclick="updateQuantity(${i},-1)">-</button>
+    <span>${item.qty}</span>
+    <button type="button" onclick="updateQuantity(${i},1)">+</button>
+  </div>
+  <span>${unitPriceLabel ? unitPriceLabel + ' c/u — ' : ''}${linePriceLabel}</span>
 `;
-    items.appendChild(div);
-  });
-  const total=cart.reduce((s,it)=> s + (it.price==null?0:it.price*it.qty), 0);
-  const totalEl=document.getElementById('cartTotal'); if(totalEl) totalEl.textContent='Total: '+fmt(total);
+    items.appendChild(div);
+  });
+  const total=cart.reduce((s,it)=> s + ((it.price==null || isNaN(it.price))?0:it.price*it.qty), 0); // Validar NaN
+  const totalEl=document.getElementById('cartTotal'); if(totalEl) totalEl.textContent='Total: '+fmt(total);
 }
-function updateQuantity(i,change){ cart[i].qty+=change; if(cart[i].qty<=0){cart.splice(i,1);} updateCartDisplay(); }
+function updateQuantity(i,change){
+  if (!cart[i]) return; // Evitar error si el item ya no existe
+  cart[i].qty+=change;
+  if(cart[i].qty<=0){cart.splice(i,1);}
+  updateCartDisplay();
+}
 function clearCart(){ cart = []; updateCartDisplay(); }
 function toggleCart(){
-  const m=document.getElementById('cartModal'); if(!m) return;
-  const opening = (m.style.display!=='flex');
-  m.style.display = opening ? 'flex' : 'none';
-  if(opening){ lockBodyScroll(); } else { unlockBodyScroll(); }
+  const m=document.getElementById('cartModal'); if(!m) return;
+  const opening = (m.style.display!=='flex');
+  m.style.display = opening ? 'flex' : 'none';
+  if(opening){ lockBodyScroll(); } else { unlockBodyScroll(); }
 }
 
 function checkout() {
-  if (cart.length === 0) {
-    alert('El carrito está vacío');
-    return;
-  }
-  let lines = ['¡Hola buenas! Quiero hacer un pedido de las siguientes prendas:', '', '📋 RESUMEN DEL PEDIDO:', '━━━━━━━━━━━━━━━━━━━━'];
-  
-  cart.forEach(it => {
-    lines.push(• ${it.name});
-    
-    // --- LÍNEA AÑADIDA PARA MOSTRAR EL MODELO ---
-    if (it.modelo) {
-      lines.push(`  Modelo: ${it.modelo}`);
-    }
-    // --- FIN DE LA LÍNEA AÑADIDA ---
+  if (cart.length === 0) {
+    alert('El carrito está vacío');
+    return;
+  }
+  let lines = ['¡Hola buenas! Quiero hacer un pedido de las siguientes prendas:', '', '📋 RESUMEN DEL PEDIDO:', '━━━━━━━━━━━━━━━━━━━━'];
 
-    lines.push(`  Talle ${it.size || '-'}: ${it.qty} unidades`);
-    
-    if (typeof it.price === 'number' && !isNaN(it.price)) {
-      lines.push(`  Precio unitario: ${fmt(it.price)}`);
-      lines.push(`  Subtotal: ${fmt(it.price * it.qty)}`);
-    } else {
-      lines.push(`  Precio: A consultar`);
-    }
-    lines.push('');
-  });
+  cart.forEach(it => {
+    // CORREGIDO: Usar backticks para template literal
+    lines.push(`• ${it.name}`);
+    if (it.modelo) {
+      lines.push(`  Modelo: ${it.modelo}`);
+    }
+    lines.push(`  Talle ${it.size || '-'}: ${it.qty} unidades`);
+    if (typeof it.price === 'number' && !isNaN(it.price)) {
+      lines.push(`  Precio unitario: ${fmt(it.price)}`);
+      lines.push(`  Subtotal: ${fmt(it.price * it.qty)}`);
+    } else {
+      lines.push(`  Precio: A consultar`);
+    }
+    lines.push('');
+  });
 
-  const total = cart.reduce((s, it) => s + (it.price == null ? 0 : it.price * it.qty), 0);
-  lines.push('━━━━━━━━━━━━━━━━━━━━');
-  lines.push(💰 TOTAL: ${fmt(total)});
-  lines.push('');
-  lines.push('¡Espero su confirmación! 😊');
-  
-  const msg = encodeURIComponent(lines.join('\n'));
-  window.open(https://wa.me/${WA_NUMBER}?text=${msg}, '_blank');
+  const total = cart.reduce((s, it) => s + ((it.price == null || isNaN(it.price)) ? 0 : it.price * it.qty), 0); // Validar NaN
+  lines.push('━━━━━━━━━━━━━━━━━━━━');
+  // CORREGIDO: Usar backticks para template literal
+  lines.push(`💰 TOTAL: ${fmt(total)}`);
+  lines.push('');
+  lines.push('¡Espero su confirmación! 😊');
+
+  const msg = encodeURIComponent(lines.join('\n'));
+  // CORREGIDO: Usar backticks para template literal
+  window.open(`https://wa.me/${WA_NUMBER}?text=${msg}`, '_blank');
 }
 
 // WhatsApp FAB & botón detalle
 document.getElementById('whatsappFab').addEventListener('click',()=>{
-  const msg=encodeURIComponent('¡Hola! Me interesa conocer más sobre los productos de Algas.'); window.open(https://wa.me/${WA_NUMBER}?text=${msg},'_blank');
+  const msg=encodeURIComponent('¡Hola! Me interesa conocer más sobre los productos de Algas.');
+  // CORREGIDO: Usar backticks para template literal
+  window.open(`https://wa.me/${WA_NUMBER}?text=${msg}`, '_blank');
 });
 
 function consultarWhatsApp() {
-  if (!currentProduct) return;
+  if (!currentProduct) return;
 
-  // 1. Obtener el modelo y el precio actualizados y correctos
-  let modeloActual = null;
-  let precioActual = null;
+  let modeloActual = getCurrentModelLabel(currentProduct); // Usar helper
+  let precioActual = getPriceForCurrent(currentProduct);   // Usar helper
 
-  // Primero, intentamos obtener el modelo desde el carrusel o la variable global
-  if (selectedModel) {
-    modeloActual = selectedModel;
-  } else if (currentProduct.images && typeof carouselIndex === 'number' && currentProduct.images[carouselIndex]) {
-    modeloActual = currentProduct.images[carouselIndex].model || null;
-  }
-  
-  // Ahora, obtenemos el precio correspondiente a ese modelo
-  if (currentProduct.id === 'camisa-ysl' && modeloActual && MODEL_PRICES['camisa-ysl']) {
-    // Caso especial para la camisa YSL con precios por modelo
-    precioActual = MODEL_PRICES['camisa-ysl'][modeloActual];
-  } else if (typeof currentProduct.price === 'number') {
-    // Para todos los demás productos con un precio fijo
-    precioActual = currentProduct.price;
-  }
+  // CORREGIDO: Usar backticks para template literal
+  let mensaje = `Hola, quiero consultar por el producto:\n\n📌 ${currentProduct.name}`;
 
-  // 2. Construir el mensaje para WhatsApp
-  let mensaje = Hola, quiero consultar por el producto:\n\n📌 ${currentProduct.name};
+  if (modeloActual) {
+    // CORREGIDO: Usar backticks para template literal
+    mensaje += `\n🧵 Modelo: ${modeloActual}`;
+  }
 
-  if (modeloActual) {
-    mensaje += \n🧵 Modelo: ${modeloActual};
-  }
+  if (typeof precioActual === 'number') {
+    // CORREGIDO: Usar backticks para template literal
+    mensaje += `\n💲 Precio: ${fmt(precioActual)}`;
+  }
 
-  if (typeof precioActual === 'number') {
-    mensaje += \n💲 Precio: ${fmt(precioActual)};
-  }
+  if (selectedSize) {
+    // CORREGIDO: Usar backticks para template literal
+    mensaje += `\n📏 Talle: ${selectedSize}`;
+  }
 
-  if (selectedSize) {
-    mensaje += \n📏 Talle: ${selectedSize};
-  }
-
-  // 3. Abrir la ventana de WhatsApp
-  const url = https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(mensaje)};
-  window.open(url, '_blank');
+  // CORREGIDO: Usar backticks para template literal
+  const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(mensaje)}`;
+  window.open(url, '_blank');
 }
 
 // Navegación
 document.addEventListener('click', (e)=>{
-  const btn=e.target.closest('#backHome'); if(btn){ e.preventDefault(); goHome(); }
+  const btn=e.target.closest('#backHome'); if(btn){ e.preventDefault(); goHome(); }
 });
 document.getElementById('btnVerProductos').addEventListener('click', (e)=>{ e.preventDefault(); goToProducts(); });
 // FAB de WhatsApp sube al detectar footer
-(function(){const fab=document.getElementById('whatsappFab');const footer=document.querySelector('footer');if(fab&&footer&&'IntersectionObserver'in window){const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){fab.classList.add('lifted')}else{fab.classList.remove('lifted')}})}, {root:null,threshold:0});io.observe(footer);}})();
+(function(){
+  const fab=document.getElementById('whatsappFab');
+  const footer=document.querySelector('footer');
+  if(fab&&footer&&'IntersectionObserver'in window){
+    const io=new IntersectionObserver(es=>{es.forEach(e=>{
+      fab.classList.toggle('lifted', e.isIntersecting); // Simplificado
+    })}, {root:null,threshold:0});
+    io.observe(footer);
+  }
+})();
 // History/back
 window.addEventListener('popstate', (event)=>{
-  if(event.state && event.state.view==='detail'){
-    const pid = event.state.productId;
-    showProductDetail(pid, true);
-  }else{
-    document.getElementById('productDetail').style.display='none';
-    document.getElementById('productos').style.display='block';
-    document.getElementById('inicio').style.display='block';
-    requestAnimationFrame(()=>{ window.scrollTo({ top: prevScrollY, behavior:'smooth' }); });
-  }
+  if(event.state && event.state.view==='detail'){
+    const pid = event.state.productId;
+    showProductDetail(pid, true); // Mostrar detalle sin afectar historial
+  }else{
+    // Volver a la vista de grilla
+    const detail = document.getElementById('productDetail');
+    const productos = document.getElementById('productos');
+    const hero = document.getElementById('inicio');
+    if(detail) detail.style.display='none';
+    if(productos) productos.style.display='block';
+    if(hero) hero.style.display='block';
+    // No hacer scroll automático al usar back, dejar que el navegador restaure
+    // requestAnimationFrame(()=>{ window.scrollTo({ top: prevScrollY, behavior:'smooth' }); });
+  }
 });
 // Init
 document.addEventListener('DOMContentLoaded', ()=>{
-  window.scrollTo(0,0); setTimeout(()=>window.scrollTo(0,0),0);
-  buildIndex(); renderProductsGrid(PRODUCTS); showCamisasPromoInGrid('all'); updateCartDisplay();
-  const hash = location.hash || '';
-  if(hash.startsWith('#detalle-')){
-    const pid = hash.replace('#detalle-','');
-    const p = PRODUCTS.find(x=>x.id===pid);
-    if(p){ showProductDetail(pid, true); history.replaceState({view:'detail', productId:pid}, '', '#detalle-'+pid); }
-    else { history.replaceState({view:'grid'}, document.title, window.location.pathname + window.location.search); }
-  }else{
-    history.replaceState({view:'grid'}, document.title, window.location.pathname + window.location.search);
-  }
+  // window.scrollTo(0,0); setTimeout(()=>window.scrollTo(0,0),0); // Puede ser problemático, mejor quitar
+  buildIndex();
+  renderProductsGrid(PRODUCTS);
+  showCamisasPromoInGrid('all');
+  updateCartDisplay(); // Actualizar carrito por si había algo guardado (no implementado aquí)
+
+  const hash = location.hash || '';
+  if(hash.startsWith('#detalle-')){
+    const pid = hash.replace('#detalle-','');
+    const p = PRODUCTS.find(x=>x.id===pid);
+    if(p){
+      showProductDetail(pid, true); // Mostrar detalle directamente
+      // No reemplazar estado aquí, dejar que showProductDetail lo maneje si no es silent
+    } else {
+      // Si el ID no es válido, limpiar hash y mostrar grilla
+      history.replaceState({view:'grid'}, document.title, window.location.pathname + window.location.search);
+    }
+  }else{
+    history.replaceState({view:'grid'}, document.title, window.location.pathname + window.location.search); // Estado inicial
+  }
 });
 
 // === Helpers robustos YSL ===
 function getCurrentModelLabel(p){
-  try{
-    if (typeof selectedModel!=='undefined' && selectedModel) return selectedModel;
-    if (!p || !p.images) return null;
-    if (typeof carouselIndex==='number' && p.images[carouselIndex]){
-      return p.images[carouselIndex].model || p.images[carouselIndex].alt || null;
-    }
-    if (p.images[0]) return p.images[0].model || p.images[0].alt || null;
-  }catch(e){}
-  return null;
+  try{
+    // Priorizar selectedModel si existe (seteado por carrusel o selector de color)
+    if (selectedModel) return selectedModel;
+    if (!p || !p.images || p.images.length === 0) return null;
+    // Si no hay selectedModel, intentar obtener del índice actual (carouselIndex)
+    if (typeof carouselIndex==='number' && p.images[carouselIndex]){
+      return p.images[carouselIndex].model || p.images[carouselIndex].alt || null;
+    }
+    // Fallback al primer modelo/alt si existe
+    return p.images[0].model || p.images[0].alt || null;
+  }catch(e){ console.error("Error en getCurrentModelLabel:", e); }
+  return null;
 }
 
 function getPriceForCurrent(p){
-  try{
-    // 1) Si en UI ya hay un precio, es la verdad visible
-    const el = document.getElementById('detailPrice');
-    if(el && el.textContent){
-      const t = el.textContent.replace(/[^\d,.-]/g,'').replace(/\./g,'').replace(',', '.');
-      const n = parseFloat(t);
-      if(!isNaN(n) && isFinite(n)) return n;
-    }
-  }catch(e){}
-  try{
-    // 2) Calcular por datos
-    if(!p) return null;
-    if (p.id==='camisa-ysl' && typeof MODEL_PRICES!=='undefined'){
-      const m = getCurrentModelLabel(p) || 'modelo 01';
-      if (MODEL_PRICES['camisa-ysl'] && typeof MODEL_PRICES['camisa-ysl'][m]==='number'){
-        return MODEL_PRICES['camisa-ysl'][m];
-      }
-    }
-    if (typeof p.price==='number') return p.price;
-  }catch(e){}
-  return null;
+  try{
+    if(!p) return null;
+    const currentModel = getCurrentModelLabel(p); // Obtener el modelo/color actual
+
+    // Caso especial YSL con precios por modelo
+    if (p.id==='camisa-ysl' && currentModel && MODEL_PRICES['camisa-ysl'] && typeof MODEL_PRICES['camisa-ysl'][currentModel]==='number'){
+      return MODEL_PRICES['camisa-ysl'][currentModel];
+    }
+    // Precio fijo estándar
+    if (typeof p.price==='number') return p.price;
+    // Si no hay precio fijo ni rango (o es YSL sin modelo), retornar null
+    if (!Array.isArray(p.priceRange)) return null;
+
+  }catch(e){ console.error("Error en getPriceForCurrent:", e); }
+  return null; // Retornar null si no se puede determinar el precio
 }
 
 function updateModelAndPrice(){
-  try{
-    if(!window.currentProduct) return;
-    // sincronizar modelo desde la slide actual
-    if (currentProduct && currentProduct.images){
-      if (typeof carouselIndex==='number' && currentProduct.images[carouselIndex]){
-        const it = currentProduct.images[carouselIndex];
-        selectedModel = (it.model||it.alt)||selectedModel||null;
-      }else if(currentProduct.images[0]){
-        selectedModel = currentProduct.images[0].model||currentProduct.images[0].alt||selectedModel||null;
-      }
-    }
-    // actualizar texto de precio en el detalle (nunca rango para YSL)
-    const priceEl = document.getElementById('detailPrice');
-    if(priceEl){
-      const n = getPriceForCurrent(currentProduct);
-      if(typeof n==='number'){
-        priceEl.textContent = n.toLocaleString('es-AR', {style:'currency', currency:'ARS'});
-      }
-    }
-  }catch(e){}
-}
+  try{
+    if(!currentProduct || !currentProduct.images) return; // Salir si no hay producto o imágenes
 
-// Garantizar botón #btnAsk en el detalle
-(function(){
-  const container = document.querySelector('#detail .detail-right') || document.getElementById('detailRight');
-  if(container && !document.getElementById('btnAsk')){
-    const b = document.createElement('button');
-    b.id='btnAsk'; b.className='btn'; b.style.background='#25d366'; b.style.color='#fff'; b.style.marginLeft='8px'; b.textContent='WhatsApp';
-    const row = container.querySelector('div[style*="gap"]') || container;
-    row.appendChild(b);
-  }
-})();
+    // Sincronizar selectedModel desde el índice actual del carrusel/selector
+    if (currentProduct.images.length > 0 && typeof carouselIndex === 'number' && currentProduct.images[carouselIndex]){
+      const currentImageObj = currentProduct.images[carouselIndex];
+      selectedModel = currentImageObj.model || currentImageObj.alt || null;
+    } else {
+      selectedModel = null; // No hay imágenes o índice inválido
+    }
+
+    // Actualizar UI de precio (si existe)
+    const priceEl = document.getElementById('detailPrice');
+    if(priceEl){
+      const n = getPriceForCurrent(currentProduct); // Usar helper para obtener precio correcto
+      if(typeof n === 'number'){
+        priceEl.textContent = fmt(n);
+      } else {
+        // Mostrar etiqueta de precio base o 'Consultar' si no se puede determinar
+        priceEl.textContent = priceLabel(currentProduct);
+      }
+    }
+    // Actualizar también el botón de agregar por si el precio cambió (YSL)
+    updateDetailPriceUI();
+
+  }catch(e){ console.error("Error en updateModelAndPrice:", e); }
+}
+// === NUEVA FUNCIÓN: GENERAR SELECTOR DE COLORES (CÍRCULOS) ===
+function buildColorSelector(product) {
+    const selector = document.getElementById('colorSelector');
+    const container = document.getElementById('colorChipsContainer');
+    const nameDisplay = document.getElementById('selectedColorName');
+    const detailImageContainer = document.getElementById('detailImage');
+
+    if (product.categoria !== 'chombas') {
+        if (selector) selector.style.display = 'none';
+        return;
+    }
+    if (!product.images || product.images.length < 2) {
+        if (selector) selector.style.display = 'none';
+        return;
+    }
+
+    selector.style.display = 'block';
+    container.innerHTML = '';
+
+    product.images.forEach((img, index) => {
+        const colorName = img.model || 'Color ' + (index + 1);
+        let colorCode = '#555';
+        if (colorName === 'Gris') colorCode = '#999';
+        else if (colorName === 'Negro') colorCode = '#000';
+        else if (colorName === 'Blanco') colorCode = '#fff';
+        else if (colorName === 'Rosa') colorCode = '#e0a9b0';
+        else if (colorName === 'Naranja') colorCode = '#ff8c00';
+        else if (colorName === 'Bordo') colorCode = '#800000';
+        else if (colorName === 'Celeste') colorCode = '#87ceeb';
+        else if (colorName === 'Mostaza') colorCode = '#ffdb58';
+
+        const chip = document.createElement('span');
+        chip.style.width = '30px';
+        chip.style.height = '30px';
+        chip.style.borderRadius = '50%';
+        chip.style.border = index === 0 ? '3px solid #1e3a2e' : '2px solid #ccc';
+        chip.style.backgroundColor = colorCode;
+        chip.style.cursor = 'pointer';
+        chip.dataset.index = index;
+        chip.dataset.colorName = colorName;
+        chip.dataset.imageSrc = img.src;
+        chip.style.boxShadow = '0 0 4px rgba(0,0,0,0.2)';
+
+        chip.onclick = function() {
+            container.querySelectorAll('span').forEach(c => c.style.border = '2px solid #ccc');
+            this.style.border = '3px solid #1e3a2e';
+            // CORREGIDO: Usar backticks
+            detailImageContainer.innerHTML = `<img referrerpolicy="no-referrer" src="${this.dataset.imageSrc}" alt="${product.name} - ${colorName}">`;
+            nameDisplay.textContent = this.dataset.colorName.toUpperCase();
+            selectedModel = this.dataset.colorName;
+            carouselIndex = parseInt(this.dataset.index);
+            if (typeof updateDetailPriceUI === 'function') updateDetailPriceUI();
+        };
+        container.appendChild(chip);
+    });
+
+    if (product.images.length > 0) {
+        const firstColorName = product.images[0].model || 'Color 1';
+        nameDisplay.textContent = firstColorName.toUpperCase();
+        // CORREGIDO: Usar backticks
+        detailImageContainer.innerHTML = `<img referrerpolicy="no-referrer" src="${product.images[0].src}" alt="${product.name} - ${firstColorName}">`;
+        selectedModel = firstColorName;
+        carouselIndex = 0;
+    }
+}
+// === FIN NUEVA FUNCIÓN ===
+
+// Garantizar botón #btnAsk en el detalle (no necesario, ya está en HTML)
+/*(function(){
+  const container = document.querySelector('#productDetail .detail-info'); // Ajustado selector
+  if(container && !document.getElementById('btnAsk')){
+    const b = document.createElement('button');
+    b.id='btnAsk'; b.className='btn'; b.style.background='#25d366'; b.style.color='#fff';
+    b.onclick = consultarWhatsApp; // Asignar función existente
+    b.innerHTML = '<img src="https://i.ibb.co/BV91S86b/image.png" alt="WhatsApp" style="height:20px;width:20px;vertical-align:middle;margin-right:8px">Consultar por WhatsApp';
+    container.querySelector('.detail-buttons').appendChild(b); // Añadir a los botones existentes
+  }
+})();*/
 </script>
 
 </body>
