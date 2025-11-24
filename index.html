@@ -215,20 +215,18 @@ function updateModelInfo(modelo, precio){
   }catch(e){ console.error("Error en updateModelInfo:", e); }
 }
 
-// Ajustar medios de pago solo para camisas, CHOMBAS Y TRAJES
 function updateMediosPago(categoria){
   try{
     const liEfectivo=document.getElementById('pagoEfectivo');
     const liTarjeta=document.getElementById('pagoTarjeta');
     const liTrans=document.getElementById('pagoTransferencia');
-    if(!liTarjeta || !liTrans || !liEfectivo) return; // Salir si falta algún elemento
+    if(!liTarjeta || !liTrans || !liEfectivo) return;
 
-    // Resetear a valores por defecto
+    // Resetear
     liEfectivo.textContent='Efectivo 💵';
     liTarjeta.textContent='Tarjeta 💳';
     liTrans.textContent='Transferencia';
 
-    // Lógica específica por categoría o ID
     if(categoria==='camisas'){
       liTarjeta.textContent='Tarjeta 💳 (en 3 cuotas)';
       liTrans.textContent='Transferencia (10% de descuento en Camisas)';
@@ -238,13 +236,25 @@ function updateMediosPago(categoria){
       liTarjeta.innerHTML='Tarjeta 💳 <span style="font-weight:bold; color: #2d5a42;">($25.000 en 3 cuotas)</span>';
       liTrans.innerHTML='Transferencia <span style="font-weight:bold; color: #e74c3c;">($20.000)</span>';
     }
-    // === NUEVA LÓGICA PARA EL TRAJE ===
-    else if(currentProduct && currentProduct.id === 'traje-thomson-williams-soft'){
-      liEfectivo.innerHTML='Efectivo 💵 <span style="font-weight:bold; color: #e74c3c;">($230.000)</span>';
-      liTarjeta.innerHTML='Tarjeta 💳 <span style="font-weight:bold; color: #2d5a42;">($260.000 en 3 pagos)</span>';
-      liTrans.innerHTML='Transferencia <span style="font-weight:bold; color: #e74c3c;">($230.000)</span>';
+    else if(currentProduct && currentProduct.id === 'traje-thomson-williams-soft'){
+      liEfectivo.innerHTML='Efectivo 💵 <span style="font-weight:bold; color: #e74c3c;">($230.000)</span>';
+      liTarjeta.innerHTML='Tarjeta 💳 <span style="font-weight:bold; color: #2d5a42;">($260.000 en 3 pagos)</span>';
+      liTrans.innerHTML='Transferencia <span style="font-weight:bold; color: #e74c3c;">($230.000)</span>';
+    }
+    // LOGICA PIMA (XXXL)
+    else if(currentProduct && currentProduct.id === 'chomba-hilo-pima'){
+        const transferPrice = 50000;
+        let cardPrice = (currentProduct.sizePrices && selectedSize) ? currentProduct.sizePrices[selectedSize] : currentProduct.price;
+
+        liEfectivo.innerHTML=`Efectivo 💵 <span style="font-weight:bold; color: #e74c3c;">(${fmt(transferPrice)})</span>`;
+        liTrans.innerHTML=`Transferencia <span style="font-weight:bold; color: #e74c3c;">(${fmt(transferPrice)})</span>`;
+        
+        if (!selectedSize) {
+            liTarjeta.innerHTML=`Tarjeta 💳 <span style="font-weight:bold; color: #2d5a42;">(Seleccionar talle para ver precio)</span>`;
+        } else {
+            liTarjeta.innerHTML=`Tarjeta 💳 <span style="font-weight:bold; color: #2d5a42;">(${fmt(cardPrice)} en 3 pagos)</span>`;
+        }
     }
-    // ===================================
   }catch(e){ console.error("Error en updateMediosPago:", e); }
 }
 
@@ -447,9 +457,9 @@ const PRODUCTS=[
       'Confección 100% algodón premium',
       'Calidad superior: increíbles resultados y confort',
       'Amplia variedad de colores disponibles',
-      'Talles disponibles del S al XXL'
+      'Talles disponibles del S al XXXL'
     ],
-    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    sizes: ['S', 'M', 'L', 'XL', 'XXL','XXXL'],
     tag: 'especial'
   }
   ,
@@ -485,7 +495,43 @@ const PRODUCTS=[
     // Generamos los talles del 46 al 66
     sizes: ['46', '48', '50', '52', '54', '56', '58', '60', '62', '64', '66'],
     tag: 'especial' // Etiqueta por la promoción
-  } // <-- NO pongas coma si este es el último producto de la lista
+  }
+  , // <--- Coma separadora del producto anterior
+  {
+    id: 'chomba-hilo-pima',
+    categoria: 'chombas',
+    name: 'Chomba Hilo Pima Peruano Legítimo',
+    price: 60000, // Precio base
+    
+    // Precios según talle
+    sizePrices: {
+      'M': 60000, 'L': 60000, 'XL': 60000, 'XXL': 60000, 'XXXL': 70000 
+    },
+    
+    image: 'https://i.ibb.co/Y40RWhpM/Imagen-de-Whats-App-2025-11-24-a-las-16-16-56-ca4ca3ea.jpg',
+    
+    images:[
+      {src: 'https://i.ibb.co/Y40RWhpM/Imagen-de-Whats-App-2025-11-24-a-las-16-16-56-ca4ca3ea.jpg', model: 'Rosa Pálido'},
+      {src: 'https://i.ibb.co/xtKFszk3/Imagen-de-Whats-App-2025-11-24-a-las-16-16-56-f7cc5cd9.jpg', model: 'Beige / Arena'},
+      {src: 'https://i.ibb.co/hFG1GDgr/Imagen-de-Whats-App-2025-11-24-a-las-16-16-57-5870fac9.jpg', model: 'celeste Claro'},
+      {src: 'https://i.ibb.co/20nybJWM/Imagen-de-Whats-App-2025-11-24-a-las-16-16-57-214d8f5c.jpg', model: 'Blanco'},
+      {src: 'https://i.ibb.co/ZpsBqG60/Imagen-de-Whats-App-2025-11-24-a-las-16-16-57-1b59fcb3.jpg', model: 'Gris '},
+      {src: 'https://i.ibb.co/MxmRwfpG/Imagen-de-Whats-App-2025-11-24-a-las-16-16-57-e3d43251.jpg', model: 'Verde Militar'},
+      {src: 'https://i.ibb.co/TDVsBLfW/Imagen-de-Whats-App-2025-11-24-a-las-16-16-58-7c50772d.jpg', model: 'Azul Marino '},
+      {src: 'https://i.ibb.co/sv7njSDn/Imagen-de-Whats-App-2025-11-24-a-las-16-16-58-f09e8f53.jpg', model: 'Azul claro'},
+      {src: 'https://i.ibb.co/67pH4rYm/Imagen-de-Whats-App-2025-11-24-a-las-16-32-08-b3b88eb8.jpg', model: ' Negro'}
+    ],
+    description: 'Chomba confeccionada con Hilo Pima Peruano legítimo, un producto excepcional, ofreciendo un tacto suave y una durabilidad superior.',
+    features: [
+      'Material: Hilo Pima Peruano legítimo (producto excepcional)',
+      'Máxima suavidad y transpirabilidad',
+      'Precio Promocional (Efectivo/Transferencia): $50.000',
+      'Precio Tarjeta varía según talle (M-XXL: $60.000 / XXXL: $70.000)',
+      'Talles disponibles: M al XXXL'
+    ],
+    sizes: ['M', 'L', 'XL', 'XXL', 'XXXL'],
+    tag: 'especial'
+  }// <-- NO pongas coma si este es el último producto de la lista
 ];
 // Helpers
 const priceLabel = (p)=>{ if(typeof p.price==='number') return fmt(p.price); if(Array.isArray(p.priceRange)&&p.priceRange.length===2) return fmt(p.priceRange[0])+'–'+fmt(p.priceRange[1]); return 'Consultar precio'; };
@@ -608,28 +654,45 @@ function attachCarouselHandlers(){
   const prev = document.querySelector('.carousel-btn.prev');
   const next = document.querySelector('.carousel-btn.next');
   const caption = document.getElementById('carouselCaption');
+  const colorNameSpan = document.getElementById('selectedColorName');
+
   const update = ()=>{
-    // CORREGIDO: Usar backticks
-    track.style.transform = `translateX(${-carouselIndex*100}%)`;
-    dots.forEach((d,i)=>{ d.classList.toggle('active', i===carouselIndex);
-    // Llamada a updateModelAndPrice() quitada de aquí para evitar redundancia
+    track.style.transform = `translateX(${-carouselIndex*100}%)`; // Backticks corregidos
+    dots.forEach((d,i)=>{ 
+        d.classList.toggle('active', i===carouselIndex);
+        // Sincronizar borde de chips si existen
+        if (currentProduct.categoria === 'chombas' || currentProduct.categoria === 'trajes') {
+            const chips = document.querySelectorAll('#colorChipsContainer span');
+            chips.forEach(c => c.style.border = '2px solid #ccc');
+            if (chips[carouselIndex]) chips[carouselIndex].style.border = '3px solid #1e3a2e';
+        }
     });
-    // Llamar a updateModelAndPrice solo una vez después de actualizar el índice
-    updateModelAndPrice();
-    if(typeof updateDetailPriceUI==='function') updateDetailPriceUI();
+    
+    updateModelAndPrice();
+    if(typeof updateDetailPriceUI==='function') updateDetailPriceUI();
 
     if(currentProduct && Array.isArray(currentProduct.images) && currentProduct.images[carouselIndex]){
       const obj = currentProduct.images[carouselIndex];
       const label = (obj && (obj.model||obj.alt)) ? (obj.model||obj.alt) : '';
-      // No setear selectedModel aquí directamente, dejar que updateModelAndPrice lo haga
-      if(caption){ caption.textContent = label ? `Modelo: ${label}` : ''; }
-      // updateDetailPriceUI(); // Ya se llama arriba
+      if(caption) caption.textContent = label ? `Modelo: ${label}` : '';
+      if (colorNameSpan) colorNameSpan.textContent = label ? label.toUpperCase() : '';
     } else if (caption) {
-      caption.textContent = '';
-    }
+      caption.textContent = '';
+      if (colorNameSpan) colorNameSpan.textContent = '';
+    }
   };
-  if(prev) prev.onclick = ()=>{ carouselIndex = Math.max(0, carouselIndex-1); update(); };
-  if(next) next.onclick = ()=>{ const total = dots.length; carouselIndex = Math.min(total-1, carouselIndex+1); update(); };
+
+  // LOOP INFINITO AQUI
+  if(prev) prev.onclick = ()=>{ 
+    carouselIndex = (carouselIndex > 0) ? carouselIndex - 1 : dots.length - 1; 
+    update(); 
+  };
+  if(next) next.onclick = ()=>{ 
+    carouselIndex = (carouselIndex < dots.length - 1) ? carouselIndex + 1 : 0; 
+    update(); 
+  };
+  // FIN LOOP
+
   dots.forEach((d,i)=> d.onclick = ()=>{ carouselIndex = i; update(); });
 
   let startX=0, dx=0;
@@ -639,28 +702,26 @@ function attachCarouselHandlers(){
     el.addEventListener('touchmove', e=>{ dx = e.touches[0].clientX - startX; }, {passive:true});
     el.addEventListener('touchend', ()=>{
       const total = dots.length;
-      if(dx < -40) carouselIndex = Math.min(total-1, carouselIndex+1);
-      if(dx > 40) carouselIndex = Math.max(0, carouselIndex-1);
+      if(dx < -40) { // Swipe Izq (Siguiente con Loop)
+          carouselIndex = (carouselIndex < total - 1) ? carouselIndex + 1 : 0;
+      }
+      if(dx > 40) { // Swipe Der (Anterior con Loop)
+          carouselIndex = (carouselIndex > 0) ? carouselIndex - 1 : total - 1;
+      }
       dx = 0; update();
     });
   }
-  update(); // Llamada inicial para setear estado
+  update(); 
 }
 
-// Detalle
 function showProductDetail(id, silent=false){
   prevScrollY = window.scrollY || window.pageYOffset || 0;
   const p=PRODUCTS.find(x=>x.id===id); if(!p) return;
   currentProduct=p;
-  // Resetear estado antes de mostrar
-  selectedSize=null;
-  selectedModel=null; // Se seteará por buildColorSelector o attachCarouselHandlers
-  carouselIndex = 0; // Resetear índice
+  selectedSize=null; selectedModel=null; carouselIndex = 0; 
 
-  // Scroll to top
-  try{window.scrollTo(0,0);document.documentElement.scrollTop=0;document.body.scrollTop=0;}catch(e){}
+  try{window.scrollTo(0,0);document.documentElement.scrollTop=0;document.body.scrollTop=0;}catch(e){}
 
-  // Mostrar/ocultar secciones
   const productos=document.getElementById('productos');
   const detail=document.getElementById('productDetail');
   const hero=document.getElementById('inicio');
@@ -668,67 +729,77 @@ function showProductDetail(id, silent=false){
   if(hero) hero.style.display='none';
   if(detail) detail.style.display='block';
 
-  // --- LÓGICA CONDICIONAL DE IMAGEN ---
-  const selector = document.getElementById('colorSelector');
-  if (selector) selector.style.display = 'none'; // Ocultar por defecto
+  const selector = document.getElementById('colorSelector');
+  if (selector) selector.style.display = 'none'; 
 
-  if (p.categoria === 'chombas' && p.images && p.images.length > 1) {
+  if (p.categoria === 'chombas' || p.categoria === 'trajes') { 
       document.getElementById('detailImage').innerHTML = '';
-      buildColorSelector(p); // Seteará selectedModel y carouselIndex iniciales
-  } else if (p.images && p.images.length > 1) {
-      document.getElementById('detailImage').innerHTML = buildCarousel(p.images);
-      // selectedModel se seteará en attachCarouselHandlers -> update() -> updateModelAndPrice()
-      setTimeout(attachCarouselHandlers, 0);
-  } else {
-      // CORREGIDO: Usar backticks
-      document.getElementById('detailImage').innerHTML = `<img referrerpolicy="no-referrer" src="${p.image}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/500x400?text=Sin+Imagen'">`;
-      selectedModel = null; // No hay modelos/colores
-  }
-  // --- FIN LÓGICA CONDICIONAL ---
+      if (p.images && p.images.length > 1) {
+          document.getElementById('detailImage').innerHTML = buildCarousel(p.images);
+          buildColorSelector(p);
+          setTimeout(attachCarouselHandlers, 0);
+      } else {
+          buildColorSelector(p);
+      }
+  } else if (p.images && p.images.length > 1) {
+      document.getElementById('detailImage').innerHTML = buildCarousel(p.images);
+      if (p.images && p.images[0] && (p.images[0].model || p.images[0].alt)) {
+          selectedModel = p.images[0].model || p.images[0].alt;
+      }
+      setTimeout(attachCarouselHandlers, 0);
+  } else {
+      document.getElementById('detailImage').innerHTML = `<img referrerpolicy="no-referrer" src="${p.image}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/500x400?text=Sin+Imagen'">`;
+      selectedModel = null; 
+  }
 
-  // Actualizar UI restante
   document.getElementById('detailName').textContent=p.name;
-  updateDetailPriceUI(); // Actualiza precio después de setear imagen/modelo inicial
+  updateDetailPriceUI(); 
   document.getElementById('detailDesc').textContent=p.description;
   const ul=document.getElementById('detailFeatures'); ul.innerHTML='';
   (p.features||[]).forEach(f=>{ const li=document.createElement('li'); li.textContent=f; ul.appendChild(li); });
 
-  // Talles
   const szCont=document.getElementById('detailSizes'); szCont.innerHTML='';
   (p.sizes||[]).forEach(s=>{
     const chip=document.createElement('span'); chip.className='size-chip'; chip.textContent=s;
     chip.setAttribute('role','button'); chip.setAttribute('tabindex','0');
     chip.setAttribute('aria-label','Seleccionar talle '+s);
-    const select=()=>{ selectedSize=s; szCont.querySelectorAll('.size-chip').forEach(c=>c.classList.remove('selected')); chip.classList.add('selected'); const warn=document.getElementById('sizeWarning'); if(warn) warn.style.display='none'; };
+    
+    const select=()=>{ 
+        selectedSize=s; 
+        szCont.querySelectorAll('.size-chip').forEach(c=>c.classList.remove('selected')); 
+        chip.classList.add('selected'); 
+        const warn=document.getElementById('sizeWarning'); if(warn) warn.style.display='none'; 
+        
+        updateMediosPago(p.categoria); 
+        
+        // Actualizar el Precio Grande al tocar talle
+        const priceEl = document.getElementById('detailPrice');
+        const newPrice = getPriceForCurrent(p);
+        if(priceEl && newPrice !== null) {
+            priceEl.textContent = fmt(newPrice);
+        }
+    };
+    
     chip.addEventListener('click', select);
     chip.addEventListener('keydown', ev=>{ if(ev.key==='Enter'||ev.key===' '){ ev.preventDefault(); select(); } });
     szCont.appendChild(chip);
   });
-  // Ocultar warning de talle al inicio
-  const sizeWarn = document.getElementById('sizeWarning'); if(sizeWarn) sizeWarn.style.display='none';
 
-  // Botón Agregar
+  const sizeWarn = document.getElementById('sizeWarning'); if(sizeWarn) sizeWarn.style.display='none';
   const addBtn=document.getElementById('addBtn');
   if(addBtn){
-    if(p.price==null && !p.priceRange){ addBtn.setAttribute('disabled','disabled'); addBtn.textContent='🛒 No disponible (consultar precio)'; }
+    if(p.price==null && !p.priceRange && !p.sizePrices){ addBtn.setAttribute('disabled','disabled'); addBtn.textContent='🛒 No disponible'; }
     else{ addBtn.removeAttribute('disabled'); addBtn.textContent='🛒 Agregar al Carrito'; }
-    // Volver a llamar updateDetailPriceUI por si hay modelos con precios (YSL)
-    updateDetailPriceUI();
+    updateDetailPriceUI();
   }
-
-  // Actualizar notas de pago específicas
-  showCamisasPromoInDetail(p.categoria==='camisas');
-  updateMediosPago(p.categoria); // Usa la categoría
-
-  // Scroll suave a la sección
+  showCamisasPromoInDetail(p.categoria==='camisas');
+  updateMediosPago(p.categoria); 
   requestAnimationFrame(()=>{
     const header = document.querySelector('header');
     const offset = (header ? header.offsetHeight : 70) + 10;
     const y = detail.getBoundingClientRect().top + window.scrollY - offset;
     window.scrollTo({top:y, behavior:'smooth'});
   });
-
-  // Actualizar historial
   if(!silent){ history.pushState({view:'detail', productId:id}, '', `#detalle-${id}`); }
 }
 
@@ -986,19 +1057,20 @@ function getCurrentModelLabel(p){
 function getPriceForCurrent(p){
   try{
     if(!p) return null;
-    const currentModel = getCurrentModelLabel(p); // Obtener el modelo/color actual
+    const currentModel = getCurrentModelLabel(p);
 
-    // Caso especial YSL con precios por modelo
+    // Lógica de precio por talle (Pima)
+    if (p.sizePrices && selectedSize) {
+        return p.sizePrices[selectedSize];
+    }
+
     if (p.id==='camisa-ysl' && currentModel && MODEL_PRICES['camisa-ysl'] && typeof MODEL_PRICES['camisa-ysl'][currentModel]==='number'){
       return MODEL_PRICES['camisa-ysl'][currentModel];
     }
-    // Precio fijo estándar
     if (typeof p.price==='number') return p.price;
-    // Si no hay precio fijo ni rango (o es YSL sin modelo), retornar null
-    if (!Array.isArray(p.priceRange)) return null;
-
+    if (!Array.isArray(p.priceRange)) return null;
   }catch(e){ console.error("Error en getPriceForCurrent:", e); }
-  return null; // Retornar null si no se puede determinar el precio
+  return null;
 }
 
 function updateModelAndPrice(){
@@ -1029,70 +1101,75 @@ function updateModelAndPrice(){
 
   }catch(e){ console.error("Error en updateModelAndPrice:", e); }
 }
-// === NUEVA FUNCIÓN: GENERAR SELECTOR DE COLORES (CÍRCULOS) ===
 function buildColorSelector(product) {
-    const selector = document.getElementById('colorSelector');
-    const container = document.getElementById('colorChipsContainer');
-    const nameDisplay = document.getElementById('selectedColorName');
-    const detailImageContainer = document.getElementById('detailImage');
+    const selector = document.getElementById('colorSelector');
+    const container = document.getElementById('colorChipsContainer');
+    const nameDisplay = document.getElementById('selectedColorName');
+    const detailImageContainer = document.getElementById('detailImage');
 
-    if (product.categoria !== 'chombas') {
-        if (selector) selector.style.display = 'none';
-        return;
-    }
-    if (!product.images || product.images.length < 2) {
-        if (selector) selector.style.display = 'none';
-        return;
-    }
+    // MAPA UNIFICADO DE COLORES
+    const hexMap = {
+        'Gris': '#808080', 'Rosa': '#FFC0CB', 'Negro': '#000000', 'Blanco': '#FFFFFF',
+        'Naranja': '#e67315', 'Bordo': '#800000', 'Celeste': '#87CEEB', 'Mostaza': '#FFDB58',
+        'Verde': '#00A36C', 'Marron': '#8B4513', 'Azul': '#0000FF',
+        
+        // Pima Nombres Exactos
+        'Rosa Pálido': '#D4A9A6', 'Beige / Arena': '#d1b27a', 'celeste Claro': '#A9D7EC',   
+        'Gris ': '#A8A8A8', 'Verde Militar': '#4C6556', 'Azul Marino ': '#1A233A',
+        'Azul claro': '#26364D', ' Negro': '#171F27'
+    };
+    
+    if (product.categoria !== 'chombas' && product.categoria !== 'trajes') {
+        if (selector) selector.style.display = 'none';
+        return;
+    }
+    if (!product.images || product.images.length < 2) {
+        if (selector) selector.style.display = 'none';
+        return;
+    }
 
-    selector.style.display = 'block';
-    container.innerHTML = '';
+    selector.style.display = 'block';
+    container.innerHTML = '';
 
-    product.images.forEach((img, index) => {
-        const colorName = img.model || 'Color ' + (index + 1);
-        let colorCode = '#555';
-        if (colorName === 'Gris') colorCode = '#999';
-        else if (colorName === 'Negro') colorCode = '#000';
-        else if (colorName === 'Blanco') colorCode = '#fff';
-        else if (colorName === 'Rosa') colorCode = '#e0a9b0';
-        else if (colorName === 'Naranja') colorCode = '#ff8c00';
-        else if (colorName === 'Bordo') colorCode = '#800000';
-        else if (colorName === 'Celeste') colorCode = '#87ceeb';
-        else if (colorName === 'Mostaza') colorCode = '#ffdb58';
+    product.images.forEach((img, index) => {
+        const colorName = img.model || 'Color ' + (index + 1);
+        let colorCode = hexMap[colorName] || '#555'; 
 
-        const chip = document.createElement('span');
-        chip.style.width = '30px';
-        chip.style.height = '30px';
-        chip.style.borderRadius = '50%';
-        chip.style.border = index === 0 ? '3px solid #1e3a2e' : '2px solid #ccc';
-        chip.style.backgroundColor = colorCode;
-        chip.style.cursor = 'pointer';
-        chip.dataset.index = index;
-        chip.dataset.colorName = colorName;
-        chip.dataset.imageSrc = img.src;
-        chip.style.boxShadow = '0 0 4px rgba(0,0,0,0.2)';
+        const chip = document.createElement('span');
+        chip.style.width = '30px'; chip.style.height = '30px';
+        chip.style.borderRadius = '50%';
+        chip.style.border = index === 0 ? '3px solid #1e3a2e' : '2px solid #ccc';
+        chip.style.backgroundColor = colorCode;
+        chip.style.cursor = 'pointer';
+        chip.dataset.index = index;
+        chip.dataset.colorName = colorName; 
+        chip.dataset.imageSrc = img.src;
+        chip.style.boxShadow = '0 0 4px rgba(0,0,0,0.2)';
 
-        chip.onclick = function() {
-            container.querySelectorAll('span').forEach(c => c.style.border = '2px solid #ccc');
-            this.style.border = '3px solid #1e3a2e';
-            // CORREGIDO: Usar backticks
-            detailImageContainer.innerHTML = `<img referrerpolicy="no-referrer" src="${this.dataset.imageSrc}" alt="${product.name} - ${colorName}">`;
-            nameDisplay.textContent = this.dataset.colorName.toUpperCase();
-            selectedModel = this.dataset.colorName;
-            carouselIndex = parseInt(this.dataset.index);
-            if (typeof updateDetailPriceUI === 'function') updateDetailPriceUI();
-        };
-        container.appendChild(chip);
-    });
+        chip.onclick = function() {
+            container.querySelectorAll('span').forEach(c => c.style.border = '2px solid #ccc');
+            this.style.border = '3px solid #1e3a2e';
+            
+            const dot = document.querySelector(`.carousel-dot[data-i="${this.dataset.index}"]`);
+            if (dot) dot.click();
 
-    if (product.images.length > 0) {
-        const firstColorName = product.images[0].model || 'Color 1';
-        nameDisplay.textContent = firstColorName.toUpperCase();
-        // CORREGIDO: Usar backticks
-        detailImageContainer.innerHTML = `<img referrerpolicy="no-referrer" src="${product.images[0].src}" alt="${product.name} - ${firstColorName}">`;
-        selectedModel = firstColorName;
-        carouselIndex = 0;
-    }
+            selectedModel = this.dataset.colorName; 
+            carouselIndex = parseInt(this.dataset.index);
+            nameDisplay.textContent = this.dataset.colorName.toUpperCase();
+            updateDetailPriceUI();
+        };
+        container.appendChild(chip);
+    });
+
+    if (product.images.length > 0) {
+        const firstColorName = product.images[0].model || 'Color 1';
+        selectedModel = firstColorName; 
+        carouselIndex = 0;
+        nameDisplay.textContent = firstColorName.toUpperCase();
+        if(!document.getElementById('carousel')) {
+             detailImageContainer.innerHTML = `<img referrerpolicy="no-referrer" src="${product.images[0].src}" alt="${product.name} - ${firstColorName}">`;
+        }
+    }
 }
 // === FIN NUEVA FUNCIÓN ===
 
