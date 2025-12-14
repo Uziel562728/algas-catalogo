@@ -241,12 +241,6 @@ function updateMediosPago(categoria){
       liTarjeta.innerHTML='Tarjeta 💳 <span style="font-weight:bold; color: #2d5a42;">($260.000 en 3 pagos)</span>';
       liTrans.innerHTML='Transferencia <span style="font-weight:bold; color: #e74c3c;">($230.000)</span>';
     }
-   
-    else if(currentProduct && currentProduct.id === 'campera-rompevientos-buckingham-nueva'){
-      liEfectivo.innerHTML='Efectivo 💵 <span style="font-weight:bold; color: #e74c3c;">($50.000)</span>';
-      liTarjeta.innerHTML='Tarjeta 💳 <span style="font-weight:bold; color: #2d5a42;">($60.000 en 3 pagos)</span>';
-      liTrans.innerHTML='Transferencia/Depósito <span style="font-weight:bold; color: #e74c3c;">($50.000)</span>';
-    }
     // LOGICA PIMA (XXXL)
     else if(currentProduct && currentProduct.id === 'chomba-hilo-pima'){
         const transferPrice = 50000;
@@ -537,35 +531,7 @@ const PRODUCTS=[
     ],
     sizes: ['M', 'L', 'XL', 'XXL', 'XXXL'],
     tag: 'especial'
-  },
-{
-  id: 'campera-rompevientos-buckingham-nueva', 
-  categoria: 'camperas', 
-  name: 'Campera Rompevientos Buckingham Polo Club - Impermeable', 
-  price: 60000, // Precio Tarjeta
-  
-  // Imagen principal (usamos la primera para la grilla)
-  image: 'https://i.ibb.co/MkWF08Lm/Imagen-de-Whats-App-2025-12-14-a-las-14-31-59-f5d77cab.jpg',
-  
-  // Imágenes y Modelos/Colores para el carrusel
-  images: [
-    {src: 'https://i.ibb.co/MkWF08Lm/Imagen-de-Whats-App-2025-12-14-a-las-14-31-59-f5d77cab.jpg', model: 'Mostaza y Blanco'},
-    {src: 'https://i.ibb.co/hnBsNS8/Imagen-de-Whats-App-2025-12-14-a-las-14-31-59-5ea91511.jpg', model: 'Rojo y Azul'},
-    {src: 'https://i.ibb.co/0j6ZFGc9/Imagen-de-Whats-App-2025-12-14-a-las-14-32-00-1bc18621.jpg', model: 'Gris y Blanco'}
-  ],
-  
-  description: 'Campera rompevientos de la primera marca Buckingham Polo Club. Diseño impermeable, con capucha desmontable y de calidad insuperable.',
-  features: [
-    'Marca: Buckingham Polo Club (Primera Marca)',
-    'Material impermeable de alta calidad',
-    'Capucha desmontable para mayor versatilidad',
-    'Precio Tarjeta: $60.000 (en 3 pagos)',
-    'Promo Efectivo/Transferencia/Depósito: $50.000',
-    'Talles disponibles: S al XXL'
-  ],
-  sizes: ['S', 'M', 'L', 'XL', 'XXL'],
-  tag: 'especial'
-}// <-- NO pongas coma si este es el último producto de la lista
+  }// <-- NO pongas coma si este es el último producto de la lista
 ];
 // Helpers
 const priceLabel = (p)=>{ if(typeof p.price==='number') return fmt(p.price); if(Array.isArray(p.priceRange)&&p.priceRange.length===2) return fmt(p.priceRange[0])+'–'+fmt(p.priceRange[1]); return 'Consultar precio'; };
@@ -763,12 +729,10 @@ function showProductDetail(id, silent=false){
   if(hero) hero.style.display='none';
   if(detail) detail.style.display='block';
 
-// ...
   const selector = document.getElementById('colorSelector');
   if (selector) selector.style.display = 'none'; 
 
-  // REEMPLAZA LA LÍNEA ANTERIOR por esta:
-  if (p.categoria === 'chombas' || p.categoria === 'trajes' || p.categoria === 'camperas') { 
+  if (p.categoria === 'chombas' || p.categoria === 'trajes') { 
       document.getElementById('detailImage').innerHTML = '';
       if (p.images && p.images.length > 1) {
           document.getElementById('detailImage').innerHTML = buildCarousel(p.images);
@@ -1152,14 +1116,10 @@ function buildColorSelector(product) {
         // Pima Nombres Exactos
         'Rosa Pálido': '#D4A9A6', 'Beige / Arena': '#d1b27a', 'celeste Claro': '#A9D7EC',   
         'Gris ': '#A8A8A8', 'Verde Militar': '#4C6556', 'Azul Marino ': '#1A233A',
-        'Azul claro': '#26364D', ' Negro': '#171F27',
-      
-      'Mostaza y Blanco': '#FFDB58,#FFFFFF', 
-        'Rojo y Azul': '#E74C3C,#2980B9',      
-        'Gris y Blanco': '#A9A9A9,#FFFFFF'
+        'Azul claro': '#26364D', ' Negro': '#171F27'
     };
     
-if (product.categoria !== 'chombas' && product.categoria !== 'trajes' && product.categoria !== 'camperas') {
+    if (product.categoria !== 'chombas' && product.categoria !== 'trajes') {
         if (selector) selector.style.display = 'none';
         return;
     }
@@ -1179,14 +1139,7 @@ if (product.categoria !== 'chombas' && product.categoria !== 'trajes' && product
         chip.style.width = '30px'; chip.style.height = '30px';
         chip.style.borderRadius = '50%';
         chip.style.border = index === 0 ? '3px solid #1e3a2e' : '2px solid #ccc';
-        if (colorCode.includes(',')) {
-            const [color1, color2] = colorCode.split(',');
-            // Crea el efecto diagonal de dos colores
-            chip.style.background = linear-gradient(135deg, ${color1} 0%, ${color1} 49%, #FFFFFF 49%, #FFFFFF 51%, ${color2} 51%, ${color2} 100%);
-        } else {
-            // Mantiene el color sólido para los chips normales
-            chip.style.backgroundColor = colorCode;
-        }
+        chip.style.backgroundColor = colorCode;
         chip.style.cursor = 'pointer';
         chip.dataset.index = index;
         chip.dataset.colorName = colorName; 
@@ -1194,4 +1147,44 @@ if (product.categoria !== 'chombas' && product.categoria !== 'trajes' && product
         chip.style.boxShadow = '0 0 4px rgba(0,0,0,0.2)';
 
         chip.onclick = function() {
-            container.querySelectorAll('span').forEach(c => c.style.border = '
+            container.querySelectorAll('span').forEach(c => c.style.border = '2px solid #ccc');
+            this.style.border = '3px solid #1e3a2e';
+            
+            const dot = document.querySelector(.carousel-dot[data-i="${this.dataset.index}"]);
+            if (dot) dot.click();
+
+            selectedModel = this.dataset.colorName; 
+            carouselIndex = parseInt(this.dataset.index);
+            nameDisplay.textContent = this.dataset.colorName.toUpperCase();
+            updateDetailPriceUI();
+        };
+        container.appendChild(chip);
+    });
+
+    if (product.images.length > 0) {
+        const firstColorName = product.images[0].model || 'Color 1';
+        selectedModel = firstColorName; 
+        carouselIndex = 0;
+        nameDisplay.textContent = firstColorName.toUpperCase();
+        if(!document.getElementById('carousel')) {
+             detailImageContainer.innerHTML = <img referrerpolicy="no-referrer" src="${product.images[0].src}" alt="${product.name} - ${firstColorName}">;
+        }
+    }
+}
+// === FIN NUEVA FUNCIÓN ===
+
+// Garantizar botón #btnAsk en el detalle (no necesario, ya está en HTML)
+/*(function(){
+  const container = document.querySelector('#productDetail .detail-info'); // Ajustado selector
+  if(container && !document.getElementById('btnAsk')){
+    const b = document.createElement('button');
+    b.id='btnAsk'; b.className='btn'; b.style.background='#25d366'; b.style.color='#fff';
+    b.onclick = consultarWhatsApp; // Asignar función existente
+    b.innerHTML = '<img src="https://i.ibb.co/BV91S86b/image.png" alt="WhatsApp" style="height:20px;width:20px;vertical-align:middle;margin-right:8px">Consultar por WhatsApp';
+    container.querySelector('.detail-buttons').appendChild(b); // Añadir a los botones existentes
+  }
+})();*/
+</script>
+
+</body>
+</html>
