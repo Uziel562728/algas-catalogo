@@ -37,10 +37,30 @@ background:#eef9f4;color:#1e3a2e;border-radius:10px;text-align:center;font-weigh
 background:#eef9f4;color:#1e3a2e;border-radius:10px;font-weight:600}
 
 
-.cart-items span{
-  white-space: normal !important;
-  word-break: break-word !important;
+/* Cart */
+/* ... otros estilos del carrito ... */
+
+.cart-item{
+
+  display: flex; 
+  flex-direction: column; 
+  margin: 0; 
+  gap: 0;
 }
+
+.cart-controls button {
+    background: none !important; 
+    color: var(--gris-1) !important;
+    border-radius: 0 !important;
+    width: 30px !important;
+    height: 30px !important;
+}
+
+.cart-controls button:active {
+    background: #f0f0f0 !important;
+}
+
+
 
 /* Grid */
 .grid{display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
@@ -95,12 +115,74 @@ ul{padding-left:20px;margin:10px 0}
 #cartFab.bounce{animation:bounce .6s}
 @keyframes bounce{0%{transform:scale(1)}30%{transform:scale(1.2)}60%{transform:scale(0.9)}100%{transform:scale(1)}}
 .fab-count{background:#e74c3c;color:#fff;border-radius:50%;padding:2px 8px;margin-left:6px}
-#cartModal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:3000;align-items:center;justify-content:center;overscroll-behavior:contain}
-#cartModal .modal-content{background:#fff;border-radius:12px;max-width:520px;width:90%;padding:20px;position:relative;max-height:85vh;overflow:auto;-webkit-overflow-scrolling:touch}
-#cartModal .close{position:absolute;top:10px;right:15px;cursor:pointer;font-size:1.5rem}
-.cart-item{display:flex;justify-content:space-between;align-items:center;margin:8px 0;gap:8px}
+/* INICIO DEL REEMPLAZO */
+/* INICIO DEL REEMPLAZO DEFINITIVO #cartModal y animaciones */
+#cartModal{
+    display: block;
+    position: fixed;
+    top: 0;
+    right: 0; /* ⬅️ ANCLADO AQUÍ: DERECHA */
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 3000;
+    align-items: center;
+    justify-content: flex-end; /* ⬅️ EMPUJA EL PANEL A LA DERECHA */
+    overscroll-behavior: contain;
+    visibility: hidden; 
+    opacity: 0;
+    transition: visibility 0.3s, opacity 0.3s;
+}
+#cartModal.visible { /* ⬅️ Clase necesaria para mostrar */
+    visibility: visible;
+    opacity: 1;
+}
+#cartModal .modal-content{
+    background:#fff;
+    border-radius:0;
+    max-width: 420px;
+    width: 100%;
+    height: 100vh;
+    padding: 20px;
+    position: relative;
+    max-height: 100vh;
+    overflow: auto;
+    -webkit-overflow-scrolling:touch;
+    transform: translateX(100%); /* ⬅️ COMIENZA 100% FUERA DE LA DERECHA */
+    transition: transform 0.3s ease-out;
+}
+#cartModal.visible .modal-content { /* ⬅️ Clase necesaria para deslizar */
+    transform: translateX(0); /* ⬅️ TERMINA EN POSICIÓN CERO (dentro de la derecha) */
+}
+/* FIN DEL REEMPLAZO DEFINITIVO */
+/* FIN DEL REEMPLAZO */
+
+#cartModal .close{
+    position:absolute;
+    top:10px;
+    right:20px; /* ⬅️ DEBE ESTAR ANCLADO A LA DERECHA (20px) */
+    cursor:pointer;
+    font-size:1.5rem ; 
+    color: #333; 
+    z-index: 3001;
+}
+.cart-item{
+    display: flex; /* <--- Cambio: era flex */
+    flex-direction: column; /* <--- Cambio: añadido */
+    margin: 0; /* <--- Cambio: era 8px 0 */
+    gap: 0; /* <--- Cambio: era 8px */
+}
 .cart-controls{display:flex;align-items:center;gap:6px}
-.cart-controls button{width:28px;height:28px;border:none;border-radius:50%;background:var(--verde-medio);color:#fff;font-size:1rem;font-weight:bold;cursor:pointer}
+.cart-controls button {
+    width: 30px !important; /* <--- Cambio: era 28px */
+    height: 30px !important; /* <--- Cambio: era 28px */
+    background: none !important; 
+    color: var(--gris-1) !important;
+    border-radius: 0 !important;
+}
+.cart-controls button:active { /* <--- Nuevo estilo */
+    background: #f0f0f0 !important;
+}
 .cart-controls button:hover{background:var(--verde-oscuro)}
 .cart-controls span{min-width:24px;text-align:center;font-weight:bold}
 .cart-total{font-weight:bold;font-size:1.2rem;margin-top:15px;text-align:right}
@@ -109,8 +191,17 @@ ul{padding-left:20px;margin:10px 0}
 /* WhatsApp FAB - circular, solo ícono */
 #whatsappFab{position:fixed;bottom:20px;right:20px;display:grid;place-items:center;width:60px;height:60px;padding:0;background:var(--whatsapp);color:#fff;border-radius:50%;cursor:pointer;z-index:2000;box-shadow:0 4px 10px rgba(0,0,0,.3)}
 #whatsappFab img{height:28px;width:28px}
-#whatsappFab.lifted{bottom:120px}
-@media (max-width:768px){#whatsappFab.lifted{bottom:140px}}
+/* REEMPLAZAR #whatsappFab.lifted */
+#whatsappFab.lifted{
+    bottom: 120px;
+    right: 440px; /* ⬅️ VUELVE A LA IZQUIERDA PARA DAR ESPACIO AL CARRITO */
+}
+@media (max-width:768px){
+    #whatsappFab.lifted{
+        bottom: 140px;
+        right: 40px; 
+    }
+}
 /* Lock background scroll when modal open */
 body.modal-open{position:fixed; width:100%; overflow:hidden; height:100vh; top:0; left:0; right:0}
 /* Footer */
@@ -178,7 +269,7 @@ footer a{color:#fff;text-decoration:underline}
     <div class="cart-total" id="cartTotal"></div>
     <div class="cart-actions">
       <button class="btn" style="background:#e74c3c;color:#fff" onclick="clearCart()">🗑️ Vaciar Carrito</button>
-      <button class="btn" style="background:#25d366;color:#fff" onclick="checkout()">📱 Finalizar Compra</button>
+      <button class="btn" style="background:#25d366;color:#fff" onclick="checkout()"> Finalizar Compra</button>
     </div>
   </div>
 </div>
@@ -695,11 +786,17 @@ function attachCarouselHandlers(){
     dots.forEach((d,i)=>{ 
         d.classList.toggle('active', i===carouselIndex);
         // Sincronizar borde de chips si existen
-        if (currentProduct.categoria === 'chombas' || currentProduct.categoria === 'trajes') {
-            const chips = document.querySelectorAll('#colorChipsContainer span');
-            chips.forEach(c => c.style.border = '2px solid #ccc');
-            if (chips[carouselIndex]) chips[carouselIndex].style.border = '3px solid #1e3a2e';
-        }
+       if (currentProduct.categoria === 'chombas' || currentProduct.categoria === 'trajes' || currentProduct.categoria === 'camperas') {
+                const chips = document.querySelectorAll('#colorChipsContainer span');
+                chips.forEach(c => c.style.border = '2px solid #ccc');
+                
+                // Marcar el chip actual
+                if (chips[carouselIndex]) {
+                    chips[carouselIndex].style.border = '3px solid #1e3a2e';
+                    // Sincronizar selectedModel al deslizar
+                    selectedModel = chips[carouselIndex].dataset.colorName || null;
+                }
+            }
     });
     
     updateModelAndPrice();
@@ -767,6 +864,7 @@ function showProductDetail(id, silent=false){
   const selector = document.getElementById('colorSelector');
   if (selector) selector.style.display = 'none'; 
 
+  // REEMPLAZA LA LÍNEA ANTERIOR por esta:
 // CÓDIGO CORREGIDO (Incluye la lógica de carga de imagen si no hay carrusel)
 
   if (p.categoria === 'chombas' || p.categoria === 'trajes' || p.categoria === 'camperas') { 
@@ -918,41 +1016,123 @@ function addToCart(p) {
   }
 }
 
+// REEMPLAZAR TODA LA FUNCIÓN updateCartDisplay
+
 function updateCartDisplay(){
-  const count=document.getElementById('cartCount'); if(count) count.textContent=cart.reduce((a,b)=>a+b.qty,0);
-  const items=document.getElementById('cartItems'); if(!items) return; items.innerHTML='';
+  const count=document.getElementById('cartCount'); 
+  if(count) count.textContent=cart.reduce((a,b)=>a+b.qty,0);
+  const items=document.getElementById('cartItems'); 
+  if(!items) return; 
+  items.innerHTML='';
+  
+  let total = 0;
+
   cart.forEach((item,i)=>{
-    const lineTotal = (item.price==null || isNaN(item.price))? 0 : item.price*item.qty; // Validar NaN
+    const lineTotal = (item.price==null || isNaN(item.price))? 0 : item.price*item.qty; 
+    total += lineTotal;
+    
     const unitPriceLabel = (item.price==null || isNaN(item.price))? '' : fmt(item.price);
-    const linePriceLabel = (item.price==null || isNaN(item.price))? 'A consultar' : fmt(lineTotal);
-    const div=document.createElement('div'); div.className='cart-item';
-    // CORREGIDO: Usar backticks y variables correctas
-    div.innerHTML = `
-  <span>${item.name}${item.modelo ? ' — ' + item.modelo : ''} ${item.size ? '(Talle ' + item.size + ')' : ''}</span>
-  <div class="cart-controls">
-    <button type="button" onclick="updateQuantity(${i},-1)">-</button>
-    <span>${item.qty}</span>
-    <button type="button" onclick="updateQuantity(${i},1)">+</button>
-  </div>
-  <span>${unitPriceLabel ? unitPriceLabel + ' c/u — ' : ''}${linePriceLabel}</span>
-`;
+    const linePriceLabel = (item.price==null || isNaN(item.price))? 'A consultar' : fmt(lineTotal);
+    
+    let itemImageSrc = item.image;
+    const originalProduct = PRODUCTS.find(p => p.id === item.id);
+    if (originalProduct && originalProduct.images && item.modelo) {
+        const modelImage = originalProduct.images.find(img => img.model === item.modelo || img.alt === item.modelo);
+        if (modelImage) itemImageSrc = modelImage.src;
+    }
+
+    const div=document.createElement('div'); 
+    div.className='cart-item';
+    
+div.innerHTML = `
+      <div style="display: flex; gap: 15px; align-items: flex-start; border-bottom: 1px solid #eee; padding-bottom: 15px; margin-top: 15px;">
+        <img src="${itemImageSrc}" alt="${item.name}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px;">
+        <div style="flex-grow: 1;">
+          <div style="font-weight: bold; margin-bottom: 4px;">${item.name}</div>
+          <div style="font-size: 0.9rem; color: #555;">
+            ${item.modelo ? item.modelo + ' | ' : ''} Talle ${item.size || '-'}
+          </div>
+        </div>
+        <div style="text-align: right; margin-top: 5px;">
+          <button type="button" style="background: none; border: none; color: #e74c3c; cursor: pointer; padding: 0;" 
+                  onclick="event.stopPropagation(); removeItem('${item.key}')">
+            🗑️
+          </button>
+        </div>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 10px; margin-bottom: 10px;">
+        <div class="cart-controls" style="display:flex; align-items:center; border: 1px solid #ccc; border-radius: 4px;">
+                    <button type="button" onclick="updateQuantity(${i}, -1, event)">-</button>
+          <span style="min-width: 30px; text-align: center; font-weight: bold; font-size: 1rem;">${item.qty}</span>
+          <button type="button" onclick="updateQuantity(${i}, 1, event)">+</button>
+        </div>
+        <span style="font-weight: bold; font-size: 1.1rem;">${linePriceLabel}</span>
+      </div>
+    `;
     items.appendChild(div);
   });
-  const total=cart.reduce((s,it)=> s + ((it.price==null || isNaN(it.price))?0:it.price*it.qty), 0); // Validar NaN
-  const totalEl=document.getElementById('cartTotal'); if(totalEl) totalEl.textContent='Total: '+fmt(total);
+  
+  if (cart.length > 0) {
+    const subtotalDiv = document.createElement('div');
+    subtotalDiv.innerHTML = `
+      <div style="margin-top: 20px;">
+        <div style="font-weight: bold; margin-bottom: 10px;">Subtotal (sin envío): <span style="float: right;">${fmt(total)}</span></div>
+      </div>
+      
+      <div style="margin-top: 15px; padding-top: 15px; border-top: 2px solid #333;">
+        <div style="display: flex; justify-content: space-between; font-size: 1.4rem;">
+          <span>Total:</span>
+          <span style="font-weight: bold; color: var(--verde-oscuro);">${fmt(total)}</span>
+        </div>
+      </div>
+    `;
+    items.appendChild(subtotalDiv);
+  } else {
+    items.innerHTML = '<div style="text-align: center; padding: 30px;">El carrito está vacío.</div>';
+  }
+  
+  const totalEl=document.getElementById('cartTotal'); 
+  if(totalEl) totalEl.innerHTML = '';
 }
-function updateQuantity(i,change){
-  if (!cart[i]) return; // Evitar error si el item ya no existe
-  cart[i].qty+=change;
-  if(cart[i].qty<=0){cart.splice(i,1);}
-  updateCartDisplay();
+function updateQuantity(i, change, event){
+    // Asegura que el evento no se propague al fondo (soluciona el cierre del carrito)
+    if (event) event.stopPropagation();
+
+    if (!cart[i]) return; // Evitar error si el item ya no existe
+    cart[i].qty+=change;
+    if(cart[i].qty<=0){cart.splice(i,1);}
+    updateCartDisplay();
 }
 function clearCart(){ cart = []; updateCartDisplay(); }
+  function removeItem(itemKey) {
+    // Busca el índice del elemento en el carrito usando la clave única
+    const index = cart.findIndex(item => item.key === itemKey);
+    
+    if (index > -1) {
+        // Elimina el elemento del array del carrito
+        cart.splice(index, 1);
+        // Actualiza la visualización del carrito
+        updateCartDisplay();
+        // Si no quedan items, cierra el panel
+        if (cart.length === 0) {
+            toggleCart();
+        }
+    }
+}
 function toggleCart(){
   const m=document.getElementById('cartModal'); if(!m) return;
-  const opening = (m.style.display!=='flex');
-  m.style.display = opening ? 'flex' : 'none';
-  if(opening){ lockBodyScroll(); } else { unlockBodyScroll(); }
+  
+  // INICIO DEL NUEVO CÓDIGO (Lógica del Panel Lateral):
+  const opening = !m.classList.contains('visible'); 
+
+  if(opening){ 
+    m.classList.add('visible');
+    lockBodyScroll(); 
+  } else { 
+    m.classList.remove('visible');
+    setTimeout(unlockBodyScroll, 300);
+  }
+  // FIN DEL NUEVO CÓDIGO
 }
 
 function checkout() {
@@ -1237,6 +1417,25 @@ if (product.categoria !== 'chombas' && product.categoria !== 'trajes' && product
     container.querySelector('.detail-buttons').appendChild(b); // Añadir a los botones existentes
   }
 })();*/
+  
+  // CÓDIGO PARA CERRAR EL CARRITO AL CLIC FUERA (DEBE ESTAR AL FINAL DEL <SCRIPT>)
+document.addEventListener('click', function(e) {
+    const modal = document.getElementById('cartModal');
+    if (!modal) return;
+    
+    // Si el carrito está visible
+    if (modal.classList.contains('visible')) {
+        const modalContent = modal.querySelector('.modal-content');
+        
+        // Verifica si el clic ocurrió fuera del contenido del modal
+        if (!modalContent.contains(e.target)) {
+            // Verifica que el clic NO haya sido en el botón de abrir (para evitar doble acción)
+            if (e.target.closest('#cartFab') === null) {
+                toggleCart();
+            }
+        }
+    }
+});
 </script>
 
 </body>
