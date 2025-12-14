@@ -283,6 +283,14 @@ footer a{color:#fff;text-decoration:underline}
 <button id="whatsappFab" aria-label="Abrir WhatsApp"><img src="https://i.ibb.co/BV91S86b/image.png" alt="WhatsApp"></button>
 
 <script>
+  // NUEVA FUNCIÓN PARA GUARDAR EL CARRITO EN LOCAL STORAGE
+function saveCart() {
+    try {
+        localStorage.setItem('algasCart', JSON.stringify(cart));
+    } catch (e) {
+        console.error("Error al guardar el carrito en Local Storage:", e);
+    }
+}
 // === Modelo + Precio dinámico ===
 function updateModelInfo(modelo, precio){
   try{
@@ -376,7 +384,12 @@ const WA_NUMBER='5491161521424';
 const CURRENCY={style:'currency',currency:'ARS',maximumFractionDigits:0,minimumFractionDigits:0};
 const fmt=(n)=> n.toLocaleString('es-AR',CURRENCY);
 // State
-let cart=[]; let currentProduct=null; let prevScrollY=0; let selectedSize=null; let selectedModel=null;
+// Cargar el carrito desde localStorage al inicio
+let cart = (JSON.parse(localStorage.getItem('algasCart')) || []); 
+let currentProduct = null; 
+let prevScrollY = 0; 
+let selectedSize = null; 
+let selectedModel = null;
 let __cartLockScrollY=0;
 function lockBodyScroll(){
   __cartLockScrollY = window.scrollY || window.pageYOffset || 0;
@@ -1014,6 +1027,7 @@ function addToCart(p) {
     fab.classList.add('bounce');
     setTimeout(() => fab.classList.remove('bounce'), 600);
   }
+  saveCart();
 }
 
 // REEMPLAZAR TODA LA FUNCIÓN updateCartDisplay
@@ -1102,8 +1116,9 @@ function updateQuantity(i, change, event){
     cart[i].qty+=change;
     if(cart[i].qty<=0){cart.splice(i,1);}
     updateCartDisplay();
+  saveCart();
 }
-function clearCart(){ cart = []; updateCartDisplay(); }
+function clearCart(){ cart = []; updateCartDisplay(); saveCart();}
   function removeItem(itemKey) {
     // Busca el índice del elemento en el carrito usando la clave única
     const index = cart.findIndex(item => item.key === itemKey);
@@ -1113,6 +1128,8 @@ function clearCart(){ cart = []; updateCartDisplay(); }
         cart.splice(index, 1);
         // Actualiza la visualización del carrito
         updateCartDisplay();
+      
+      saveCart();
         // Si no quedan items, cierra el panel
         if (cart.length === 0) {
             toggleCart();
