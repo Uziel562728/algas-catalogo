@@ -767,25 +767,31 @@ function showProductDetail(id, silent=false){
   const selector = document.getElementById('colorSelector');
   if (selector) selector.style.display = 'none'; 
 
-  // REEMPLAZA LA LÍNEA ANTERIOR por esta:
+// CÓDIGO CORREGIDO (Incluye la lógica de carga de imagen si no hay carrusel)
+
   if (p.categoria === 'chombas' || p.categoria === 'trajes' || p.categoria === 'camperas') { 
-      document.getElementById('detailImage').innerHTML = '';
-      if (p.images && p.images.length > 1) {
+      document.getElementById('detailImage').innerHTML = ''; // Limpiar el contenedor
+      if (p.images && p.images.length > 1) { // Tiene carrusel de modelos (ej: nueva campera)
           document.getElementById('detailImage').innerHTML = buildCarousel(p.images);
           buildColorSelector(p);
           setTimeout(attachCarouselHandlers, 0);
-      } else {
-          buildColorSelector(p);
+      } else { // NO tiene carrusel (ej: camperas antiguas con solo p.image)
+          // ⬇️ ¡SOLUCIÓN! Cargar la imagen única si no hay carrusel.
+          document.getElementById('detailImage').innerHTML = `<img referrerpolicy="no-referrer" src="${p.image}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/500x400?text=Sin+Imagen'">`;
+          selectedModel = null; 
+          
+          // Asegurarse de ocultar el selector de color si no es necesario.
+          if (selector) selector.style.display = 'none'; 
       }
-  } else if (p.images && p.images.length > 1) {
+  } else if (p.images && p.images.length > 1) { // Lógica para productos con imágenes, pero sin selector de color forzado (como camisas YSL)
       document.getElementById('detailImage').innerHTML = buildCarousel(p.images);
       if (p.images && p.images[0] && (p.images[0].model || p.images[0].alt)) {
           selectedModel = p.images[0].model || p.images[0].alt;
       }
       setTimeout(attachCarouselHandlers, 0);
-  } else {
+  } else { // Lógica para productos simples sin imágenes múltiples (la lógica original)
       document.getElementById('detailImage').innerHTML = `<img referrerpolicy="no-referrer" src="${p.image}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/500x400?text=Sin+Imagen'">`;
-      selectedModel = null; 
+      selectedModel = null; 
   }
 
   document.getElementById('detailName').textContent=p.name;
