@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -914,32 +915,22 @@ const MODEL_PRICES = {
   }
 };
 // Helpers de precio en detalle (sin tocar tu lógica de render)
-function detailPriceForSelection(){
-  if(!currentProduct) return null;
-  if(selectedModel && MODEL_PRICES[currentProduct.id] && typeof MODEL_PRICES[currentProduct.id][selectedModel]==='number'){
-    return MODEL_PRICES[currentProduct.id][selectedModel];
-  }
-  if(typeof currentProduct.price==='number') return currentProduct.price;
-  if(Array.isArray(currentProduct.priceRange)) return null;
-  return null;
-}
+
 function updateDetailPriceUI(){
-  const el = document.getElementById('detailPrice');
-  const addBtn = document.getElementById('addBtn');
-  if(!el) return;
-  const priceNum = detailPriceForSelection();
-  if(typeof priceNum==='number'){
-    el.textContent = fmt(priceNum);
-    if(addBtn){ addBtn.removeAttribute('disabled'); addBtn.disabled=false; addBtn.textContent='🛒 Agregar al Carrito'; }
-  }else{
-    if(currentProduct && currentProduct.id==='camisa-ysl' && currentProduct.images && currentProduct.images[0]){
-      selectedModel = currentProduct.images[0].model || currentProduct.images[0].alt || 'modelo 01';
-      const p = detailPriceForSelection();
-      if(typeof p==='number'){ el.textContent = fmt(p); if(addBtn){ addBtn.removeAttribute('disabled'); addBtn.disabled=false; addBtn.textContent='🛒 Agregar al Carrito'; } return; }
-    }
-    el.textContent = 'Consultar precio';
-    if(addBtn){ addBtn.setAttribute('disabled','disabled'); addBtn.disabled=true; addBtn.textContent='🛒 No disponible'; }
-  }
+  const el = document.getElementById('detailPrice');
+  const addBtn = document.getElementById('addBtn');
+  if(!el) return;
+  
+  // Aquí está el truco: ahora siempre usa getPriceForCurrent que ya sabe lo del talle XXXL
+  const priceNum = getPriceForCurrent(currentProduct);
+  
+  if(typeof priceNum==='number'){
+    el.textContent = fmt(priceNum);
+    if(addBtn){ addBtn.removeAttribute('disabled'); addBtn.disabled=false; addBtn.textContent='🛒 Agregar al Carrito'; }
+  }else{
+    el.textContent = 'Consultar precio';
+    if(addBtn){ addBtn.setAttribute('disabled','disabled'); addBtn.disabled=true; addBtn.textContent='🛒 No disponible'; }
+  }
 }
 let carouselIndex = 0;
 function attachCarouselHandlers(){
@@ -1458,57 +1449,47 @@ function getCurrentModelLabel(p){
 }
 
 function getPriceForCurrent(p){
-  try{
-    if(!p) return null;
-    const currentModel = getCurrentModelLabel(p);
+  try{
+    if(!p) return null;
 
-    // Lógica de precio por talle (Pima)
-    if (p.sizePrices && selectedSize) {
+    // 1. PRIORIDAD MÁXIMA: Si el talle tiene un precio especial (como el XXXL de 70k), devolvemos ese y listo.
+    if (p.sizePrices && selectedSize && typeof p.sizePrices[selectedSize] === 'number') {
         return p.sizePrices[selectedSize];
     }
 
-    if (p.id==='camisa-ysl' && currentModel && MODEL_PRICES['camisa-ysl'] && typeof MODEL_PRICES['camisa-ysl'][currentModel]==='number'){
-      return MODEL_PRICES['camisa-ysl'][currentModel];
-    }
-    if (typeof p.price==='number') return p.price;
-    if (!Array.isArray(p.priceRange)) return null;
-  }catch(e){ console.error("Error en getPriceForCurrent:", e); }
-  return null;
+    // 2. SEGUNDA PRIORIDAD: Si es Camisa YSL y tiene precio por modelo.
+    const currentModel = getCurrentModelLabel(p);
+    if (p.id==='camisa-ysl' && currentModel && MODEL_PRICES['camisa-ysl'] && typeof MODEL_PRICES['camisa-ysl'][currentModel]==='number'){
+      return MODEL_PRICES['camisa-ysl'][currentModel];
+    }
+
+    // 3. TERCERA PRIORIDAD: Precio base del producto.
+    if (typeof p.price==='number') return p.price;
+
+    return null;
+  }catch(e){ console.error("Error en getPriceForCurrent:", e); }
+  return null;
 }
 
 function updateModelAndPrice() {
   try {
     if (!currentProduct || !currentProduct.images) return;
 
-    // Sincronizar selectedModel desde el índice actual
     if (currentProduct.images.length > 0 && typeof carouselIndex === 'number' && currentProduct.images[carouselIndex]) {
       const currentImageObj = currentProduct.images[carouselIndex];
       selectedModel = currentImageObj.model || currentImageObj.alt || null;
     }
 
-    // ACTUALIZACIÓN CRÍTICA: Priorizar el precio por talle
+    // Al cambiar de color, volvemos a preguntar el precio correcto
+    const precioFinal = getPriceForCurrent(currentProduct); 
     const priceEl = document.getElementById('detailPrice');
-    if (priceEl) {
-      // 1. Verificamos si hay un talle seleccionado con precio especial (como el XXXL de 70k)
-      let precioParaMostrar = null;
-      if (currentProduct.sizePrices && selectedSize) {
-        precioParaMostrar = currentProduct.sizePrices[selectedSize];
-      } 
-      // 2. Si no hay talle seleccionado, buscamos el precio por modelo (ej: YSL) o el precio base
-      else {
-        precioParaMostrar = getPriceForCurrent(currentProduct);
-      }
-
-      // Dibujamos el precio en la pantalla
-      if (typeof precioParaMostrar === 'number') {
-        priceEl.textContent = fmt(precioParaMostrar);
-      } else {
-        priceEl.textContent = priceLabel(currentProduct);
-      }
+    
+    if (priceEl && typeof precioFinal === 'number') {
+      priceEl.textContent = fmt(precioFinal);
     }
 
     updateDetailPriceUI();
-
+    updateMediosPago(currentProduct.categoria); // Esto actualiza los textos de abajo también
   } catch (e) { 
     console.error("Error en updateModelAndPrice:", e); 
   }
