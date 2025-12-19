@@ -1302,6 +1302,7 @@ function toggleCart(){
   if(opening){ 
     m.classList.add('visible');
     lockBodyScroll(); 
+history.pushState({view: 'cart'},
   } else { 
     m.classList.remove('visible');
     setTimeout(unlockBodyScroll, 300);
