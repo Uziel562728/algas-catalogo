@@ -1116,6 +1116,12 @@ function showProductDetail(id, silent=false){
 function goHome(){
   selectedModel = null; // Resetear modelo al volver
   currentProduct = null; // Limpiar producto actual
+
+const m = document.getElementById('cartModal');
+  if(m && m.classList.contains('visible')) {
+      m.classList.remove('visible');
+      unlockBodyScroll();
+  }
   const detail=document.getElementById('productDetail');
   const productos=document.getElementById('productos');
   const hero=document.getElementById('inicio');
