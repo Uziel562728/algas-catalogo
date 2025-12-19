@@ -63,12 +63,14 @@ background:#eef9f4;color:#1e3a2e;border-radius:10px;font-weight:600}
 
 
 /* Grid */
-.grid { 
-    display: grid; 
-    gap: 30px; 
-    /* Cambiamos auto-fit por auto-fill para que no estire las tarjetas */
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); 
-    justify-content: center; /* Centra los productos si hay pocos */
+/* --- GRILLA CORREGIDA PARA 2 COLUMNAS EN CELULAR --- */
+.grid {
+    display: grid;
+    gap: 15px; /* Reducimos un poco el espacio para que quepan mejor en móvil */
+    /* Bajamos el mínimo a 140px para forzar las 2 columnas en celular */
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); 
+    justify-content: center;
+    padding: 10px;
 }
 
 .card {
@@ -80,20 +82,28 @@ background:#eef9f4;color:#1e3a2e;border-radius:10px;font-weight:600}
     text-align: left;
     display: flex;
     flex-direction: column;
+    /* En PC se verán de un tamaño máximo controlado */
+    max-width: 250px; 
+    width: 100%;
+    margin: 0 auto;
     cursor: pointer;
-    /* AGREGAR ESTA LÍNEA: evita que la tarjeta crezca más de la cuenta */
-    max-width: 280px; 
-    margin: 0 auto; /* Centra la tarjeta dentro de su celda */
 }
 
 .card img {
     width: 100%;
-    aspect-ratio: 3 / 4; /* Todas las fotos misma proporción */
-    object-fit: contain; /* No se deforman */
-    display: block;
-    margin-bottom: 12px;
+    aspect-ratio: 3 / 4; 
+    object-fit: cover;
     border-radius: 4px;
     background: #f4f4f4;
+    margin-bottom: 8px;
+}
+
+/* Ajuste específico para PC: si la pantalla es grande, que las fotos sean un poco más grandes */
+@media (min-width: 768px) {
+    .grid {
+        grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+        gap: 30px;
+    }
 }
 
 .card .product-name {
