@@ -257,6 +257,22 @@ ul{padding-left:20px;margin:10px 0}
 .cart-total{font-weight:bold;font-size:1.2rem;margin-top:15px;text-align:right}
 .cart-actions{display:flex;gap:10px;margin-top:20px}
 .cart-actions button{flex:1}
+  
+  /* --- SELECTOR DE COLORES MEJORADO --- */
+#colorChipsContainer {
+    display: flex;
+    flex-wrap: wrap; /* ⬅️ Permite que los colores bajen si no hay espacio */
+    gap: 12px;
+    align-items: center;
+    max-width: 210px; /* ⬅️ Ajuste para que entren 5 por fila (30px cada uno + gap) */
+    margin-top: 10px;
+}
+
+/* Asegura que los círculos no se deformen al bajar de fila */
+#colorChipsContainer span {
+    flex: 0 0 30px; 
+}
+  
 /* WhatsApp FAB - circular, solo ícono */
 #whatsappFab {
     position: fixed !important;
@@ -1048,7 +1064,8 @@ function showProductDetail(id, silent=false){
 
   const szCont=document.getElementById('detailSizes'); szCont.innerHTML='';
   (p.sizes||[]).forEach(s=>{
-    const chip=document.createElement('span'); chip.className='size-chip'; chip.textContent=s;
+    const chip=document.createElement('span');
+    chip.className='size-chip'; chip.textContent=s;
     chip.setAttribute('role','button'); chip.setAttribute('tabindex','0');
     chip.setAttribute('aria-label','Seleccionar talle '+s);
     
@@ -1514,7 +1531,9 @@ if (product.categoria !== 'chombas' && product.categoria !== 'trajes' && product
         let colorCode = hexMap[colorName] || '#555'; 
 
         const chip = document.createElement('span');
-        chip.style.width = '30px'; chip.style.height = '30px';
+        chip.style.width = '30px'; 
+      chip.style.height = '30px';
+      chip.style.flex = '0 0 30px';
         chip.style.borderRadius = '50%';
         chip.style.border = index === 0 ? '3px solid #1e3a2e' : '2px solid #ccc';
         if (colorCode.includes(',')) {
