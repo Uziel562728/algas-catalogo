@@ -63,16 +63,75 @@ background:#eef9f4;color:#1e3a2e;border-radius:10px;font-weight:600}
 
 
 /* Grid */
-.grid{display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
-@media (max-width: 768px){ .grid{ grid-template-columns: repeat(2, 1fr); } }
-.card{position:relative;background:#fff;border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,0.1);
-padding:14px;text-align:center;min-height:360px;display:flex;flex-direction:column;justify-content:flex-start;cursor:pointer}
-.card img{width:100%;height:auto;max-height:240px;object-fit:contain;display:block;margin:0 auto 10px;border-radius:8px;background:#f4f4f4}
-.card .product-name{font-weight:bold;margin:8px 0}
-.card .product-price{color:var(--verde-medio);font-size:1.1rem;margin-bottom:6px}
-/* Badges */
-.badge{position:absolute;top:10px;left:10px;width:70px;height:70px;display:flex;align-items:center;justify-content:center;
-font-size:0.8rem;font-weight:bold;color:#fff;text-transform:uppercase;border-radius:50%;animation:pulse 1.5s infinite;z-index:5}
+.grid { 
+    display: grid; 
+    gap: 30px; 
+    /* Cambiamos auto-fit por auto-fill para que no estire las tarjetas */
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); 
+    justify-content: center; /* Centra los productos si hay pocos */
+}
+
+.card {
+    position: relative;
+    background: none;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    /* AGREGAR ESTA LÍNEA: evita que la tarjeta crezca más de la cuenta */
+    max-width: 280px; 
+    margin: 0 auto; /* Centra la tarjeta dentro de su celda */
+}
+
+.card img {
+    width: 100%;
+    aspect-ratio: 3 / 4; /* Todas las fotos misma proporción */
+    object-fit: contain; /* No se deforman */
+    display: block;
+    margin-bottom: 12px;
+    border-radius: 4px;
+    background: #f4f4f4;
+}
+
+.card .product-name {
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: #333;
+    margin: 5px 0;
+    text-transform: capitalize;
+}
+
+/* Estilo del Precio Fake Discount */
+.product-price {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.price-old {
+    color: #999;
+    text-decoration: line-through;
+    font-size: 0.85rem;
+}
+
+.price-current {
+    color: var(--verde-medio); /* Tu verde actual */
+    font-weight: bold;
+    font-size: 1.05rem;
+}
+
+.price-discount {
+    color: #e74c3c; /* Rojo para el porcentaje */
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+
+/* Borramos el tag "Especial" visualmente */
+.badge { display: none !important; }
 .badge.{background:#e74c3c;box-shadow:0 0 12px rgba(231,76,60,0.8)}
 .badge.especial{background:#2d5a42;box-shadow:0 0 12px rgba(45,90,66,0.8)}
 @keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.1)}100%{transform:scale(1)}}
@@ -189,18 +248,35 @@ ul{padding-left:20px;margin:10px 0}
 .cart-actions{display:flex;gap:10px;margin-top:20px}
 .cart-actions button{flex:1}
 /* WhatsApp FAB - circular, solo ícono */
-#whatsappFab{position:fixed;bottom:20px;right:20px;display:grid;place-items:center;width:60px;height:60px;padding:0;background:var(--whatsapp);color:#fff;border-radius:50%;cursor:pointer;z-index:2000;box-shadow:0 4px 10px rgba(0,0,0,.3)}
-#whatsappFab img{height:28px;width:28px}
-/* REEMPLAZAR #whatsappFab.lifted */
-#whatsappFab.lifted{
-    bottom: 120px;
-    right: 440px; /* ⬅️ VUELVE A LA IZQUIERDA PARA DAR ESPACIO AL CARRITO */
+#whatsappFab {
+    position: fixed !important;
+    bottom: 20px !important;
+    right: 20px !important;
+    display: grid;
+    place-items: center;
+    width: 60px;
+    height: 60px;
+    padding: 0;
+    background: var(--whatsapp);
+    color: #fff;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 4000; /* Lo subimos para que esté por encima de todo */
+    box-shadow: 0 4px 10px rgba(0,0,0,.3);
+    transition: none !important; /* Evita que se deslice al moverse */
 }
-@media (max-width:768px){
-    #whatsappFab.lifted{
-        bottom: 140px;
-        right: 40px; 
-    }
+
+#whatsappFab img {
+    height: 28px;
+    width: 28px;
+}
+
+/* Anulamos completamente cualquier efecto de la clase .lifted */
+#whatsappFab.lifted {
+    bottom: 20px !important;
+    right: 20px !important;
+    left: auto !important;
+    transform: none !important;
 }
 /* Lock background scroll when modal open */
 body.modal-open{position:fixed; width:100%; overflow:hidden; height:100vh; top:0; left:0; right:0}
@@ -419,84 +495,96 @@ const PRODUCTS=[
     description:'Campera doble pechera de la marca Buckingham Polo Club, pensada para brindar abrigo y estilo. Disponible en talle XL.',
     features:['Diseño de doble pechera para mayor protección térmica','Marca Buckingham Polo Club, símbolo de elegancia','Materiales resistentes y costuras reforzadas','Disponible en talle XL','10%  pagando en efectivo o transferencia'],
     sizes:['XL'],
-    tag:''
+   tag: null,
+    fakeDiscount: 15
   },
   { id:'campera-impermeable', categoria:'camperas', name:'Campera Impermeable con Capucha Desmontable Buckingham Polo Club', price:40000,
     image:'https://i.ibb.co/j9m1hd5s/Imagen-de-Whats-App-2025-09-02-a-las-15-04-22-3e106fdf.jpg',
     description:'Campera impermeable con capucha desmontable de Buckingham Polo Club. Ideal para lluvia y frío. Disponible en XL y color azul.',
     features:['Material impermeable de alta calidad','Capucha desmontable con cierre oculto','Confección resistente y cómoda','Marca Buckingham Polo Club','Disponible en talle XL y en color azul'],
     sizes:['XL'],
-    tag:null
+    tag: null,
+    fakeDiscount: 20
   },
   { id:'campera-backing', categoria:'camperas', name:'Campera Backing Polo Club — Oferta Especial', price:25000,
     image:'https://i.ibb.co/nNZkfLKQ/Imagen-de-Whats-App-2025-09-02-a-las-15-04-22-98e2bc66.jpg',
     description:'Campera Backing Polo Club en color único. Oferta especial desde talle S hasta doble XL.',
     features:['Diseño exclusivo de Backing Polo Club','Oferta limitada a un único color','Disponible desde talle S hasta doble XL','Confección resistente y cómoda','Precio promocional especial'],
     sizes:['S','M','L','XL','XXL'],
-    tag:'especial'
+    tag: null,
+    fakeDiscount: 23
   },
   { id:'campera-buckingham-reversible', categoria:'camperas', name:'Campera Buckingham Polo Club — Reversible', price:35000,
     image:'https://i.ibb.co/60gWC3Cg/Imagen-de-Whats-App-2025-09-02-a-las-15-04-22-9543c4f7.jpg',
     description:'Campera reversible de Buckingham Polo Club, ideal para diferentes estilos y situaciones. Disponible en talles S a doble XL.',
     features:['Diseño reversible para dos estilos','Marca Buckingham Polo Club, sinónimo de calidad','Ideal para climas fríos y moderados','Disponible en talles desde S a XXL','Precio increíble $35.000'],
     sizes:['S','M','L','XL','XXL'],
-    tag:null
+    tag: null,
+    fakeDiscount: 13
   },
   { id:'campera-engomada', categoria:'camperas', name:'Campera Engomada Buckingham Polo Club', price:45000,
     image:'https://i.ibb.co/xShQ1PGx/Imagen-de-Whats-App-2025-09-02-a-las-15-04-23-01309848.jpg',
     description:'Campera engomada Buckingham Polo Club, del talle S al doble XL. Terminación engomada con excelente resistencia y estilo.',
     features:['Terminación engomada de alta resistencia','Marca Buckingham Polo Club','Disponible del S al XXL','Interior cómodo para uso diario','Precio especial $45.000'],
     sizes:['S','M','L','XL','XXL'],
-    tag:null
+    tag: null,
+    fakeDiscount: 18
   },
   { id:'campera-capucha-desmontable', categoria:'camperas', name:'Campera Buckingham Polo Club — Capucha Desmontable', price:40000,
     image:'https://i.ibb.co/tw0QJtkp/Imagen-de-Whats-App-2025-09-02-a-las-15-04-23-995082e4.jpg',
     description:'Campera con capucha desmontable e impermeable de Buckingham Polo Club, con precio increíble. Ideal para lluvia y uso diario.',
     features:['Capucha desmontable para mayor versatilidad','Tejido impermeable para lluvia','Marca Buckingham Polo Club','Confección cómoda para uso diario','Precio increíble: $40.000'],
     sizes:['S','M','L','XL','XXL'],
-    tag:null
+    tag: null,
+    fakeDiscount: 33
   },
   { id:'campera-uniqlo-impermeable', categoria:'camperas', name:'Campera Impermeable Símil Uniqlo Buckingham Polo Club', price:25000,
     image:'https://i.ibb.co/nN4sKcMj/Imagen-de-Whats-App-2025-09-02-a-las-15-04-23-bf6f3281.jpg',
     description:'Campera impermeable símil Uniqlo de Buckingham Polo Club, disponible del talle S al XXL. Precio imbatible: $25.000.',
     features:['Inspirada en el estilo Uniqlo','Material impermeable de alta calidad','Disponible del talle S al XXL','Confección cómoda y resistente','Precio imbatible $25.000'],
     sizes:['S','M','L','XL','XXL'],
-    tag:null
+   tag: null,
+    fakeDiscount: 42
   },
   { id:'campera-impermeable-oferta', categoria:'camperas', name:'Campera Impermeable — Oferta Limitada', price:35000,
     image:'https://i.ibb.co/zVHHrw0V/Imagen-de-Whats-App-2025-09-04-a-las-11-06-23-83ac75f2.jpg',
     description:'Campera impermeable. Oferta limitada desde el talle S al doble XL. Precio promocional $35.000 (transferencia o efectivo).',
     features:['Impermeable de alta calidad','Oferta limitada','Disponible desde talle S hasta doble XL','Precio promocional especial $35.000','Pagando con transferencia o efectivo'],
     sizes:['S','M','L','XL','XXL'],
-    tag:'especial'
+    tag: null,
+    fakeDiscount: 14
   },
   { id:'campera-rompevientos', categoria:'camperas', name:'Rompevientos Buckingham Polo Club', price:40000,
     image:'https://i.ibb.co/DPQ8mYZm/Imagen-de-Whats-App-2025-09-04-a-las-10-33-16-0ff45917.jpg',
     description:'Varios modelos, talles y colores, del Small al XXL. ¡Increíble oferta $40.000!',
     features:['Rompevientos liviano','Varios modelos y colores','Talles S al XXL','Secado rápido','Excelente relación precio-calidad'],
     sizes:['S','M','L','XL','XXL'],
-    tag:'especial'
+   tag: null,
+    fakeDiscount: 15
   },
   { id:'chaleco-impermeable', categoria:'chalecos', name:'Chaleco Impermeable Buckingham Polo Club', price:35000,
     image:'https://i.ibb.co/JwPW5XPS/Imagen-de-Whats-App-2025-09-04-a-las-10-33-17-ba7943c4.jpg',
     description:'Único color. Precio $35.000.',
     features:['Tejido impermeable','Único color','Marca Buckingham Polo Club','Liviano y cómodo','Ideal para lluvia y viento'],
     sizes:['S','M','L','XL','XXL'],
-    tag:'especial'
+    tag: null,
+    fakeDiscount: 17
   },
   { id:'camisaco-corderito', categoria:'camperas', name:'Camisaco forrado en Corderito', price:35000,
     image:'https://i.ibb.co/jqdFsKW/Imagen-de-Whats-App-2025-09-04-a-las-10-33-17-1b371c5b.jpg',
     description:'Últimas unidades. Del talle S al XL.',
     features:['Forrado en corderito','Últimas unidades','Del S al XL','Abrigo suave y cómodo'],
     sizes:['S','M','L','XL'],
-    tag:'especial'
+    tag: null,
+    fakeDiscount: 28
   },
   { id:'remera-mc-premium', categoria:'remeras', name:'Remera Manga Corta - Primera Marca (Algodón Peinado)', price:20000,
     image:'https://i.ibb.co/k62gp4Zw/Imagen-de-Whats-App-2025-09-04-a-las-22-34-46-2e91c20e.jpg',
     description:'Oferta especial. Algodón peinado, calidad primera marca.',
     features:['Algodón peinado','Primera marca','Oferta especial','Corte clásico y cómodo'],
     sizes:['XS','S','M','L','XL','XXL'],
-    tag:'especial'
+    tag: null,
+    fakeDiscount: 25
   },
   { id:'camisa-rochas', categoria:'camisas', name:'Camisa primera marca Rochas', price:null,
     image:'https://i.ibb.co/qMzbzg3g/Imagen-de-Whats-App-2025-09-09-a-las-23-41-40-dc17556f.jpg',
@@ -513,7 +601,8 @@ const PRODUCTS=[
     description:'Marca Rochas. 80% algodón. Varios tonos. Talles del S al XXL.',
     features:['Marca Rochas','80% algodón','Varios tonos disponibles','Talles del S al XXL','Consultá el precio'],
     sizes:['S','M','L','XL','XXL'],
-    tag:'especial'
+    tag: null,
+    fakeDiscount: 53
   },
   { id:'camisa-rocco', categoria:'camisas', name:'Camisa marca Rocco — Oferta especial', price:39999,
     image:'https://i.ibb.co/gZv8X62R/Imagen-de-Whats-App-2025-09-10-a-las-16-31-37-d034c8e0.jpg',
@@ -527,7 +616,8 @@ const PRODUCTS=[
     description:'Camisas marca Rocco. Oferta especial $39.999. Talles del S al XXL.',
     features:['Marca Rocco','Varios tonos y diseños','Talles del S al XXL','Oferta especial $39.999'],
     sizes:['S','M','L','XL','XXL'],
-    tag:'especial'
+    tag: null,
+    fakeDiscount: 50
   },
   { id:'camisa-ysl', categoria:'camisas', name:'Camisa Yves Saint Laurent — 100% Algodón', priceRange:[50000,70000],
     image:'https://i.ibb.co/tM3rFddt/Imagen-de-Whats-App-2025-09-15-a-las-16-22-09-bd64a629.jpg',
@@ -553,7 +643,8 @@ const PRODUCTS=[
     description:'Sastrería de lujo en algodón 100% de fibra larga. Terminación impecable en cuello y puños; corte moderno con estructura clásica.',
     features:['100% algodón premium','Costuras reforzadas','Conserva forma y color','Corte moderno'],
     sizes:['S','M','L','XL','XXL'],
-    tag:'especial'
+   tag: null,
+    fakeDiscount: 26
   },
   {
     id: 'chomba-algodon-premium-colores',
@@ -579,7 +670,8 @@ const PRODUCTS=[
       'Talles disponibles del S al XXXL'
     ],
     sizes: ['S', 'M', 'L', 'XL', 'XXL','XXXL'],
-    tag: 'especial'
+    tag: null,
+    fakeDiscount: 28
   }
   ,
   {
@@ -613,7 +705,8 @@ const PRODUCTS=[
     ],
     // Generamos los talles del 46 al 66
     sizes: ['46', '48', '50', '52', '54', '56', '58', '60', '62', '64', '66'],
-    tag: 'especial' // Etiqueta por la promoción
+   tag: null,
+    fakeDiscount: 26
   }
   , // <--- Coma separadora del producto anterior
   {
@@ -649,7 +742,8 @@ const PRODUCTS=[
       'Talles disponibles: M al XXXL'
     ],
     sizes: ['M', 'L', 'XL', 'XXL', 'XXXL'],
-    tag: 'especial'
+   tag: null,
+    fakeDiscount: 43
   },
 {
   id: 'campera-rompevientos-buckingham-nueva', 
@@ -677,18 +771,40 @@ const PRODUCTS=[
     'Talles disponibles: S al XXL'
   ],
   sizes: ['S', 'M', 'L', 'XL', 'XXL'],
-  tag: 'especial'
+ tag: null,
+    fakeDiscount: 30
 }// <-- NO pongas coma si este es el último producto de la lista
 ];
 // Helpers
 const priceLabel = (p)=>{ if(typeof p.price==='number') return fmt(p.price); if(Array.isArray(p.priceRange)&&p.priceRange.length===2) return fmt(p.priceRange[0])+'–'+fmt(p.priceRange[1]); return 'Consultar precio'; };
 const makeBadge = (tag)=> tag===''?"<span class='badge '></span>":(tag==='especial'?"<span class='badge especial'>ESPECIAL</span>":"");
-const card = (p)=>`
-  ${makeBadge(p.tag)}
-  <img referrerpolicy="no-referrer" src="${p.image}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/240x160?text=Sin+Imagen'">
-  <div class="product-name">${p.name}</div>
-  <div class="product-price">${priceLabel(p)}</div>
-  <div class='btn btn-primary' style='margin-top:auto;'>Ver detalles</div>`;
+const card = (p) => {
+    let priceHTML = '';
+
+    // Lógica de Fake Discount: Si existe fakeDiscount, calculamos el precio tachado
+    if (p.fakeDiscount && typeof p.price === 'number') {
+        const finalPrice = p.price;
+        const originalPrice = Math.round(finalPrice / (1 - p.fakeDiscount / 100));
+
+        priceHTML = `
+            <div class="product-price">
+                <span class="price-old">${fmt(originalPrice)}</span>
+                <span class="price-current">${fmt(finalPrice)}</span>
+                <span class="price-discount">-${p.fakeDiscount}%</span>
+            </div>
+        `;
+    } else {
+        // Precio normal si no tiene descuento
+        priceHTML = `<div class="product-price"><span class="price-current">${priceLabel(p)}</span></div>`;
+    }
+
+    // Retornamos solo Imagen, Nombre y Precio (SIN BOTÓN)
+    return `
+        <img referrerpolicy="no-referrer" src="${p.image}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/300x400?text=Sin+Imagen'">
+        <div class="product-name">${p.name}</div>
+        ${priceHTML}
+    `;
+};
 // Render grid
 function renderProductsGrid(list){
   const grid=document.getElementById('productsGrid');
