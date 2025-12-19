@@ -1469,34 +1469,45 @@ function getPriceForCurrent(p){
   return null;
 }
 
-function updateModelAndPrice(){
-  try{
-    if(!currentProduct || !currentProduct.images) return; // Salir si no hay producto o imágenes
+function updateModelAndPrice() {
+  try {
+    if (!currentProduct || !currentProduct.images) return;
 
-    // Sincronizar selectedModel desde el índice actual del carrusel/selector
-    if (currentProduct.images.length > 0 && typeof carouselIndex === 'number' && currentProduct.images[carouselIndex]){
+    // Sincronizar selectedModel desde el índice actual
+    if (currentProduct.images.length > 0 && typeof carouselIndex === 'number' && currentProduct.images[carouselIndex]) {
       const currentImageObj = currentProduct.images[carouselIndex];
       selectedModel = currentImageObj.model || currentImageObj.alt || null;
-    } else {
-      selectedModel = null; // No hay imágenes o índice inválido
     }
 
-    // Actualizar UI de precio (si existe)
-    const priceEl = document.getElementById('detailPrice');
-    if(priceEl){
-      const n = getPriceForCurrent(currentProduct); // Usar helper para obtener precio correcto
-      if(typeof n === 'number'){
-        priceEl.textContent = fmt(n);
-      } else {
-        // Mostrar etiqueta de precio base o 'Consultar' si no se puede determinar
+    // ACTUALIZACIÓN CRÍTICA: Priorizar el precio por talle
+    const priceEl = document.getElementById('detailPrice');
+    if (priceEl) {
+      // 1. Verificamos si hay un talle seleccionado con precio especial (como el XXXL de 70k)
+      let precioParaMostrar = null;
+      if (currentProduct.sizePrices && selectedSize) {
+        precioParaMostrar = currentProduct.sizePrices[selectedSize];
+      } 
+      // 2. Si no hay talle seleccionado, buscamos el precio por modelo (ej: YSL) o el precio base
+      else {
+        precioParaMostrar = getPriceForCurrent(currentProduct);
+      }
+
+      // Dibujamos el precio en la pantalla
+      if (typeof precioParaMostrar === 'number') {
+        priceEl.textContent = fmt(precioParaMostrar);
+      } else {
         priceEl.textContent = priceLabel(currentProduct);
       }
-    }
-    // Actualizar también el botón de agregar por si el precio cambió (YSL)
+    }
+
     updateDetailPriceUI();
 
-  }catch(e){ console.error("Error en updateModelAndPrice:", e); }
+  } catch (e) { 
+    console.error("Error en updateModelAndPrice:", e); 
+  }
 }
+
+
 function buildColorSelector(product) {
     const selector = document.getElementById('colorSelector');
     const container = document.getElementById('colorChipsContainer');
