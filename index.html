@@ -1630,6 +1630,27 @@ document.addEventListener('click', function(e) {
         }
     }
 });
+
+// === CÓDIGO PARA QUE EL BOTÓN ATRÁS DEL CELULAR CIERRE EL CARRITO ===
+window.addEventListener('popstate', (event) => {
+  const modal = document.getElementById('cartModal');
+
+  // 1. Si el carrito está abierto, lo cerramos y volvemos al inicio
+  if (modal && modal.classList.contains('visible')) {
+    goHome();
+    return;
+  }
+
+  // 2. Si estaba viendo un producto, vuelve a la lista
+  if (event.state && event.state.view === 'detail') {
+    const pid = event.state.productId;
+    showProductDetail(pid, true);
+  } else {
+    // 3. En cualquier otro caso, vuelve al inicio
+    goHome();
+  }
+});
+
 </script>
 
 </body>
