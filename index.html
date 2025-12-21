@@ -39,26 +39,136 @@ background:#eef9f4;color:#1e3a2e;border-radius:10px;font-weight:600}
 
 
 /* Cart */
-/* ... otros estilos del carrito ... */
-
-.cart-item{
-
-  display: flex; 
-  flex-direction: column; 
-  margin: 0; 
-  gap: 0;
+/* --- ESTILOS NUEVOS DEL CARRITO TIPO TARJETA --- */
+.cart-card {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: flex-start; /* Alineado arriba para que no se deforme */
+    gap: 15px;
+    position: relative;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    transition: transform 0.1s;
+    cursor: pointer;
+    min-height: 100px; /* Altura mínima para consistencia */
 }
-
-.cart-controls button {
-    background: none !important; 
-    color: var(--gris-1) !important;
-    border-radius: 0 !important;
-    width: 30px !important;
-    height: 30px !important;
+.cart-card:active {
+    transform: scale(0.98);
 }
-
-.cart-controls button:active {
-    background: #f0f0f0 !important;
+.cart-img {
+    width: 70px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 6px;
+    background: #f4f4f4;
+    flex-shrink: 0; /* Para que no se aplaste nunca */
+}
+.cart-info {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.cart-title {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--verde-oscuro);
+    margin-bottom: 8px;
+    line-height: 1.3;
+    /* Limitamos el texto a 2 líneas para que no rompa el diseño */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.cart-details-row {
+    display: flex;
+    align-items: center; /* Alineados verticalmente */
+    gap: 15px; /* Espacio entre el selector y los detalles */
+    flex-wrap: wrap;
+}
+/* Selector de cantidad estilo Pistakio (< 1 >) */
+.qty-selector {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    height: 32px;
+    background: #fff;
+}
+.qty-btn {
+    width: 30px;
+    height: 100%;
+    border: none;
+    background: none;
+    font-size: 1.1rem;
+    color: var(--verde-medio);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 3px;
+}
+.qty-val {
+    min-width: 25px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 0.95rem;
+}
+/* Info de Talle y Modelo (Donde marcaste amarillo) */
+.spec-box {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    line-height: 1.1;
+}
+.spec-title {
+    font-size: 0.7rem;
+    color: #888;
+    text-transform: uppercase;
+    font-weight: bold;
+    margin-bottom: 2px;
+}
+.spec-value {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--verde-medio);
+}
+/* Precio y Tacho */
+.cart-price-absolute {
+    font-weight: bold;
+    font-size: 1rem;
+    color: #333;
+    align-self: flex-end; /* Lo manda a la derecha si usamos flex column */
+    margin-top: auto;
+}
+.delete-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 1.1rem;
+    color: #999;
+    cursor: pointer;
+    padding: 5px;
+}
+/* Total limpio abajo */
+.cart-footer-clean {
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+    margin-top: 20px;
+}
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--verde-oscuro);
 }
 
 
@@ -310,6 +420,41 @@ body.modal-open{position:fixed; width:100%; overflow:hidden; height:100vh; top:0
 /* Footer */
 footer{background:var(--verde-oscuro);color:#fff;text-align:center;padding:20px;margin-top:40px}
 footer a{color:#fff;text-decoration:underline}
+  
+  /* Estilo para que el botón de basura sea cuadrado y la imagen no se deforme */
+.btn-basura-cuadrado {
+    position: absolute; /* Lo fijamos en la esquina */
+    top: 10px;
+    right: 10px;
+    width: 32px;
+    height: 32px;
+    padding: 6px;
+    background: #f9f9f9; /* Fondo gris claro para que se vea si la imagen es blanca */
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10; /* Por encima de todo */
+}
+
+.btn-basura-cuadrado img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    filter: brightness(0.6); /* Oscurece un poco la imagen para que se vea mejor */
+}
+  
+  /* Animación para borrar producto */
+.slide-out-left {
+    transform: translateX(-120%); /* Se mueve hacia la izquierda fuera de la pantalla */
+    opacity: 0; /* Se va desvaneciendo */
+    transition: transform 0.4s ease-out, opacity 0.4s ease-out; /* Dura 0.4 segundos */
+    pointer-events: none; /* Evita que lo toquen mientras se va */
+}
+  
 </style>
 <!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-LBE173Q7BN"></script>
@@ -933,175 +1078,183 @@ function updateDetailPriceUI(){
   }
 }
 let carouselIndex = 0;
-function attachCarouselHandlers(){
-  const track = document.getElementById('carouselTrack');
-  const dots = Array.from(document.querySelectorAll('.carousel-dot'));
-  const prev = document.querySelector('.carousel-btn.prev');
-  const next = document.querySelector('.carousel-btn.next');
-  const caption = document.getElementById('carouselCaption');
-  const colorNameSpan = document.getElementById('selectedColorName');
+// CAMBIO: Ahora acepta un índice inicial
+function attachCarouselHandlers(initialIndex = 0){
+  const track = document.getElementById('carouselTrack');
+  const dots = Array.from(document.querySelectorAll('.carousel-dot'));
+  const prev = document.querySelector('.carousel-btn.prev');
+  const next = document.querySelector('.carousel-btn.next');
+  const caption = document.getElementById('carouselCaption');
+  const colorNameSpan = document.getElementById('selectedColorName');
 
-  const update = ()=>{
-    track.style.transform = `translateX(${-carouselIndex*100}%)`; // Backticks corregidos
-    dots.forEach((d,i)=>{ 
+  // Seteamos el índice global con el valor inicial recibido
+  carouselIndex = initialIndex;
+
+  const update = ()=>{
+    track.style.transform = `translateX(${-carouselIndex*100}%)`;
+    dots.forEach((d,i)=>{
         d.classList.toggle('active', i===carouselIndex);
-        // Sincronizar borde de chips si existen
-       if (currentProduct.categoria === 'chombas' || currentProduct.categoria === 'trajes' || currentProduct.categoria === 'camperas') {
-                const chips = document.querySelectorAll('#colorChipsContainer span');
-                chips.forEach(c => c.style.border = '2px solid #ccc');
-                
-                // Marcar el chip actual
-                if (chips[carouselIndex]) {
-                    chips[carouselIndex].style.border = '3px solid #1e3a2e';
-                    // Sincronizar selectedModel al deslizar
-                    selectedModel = chips[carouselIndex].dataset.colorName || null;
-                }
-            }
+        if (currentProduct.categoria === 'chombas' || currentProduct.categoria === 'trajes' || currentProduct.categoria === 'camperas') {
+                const chips = document.querySelectorAll('#colorChipsContainer span');
+                chips.forEach(c => c.style.border = '2px solid #ccc');
+
+                if (chips[carouselIndex]) {
+                    chips[carouselIndex].style.border = '3px solid #1e3a2e';
+                    selectedModel = chips[carouselIndex].dataset.colorName || null;
+                }
+            }
     });
-    
-    updateModelAndPrice();
-    if(typeof updateDetailPriceUI==='function') updateDetailPriceUI();
 
-    if(currentProduct && Array.isArray(currentProduct.images) && currentProduct.images[carouselIndex]){
-      const obj = currentProduct.images[carouselIndex];
-      const label = (obj && (obj.model||obj.alt)) ? (obj.model||obj.alt) : '';
-      if(caption) caption.textContent = label ? `Modelo: ${label}` : '';
-      if (colorNameSpan) colorNameSpan.textContent = label ? label.toUpperCase() : '';
-    } else if (caption) {
-      caption.textContent = '';
+    updateModelAndPrice();
+    if(typeof updateDetailPriceUI==='function') updateDetailPriceUI();
+
+    if(currentProduct && Array.isArray(currentProduct.images) && currentProduct.images[carouselIndex]){
+      const obj = currentProduct.images[carouselIndex];
+      const label = (obj && (obj.model||obj.alt)) ? (obj.model||obj.alt) : '';
+      if(caption) caption.textContent = label ? `Modelo: ${label}` : '';
+      if (colorNameSpan) colorNameSpan.textContent = label ? label.toUpperCase() : '';
+    } else if (caption) {
+      caption.textContent = '';
       if (colorNameSpan) colorNameSpan.textContent = '';
-    }
-  };
-
-  // LOOP INFINITO AQUI
-  if(prev) prev.onclick = ()=>{ 
-    carouselIndex = (carouselIndex > 0) ? carouselIndex - 1 : dots.length - 1; 
-    update(); 
+    }
   };
-  if(next) next.onclick = ()=>{ 
-    carouselIndex = (carouselIndex < dots.length - 1) ? carouselIndex + 1 : 0; 
-    update(); 
+
+  if(prev) prev.onclick = ()=>{
+    carouselIndex = (carouselIndex > 0) ? carouselIndex - 1 : dots.length - 1;
+    update();
   };
-  // FIN LOOP
+  if(next) next.onclick = ()=>{
+    carouselIndex = (carouselIndex < dots.length - 1) ? carouselIndex + 1 : 0;
+    update();
+  };
 
-  dots.forEach((d,i)=> d.onclick = ()=>{ carouselIndex = i; update(); });
+  dots.forEach((d,i)=> d.onclick = ()=>{ carouselIndex = i; update(); });
 
-  let startX=0, dx=0;
-  const el = document.getElementById('carousel');
-  if(el){
-    el.addEventListener('touchstart', e=>{ startX = e.touches[0].clientX; }, {passive:true});
-    el.addEventListener('touchmove', e=>{ dx = e.touches[0].clientX - startX; }, {passive:true});
-    el.addEventListener('touchend', ()=>{
-      const total = dots.length;
-      if(dx < -40) { // Swipe Izq (Siguiente con Loop)
+  let startX=0, dx=0;
+  const el = document.getElementById('carousel');
+  if(el){
+    el.addEventListener('touchstart', e=>{ startX = e.touches[0].clientX; }, {passive:true});
+    el.addEventListener('touchmove', e=>{ dx = e.touches[0].clientX - startX; }, {passive:true});
+    el.addEventListener('touchend', ()=>{
+      const total = dots.length;
+      if(dx < -40) {
           carouselIndex = (carouselIndex < total - 1) ? carouselIndex + 1 : 0;
       }
-      if(dx > 40) { // Swipe Der (Anterior con Loop)
+      if(dx > 40) {
           carouselIndex = (carouselIndex > 0) ? carouselIndex - 1 : total - 1;
       }
-      dx = 0; update();
-    });
-  }
-  update(); 
+      dx = 0; update();
+    });
+  }
+  // CAMBIO: Llamamos a update() para aplicar el estado inicial
+  update();
 }
 
-function showProductDetail(id, silent=false){
-  prevScrollY = window.scrollY || window.pageYOffset || 0;
-  const p=PRODUCTS.find(x=>x.id===id); if(!p) return;
-  currentProduct=p;
-  selectedSize=null; selectedModel=null; carouselIndex = 0; 
+function showProductDetail(id, silent=false, preSelectedModel=null){
+  prevScrollY = window.scrollY || window.pageYOffset || 0;
+  const p=PRODUCTS.find(x=>x.id===id); if(!p) return;
+  currentProduct=p;
+  selectedSize=null;
+  // CAMBIO: Si viene un modelo pre-seleccionado, lo usamos. Si no, se resetea.
+  selectedModel = preSelectedModel || null;
+  carouselIndex = 0;
 
-  try{window.scrollTo(0,0);document.documentElement.scrollTop=0;document.body.scrollTop=0;}catch(e){}
+  try{window.scrollTo(0,0);document.documentElement.scrollTop=0;document.body.scrollTop=0;}catch(e){}
 
-  const productos=document.getElementById('productos');
-  const detail=document.getElementById('productDetail');
-  const hero=document.getElementById('inicio');
-  if(productos) productos.style.display='none';
-  if(hero) hero.style.display='none';
-  if(detail) detail.style.display='block';
+  const productos=document.getElementById('productos');
+  const detail=document.getElementById('productDetail');
+  const hero=document.getElementById('inicio');
+  if(productos) productos.style.display='none';
+  if(hero) hero.style.display='none';
+  if(detail) detail.style.display='block';
 
-// ...
-  const selector = document.getElementById('colorSelector');
-  if (selector) selector.style.display = 'none'; 
+  const selector = document.getElementById('colorSelector');
+  if (selector) selector.style.display = 'none';
 
-  // REEMPLAZA LA LÍNEA ANTERIOR por esta:
-// CÓDIGO CORREGIDO (Incluye la lógica de carga de imagen si no hay carrusel)
+  // LÓGICA PARA ENCONTRAR EL ÍNDICE DEL MODELO PRE-SELECCIONADO
+  let initialCarouselIndex = 0;
+  if (preSelectedModel && p.images && p.images.length > 1) {
+      const foundIndex = p.images.findIndex(img => (img.model === preSelectedModel || img.alt === preSelectedModel));
+      if (foundIndex !== -1) {
+          initialCarouselIndex = foundIndex;
+          carouselIndex = foundIndex; // Seteamos el índice global
+      }
+  }
 
-  if (p.categoria === 'chombas' || p.categoria === 'trajes' || p.categoria === 'camperas') { 
-      document.getElementById('detailImage').innerHTML = ''; // Limpiar el contenedor
-      if (p.images && p.images.length > 1) { // Tiene carrusel de modelos (ej: nueva campera)
-          document.getElementById('detailImage').innerHTML = buildCarousel(p.images);
-          buildColorSelector(p);
-          setTimeout(attachCarouselHandlers, 0);
-      } else { // NO tiene carrusel (ej: camperas antiguas con solo p.image)
-          // ⬇️ ¡SOLUCIÓN! Cargar la imagen única si no hay carrusel.
-          document.getElementById('detailImage').innerHTML = `<img referrerpolicy="no-referrer" src="${p.image}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/500x400?text=Sin+Imagen'">`;
-          selectedModel = null; 
-          
-          // Asegurarse de ocultar el selector de color si no es necesario.
-          if (selector) selector.style.display = 'none'; 
-      }
-  } else if (p.images && p.images.length > 1) { // Lógica para productos con imágenes, pero sin selector de color forzado (como camisas YSL)
-      document.getElementById('detailImage').innerHTML = buildCarousel(p.images);
-      if (p.images && p.images[0] && (p.images[0].model || p.images[0].alt)) {
-          selectedModel = p.images[0].model || p.images[0].alt;
-      }
-      setTimeout(attachCarouselHandlers, 0);
-  } else { // Lógica para productos simples sin imágenes múltiples (la lógica original)
-      document.getElementById('detailImage').innerHTML = `<img referrerpolicy="no-referrer" src="${p.image}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/500x400?text=Sin+Imagen'">`;
-      selectedModel = null; 
-  }
+  if (p.categoria === 'chombas' || p.categoria === 'trajes' || p.categoria === 'camperas') {
+      document.getElementById('detailImage').innerHTML = '';
+      if (p.images && p.images.length > 1) {
+          document.getElementById('detailImage').innerHTML = buildCarousel(p.images);
+          buildColorSelector(p);
+          // CAMBIO: Pasamos el índice inicial
+          setTimeout(() => attachCarouselHandlers(initialCarouselIndex), 0);
+      } else {
+          document.getElementById('detailImage').innerHTML = `<img referrerpolicy="no-referrer" src="${p.image}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/500x400?text=Sin+Imagen'">`;
+          selectedModel = null;
+          if (selector) selector.style.display = 'none';
+      }
+  } else if (p.images && p.images.length > 1) {
+      document.getElementById('detailImage').innerHTML = buildCarousel(p.images);
+      // Si no había modelo pre-seleccionado, usamos el primero por defecto
+      if (!selectedModel && p.images && p.images[0] && (p.images[0].model || p.images[0].alt)) {
+          selectedModel = p.images[0].model || p.images[0].alt;
+      }
+      // CAMBIO: Pasamos el índice inicial
+      setTimeout(() => attachCarouselHandlers(initialCarouselIndex), 0);
+  } else {
+      document.getElementById('detailImage').innerHTML = `<img referrerpolicy="no-referrer" src="${p.image}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/500x400?text=Sin+Imagen'">`;
+      selectedModel = null;
+  }
 
-  document.getElementById('detailName').textContent=p.name;
-  updateDetailPriceUI(); 
-  document.getElementById('detailDesc').textContent=p.description;
-  const ul=document.getElementById('detailFeatures'); ul.innerHTML='';
-  (p.features||[]).forEach(f=>{ const li=document.createElement('li'); li.textContent=f; ul.appendChild(li); });
+  document.getElementById('detailName').textContent=p.name;
+  updateDetailPriceUI();
+  document.getElementById('detailDesc').textContent=p.description;
+  const ul=document.getElementById('detailFeatures'); ul.innerHTML='';
+  (p.features||[]).forEach(f=>{ const li=document.createElement('li'); li.textContent=f; ul.appendChild(li); });
 
-  const szCont=document.getElementById('detailSizes'); szCont.innerHTML='';
-  (p.sizes||[]).forEach(s=>{
-    const chip=document.createElement('span');
+  const szCont=document.getElementById('detailSizes'); szCont.innerHTML='';
+  (p.sizes||[]).forEach(s=>{
+    const chip=document.createElement('span');
     chip.className='size-chip'; chip.textContent=s;
-    chip.setAttribute('role','button'); chip.setAttribute('tabindex','0');
-    chip.setAttribute('aria-label','Seleccionar talle '+s);
-    
-    const select=()=>{ 
-        selectedSize=s; 
-        szCont.querySelectorAll('.size-chip').forEach(c=>c.classList.remove('selected')); 
-        chip.classList.add('selected'); 
-        const warn=document.getElementById('sizeWarning'); if(warn) warn.style.display='none'; 
-        
-        updateMediosPago(p.categoria); 
-        
-        // Actualizar el Precio Grande al tocar talle
+    chip.setAttribute('role','button'); chip.setAttribute('tabindex','0');
+    chip.setAttribute('aria-label','Seleccionar talle '+s);
+
+    const select=()=>{
+        selectedSize=s;
+        szCont.querySelectorAll('.size-chip').forEach(c=>c.classList.remove('selected'));
+        chip.classList.add('selected');
+        const warn=document.getElementById('sizeWarning'); if(warn) warn.style.display='none';
+
+        updateMediosPago(p.categoria);
+
         const priceEl = document.getElementById('detailPrice');
         const newPrice = getPriceForCurrent(p);
         if(priceEl && newPrice !== null) {
             priceEl.textContent = fmt(newPrice);
         }
     };
-    
-    chip.addEventListener('click', select);
-    chip.addEventListener('keydown', ev=>{ if(ev.key==='Enter'||ev.key===' '){ ev.preventDefault(); select(); } });
-    szCont.appendChild(chip);
-  });
 
-  const sizeWarn = document.getElementById('sizeWarning'); if(sizeWarn) sizeWarn.style.display='none';
-  const addBtn=document.getElementById('addBtn');
-  if(addBtn){
-    if(p.price==null && !p.priceRange && !p.sizePrices){ addBtn.setAttribute('disabled','disabled'); addBtn.textContent='🛒 No disponible'; }
-    else{ addBtn.removeAttribute('disabled'); addBtn.textContent='🛒 Agregar al Carrito'; }
-    updateDetailPriceUI();
-  }
-  showCamisasPromoInDetail(p.categoria==='camisas');
-  updateMediosPago(p.categoria); 
-  requestAnimationFrame(()=>{
-    const header = document.querySelector('header');
-    const offset = (header ? header.offsetHeight : 70) + 10;
-    const y = detail.getBoundingClientRect().top + window.scrollY - offset;
-    window.scrollTo({top:y, behavior:'smooth'});
-  });
-  if(!silent){ history.pushState({view:'detail', productId:id}, '', `#detalle-${id}`); }
+    chip.addEventListener('click', select);
+    chip.addEventListener('keydown', ev=>{ if(ev.key==='Enter'||ev.key===' '){ ev.preventDefault(); select(); } });
+    szCont.appendChild(chip);
+  });
+
+  const sizeWarn = document.getElementById('sizeWarning'); if(sizeWarn) sizeWarn.style.display='none';
+  const addBtn=document.getElementById('addBtn');
+  if(addBtn){
+    if(p.price==null && !p.priceRange && !p.sizePrices){ addBtn.setAttribute('disabled','disabled'); addBtn.textContent='🛒 No disponible'; }
+    else{ addBtn.removeAttribute('disabled'); addBtn.textContent='🛒 Agregar al Carrito'; }
+    updateDetailPriceUI();
+  }
+  showCamisasPromoInDetail(p.categoria==='camisas');
+  updateMediosPago(p.categoria);
+  requestAnimationFrame(()=>{
+    const header = document.querySelector('header');
+    const offset = (header ? header.offsetHeight : 70) + 10;
+    const y = detail.getBoundingClientRect().top + window.scrollY - offset;
+    window.scrollTo({top:y, behavior:'smooth'});
+  });
+  if(!silent){ history.pushState({view:'detail', productId:id}, '', `#detalle-${id}`); }
 }
 
 function goHome(){
@@ -1184,84 +1337,108 @@ function addToCart(p) {
   saveCart();
 }
 
-// REEMPLAZAR TODA LA FUNCIÓN updateCartDisplay
-
-function updateCartDisplay(){
-  const count=document.getElementById('cartCount'); 
-  if(count) count.textContent=cart.reduce((a,b)=>a+b.qty,0);
-  const items=document.getElementById('cartItems'); 
-  if(!items) return; 
-  items.innerHTML='';
-  
-  let total = 0;
-
-  cart.forEach((item,i)=>{
-    const lineTotal = (item.price==null || isNaN(item.price))? 0 : item.price*item.qty; 
-    total += lineTotal;
-    
-    const unitPriceLabel = (item.price==null || isNaN(item.price))? '' : fmt(item.price);
-    const linePriceLabel = (item.price==null || isNaN(item.price))? 'A consultar' : fmt(lineTotal);
-    
-    let itemImageSrc = item.image;
-    const originalProduct = PRODUCTS.find(p => p.id === item.id);
-    if (originalProduct && originalProduct.images && item.modelo) {
-        const modelImage = originalProduct.images.find(img => img.model === item.modelo || img.alt === item.modelo);
-        if (modelImage) itemImageSrc = modelImage.src;
-    }
-
-    const div=document.createElement('div'); 
-    div.className='cart-item';
-    
-div.innerHTML = `
-      <div style="display: flex; gap: 15px; align-items: flex-start; border-bottom: 1px solid #eee; padding-bottom: 15px; margin-top: 15px;">
-        <img src="${itemImageSrc}" alt="${item.name}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px;">
-        <div style="flex-grow: 1;">
-          <div style="font-weight: bold; margin-bottom: 4px;">${item.name}</div>
-          <div style="font-size: 0.9rem; color: #555;">
-            ${item.modelo ? item.modelo + ' | ' : ''} Talle ${item.size || '-'}
-          </div>
-        </div>
-        <div style="text-align: right; margin-top: 5px;">
-          <button type="button" style="background: none; border: none; color: #e74c3c; cursor: pointer; padding: 0;" 
-                  onclick="event.stopPropagation(); removeItem('${item.key}')">
-            🗑️
-          </button>
-        </div>
-      </div>
-      <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 10px; margin-bottom: 10px;">
-        <div class="cart-controls" style="display:flex; align-items:center; border: 1px solid #ccc; border-radius: 4px;">
-                    <button type="button" onclick="updateQuantity(${i}, -1, event)">-</button>
-          <span style="min-width: 30px; text-align: center; font-weight: bold; font-size: 1rem;">${item.qty}</span>
-          <button type="button" onclick="updateQuantity(${i}, 1, event)">+</button>
-        </div>
-        <span style="font-weight: bold; font-size: 1.1rem;">${linePriceLabel}</span>
-      </div>
-    `;
-    items.appendChild(div);
-  });
-  
-  if (cart.length > 0) {
-    const subtotalDiv = document.createElement('div');
-    subtotalDiv.innerHTML = `
-      <div style="margin-top: 20px;">
-        <div style="font-weight: bold; margin-bottom: 10px;">Subtotal (sin envío): <span style="float: right;">${fmt(total)}</span></div>
-      </div>
-      
-      <div style="margin-top: 15px; padding-top: 15px; border-top: 2px solid #333;">
-        <div style="display: flex; justify-content: space-between; font-size: 1.4rem;">
-          <span>Total:</span>
-          <span style="font-weight: bold; color: var(--verde-oscuro);">${fmt(total)}</span>
-        </div>
-      </div>
-    `;
-    items.appendChild(subtotalDiv);
-  } else {
-    items.innerHTML = '<div style="text-align: center; padding: 30px;">El carrito está vacío.</div>';
-  }
-  
-  const totalEl=document.getElementById('cartTotal'); 
-  if(totalEl) totalEl.innerHTML = '';
+// Función para abrir el producto desde el carrito, ahora recibe el modelo
+function openProductFromCart(id, model) {
+    toggleCart(); // Cierra el carrito
+    setTimeout(() => {
+        // Llamamos a showProductDetail pasando el modelo (si existe)
+        showProductDetail(id, false, model);
+    }, 100);
 }
+  
+function updateCartDisplay(){
+  const count = document.getElementById('cartCount');
+  if(count) count.textContent = cart.reduce((a,b)=>a+b.qty,0);
+
+  const items = document.getElementById('cartItems');
+  if(!items) return;
+  items.innerHTML='';
+
+  let total = 0;
+
+  cart.forEach((item,i)=>{
+    const lineTotal = (item.price==null || isNaN(item.price))? 0 : item.price*item.qty;
+    total += lineTotal;
+
+    let itemImageSrc = item.image;
+    const originalProduct = PRODUCTS.find(p => p.id === item.id);
+    if (originalProduct && originalProduct.images && item.modelo) {
+        const modelImage = originalProduct.images.find(img => img.model === item.modelo || img.alt === item.modelo);
+        if (modelImage) itemImageSrc = modelImage.src;
+    }
+
+    let specsHTML = '';
+    if(item.size){
+        specsHTML += `
+            <div class="spec-box">
+                <span class="spec-title">Talle</span>
+                <span class="spec-value">${item.size}</span>
+            </div>
+        `;
+    }
+    if(item.modelo){
+        specsHTML += `
+            <div class="spec-box" style="margin-left: 10px;">
+                <span class="spec-title">Modelo</span>
+                <span class="spec-value">${item.modelo}</span>
+            </div>
+        `;
+    }
+
+    const div = document.createElement('div');
+    div.className = 'cart-card';
+
+    // CAMBIO IMPORTANTE: Al hacer click, pasamos el ID y el MODELO
+    div.onclick = () => openProductFromCart(item.id, item.modelo);
+
+    div.innerHTML = `
+      <img src="${itemImageSrc}" class="cart-img" alt="${item.name}">
+
+      <div class="cart-info">
+          <div class="cart-title">${item.name}</div>
+
+          <div class="cart-details-row">
+              <div class="qty-selector" onclick="event.stopPropagation()">
+                  <button class="qty-btn" onclick="updateQuantity(${i}, -1, event)">‹</button>
+                  <span class="qty-val">${item.qty}</span>
+                  <button class="qty-btn" onclick="updateQuantity(${i}, 1, event)">›</button>
+              </div>
+              ${specsHTML}
+          </div>
+      </div>
+
+      <div class="cart-price-absolute">
+         ${(item.price==null || isNaN(item.price)) ? 'Consultar' : fmt(lineTotal)}
+      </div>
+
+
+
+<button type="button" class="btn-basura-cuadrado" 
+    onclick="event.stopPropagation(); removeItem('${item.key}')">
+    <img src="https://cdn-icons-png.flaticon.com/512/484/484662.png" alt="Eliminar">
+</button>
+    `;
+    items.appendChild(div);
+  });
+
+  if (cart.length > 0) {
+    const footerDiv = document.createElement('div');
+    footerDiv.className = 'cart-footer-clean';
+    footerDiv.innerHTML = `
+      <div class="total-row">
+          <span>Total:</span>
+          <span>${fmt(total)}</span>
+      </div>
+    `;
+    items.appendChild(footerDiv);
+  } else {
+    items.innerHTML = '<div style="text-align: center; padding: 40px; color: #777;">Tu carrito está vacío 🛒</div>';
+  }
+
+  const totalEl = document.getElementById('cartTotal');
+  if(totalEl) totalEl.innerHTML = '';
+}
+  
 function updateQuantity(i, change, event){
     // Asegura que el evento no se propague al fondo (soluciona el cierre del carrito)
     if (event) event.stopPropagation();
@@ -1273,22 +1450,39 @@ function updateQuantity(i, change, event){
   saveCart();
 }
 function clearCart(){ cart = []; updateCartDisplay(); saveCart();}
-  function removeItem(itemKey) {
-    // Busca el índice del elemento en el carrito usando la clave única
-    const index = cart.findIndex(item => item.key === itemKey);
-    
-    if (index > -1) {
-        // Elimina el elemento del array del carrito
-        cart.splice(index, 1);
-        // Actualiza la visualización del carrito
-        updateCartDisplay();
-      
-      saveCart();
-        // Si no quedan items, cierra el panel
-        if (cart.length === 0) {
-            toggleCart();
-        }
-    }
+function removeItem(itemKey, event) {
+    // 1. Intentamos encontrar la tarjeta visualmente usando el evento
+    let card = null;
+    if (event && event.target) {
+        card = event.target.closest('.cart-card');
+    }
+
+    // Esta es la lógica de borrado real (lo que ya tenías)
+    const ejecutarBorrado = () => {
+        const index = cart.findIndex(item => item.key === itemKey);
+        if (index > -1) {
+            cart.splice(index, 1);
+            updateCartDisplay();
+            saveCart();
+            // Si no quedan items, cierra el panel
+            if (cart.length === 0) {
+                toggleCart();
+            }
+        }
+    };
+
+    // 2. Si encontramos la tarjeta visual, la animamos primero
+    if (card) {
+        card.classList.add('slide-out-left'); // Activamos la animación CSS
+        
+        // Esperamos 400ms (lo mismo que dura la transición CSS) antes de borrar
+        setTimeout(() => {
+            ejecutarBorrado();
+        }, 400); 
+    } else {
+        // Si por alguna razón no hay tarjeta visual, borramos directo
+        ejecutarBorrado();
+    }
 }
 function toggleCart(){
   const m=document.getElementById('cartModal'); if(!m) return;
