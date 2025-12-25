@@ -455,6 +455,16 @@ footer a{color:#fff;text-decoration:underline}
     pointer-events: none; /* Evita que lo toquen mientras se va */
 }
   
+/* --- AJUSTE DE FOTOS SOLO PARA CELULAR --- */
+@media (max-width: 768px) {
+    .carousel-slide img, 
+    #detailImage img {
+        max-height: 40vh !important; /* Aquí controlas el tamaño en el celu */
+    }
+}
+
+
+
 </style>
 <!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-LBE173Q7BN"></script>
