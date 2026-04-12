@@ -586,54 +586,35 @@ function updateModelInfo(modelo, precio){
   }catch(e){ console.error("Error en updateModelInfo:", e); }
 }
 
+
 function updateMediosPago(categoria){
-  try{
-    const liEfectivo=document.getElementById('pagoEfectivo');
-    const liTarjeta=document.getElementById('pagoTarjeta');
-    const liTrans=document.getElementById('pagoTransferencia');
-    if(!liTarjeta || !liTrans || !liEfectivo) return;
+  try{
+    const liEfectivo = document.getElementById('pagoEfectivo');
+    const liTarjeta = document.getElementById('pagoTarjeta');
+    const liTrans = document.getElementById('pagoTransferencia');
 
-    // Resetear
-    liEfectivo.textContent='Efectivo 💵';
-    liTarjeta.textContent='Tarjeta 💳';
-    liTrans.textContent='Transferencia';
+    if(!liTarjeta || !liTrans || !liEfectivo) return;
 
-    if(categoria==='camisas'){
-      liTarjeta.textContent='Tarjeta 💳 (en 3 cuotas)';
-      liTrans.textContent='Transferencia (10% de descuento en Camisas)';
-    }
-    else if(currentProduct && currentProduct.id === 'chomba-algodon-premium-colores'){
-      liEfectivo.innerHTML='Efectivo 💵 <span style="font-weight:bold; color: #e74c3c;">($20.000)</span>';
-      liTarjeta.innerHTML='Tarjeta 💳 <span style="font-weight:bold; color: #2d5a42;">($25.000 en 3 cuotas)</span>';
-      liTrans.innerHTML='Transferencia <span style="font-weight:bold; color: #e74c3c;">($20.000)</span>';
-    }
-    else if(currentProduct && currentProduct.id === 'traje-thomson-williams-soft'){
-      liEfectivo.innerHTML='Efectivo 💵 <span style="font-weight:bold; color: #e74c3c;">($230.000)</span>';
-      liTarjeta.innerHTML='Tarjeta 💳 <span style="font-weight:bold; color: #2d5a42;">($260.000 en 3 pagos)</span>';
-      liTrans.innerHTML='Transferencia <span style="font-weight:bold; color: #e74c3c;">($230.000)</span>';
-    }
-   
-    else if(currentProduct && currentProduct.id === 'campera-rompevientos-buckingham-nueva'){
-      liEfectivo.innerHTML='Efectivo 💵 <span style="font-weight:bold; color: #e74c3c;">($50.000)</span>';
-      liTarjeta.innerHTML='Tarjeta 💳 <span style="font-weight:bold; color: #2d5a42;">($60.000 en 3 pagos)</span>';
-      liTrans.innerHTML='Transferencia/Depósito <span style="font-weight:bold; color: #e74c3c;">($50.000)</span>';
-    }
-    // LOGICA PIMA (XXXL)
-    else if(currentProduct && currentProduct.id === 'chomba-hilo-pima'){
-        const transferPrice = 50000;
-        let cardPrice = (currentProduct.sizePrices && selectedSize) ? currentProduct.sizePrices[selectedSize] : currentProduct.price;
+    const precioActual = currentProduct ? getPriceForCurrent(currentProduct) : null;
 
-        liEfectivo.innerHTML=`Efectivo 💵 <span style="font-weight:bold; color: #e74c3c;">(${fmt(transferPrice)})</span>`;
-        liTrans.innerHTML=`Transferencia <span style="font-weight:bold; color: #e74c3c;">(${fmt(transferPrice)})</span>`;
-        
-        if (!selectedSize) {
-            liTarjeta.innerHTML=`Tarjeta 💳 <span style="font-weight:bold; color: #2d5a42;">(Seleccionar talle para ver precio)</span>`;
-        } else {
-            liTarjeta.innerHTML=`Tarjeta 💳 <span style="font-weight:bold; color: #2d5a42;">(${fmt(cardPrice)} en 3 pagos)</span>`;
-        }
+    // ❌ Eliminamos efectivo
+    liEfectivo.style.display = 'none';
+
+    // Tarjeta
+    if(typeof precioActual === 'number'){
+      liTarjeta.innerHTML = `Tarjeta 💳 <span style="font-weight:bold; color:#2d5a42;">(${fmt(precioActual)} en 3 cuotas)</span>`;
+    } else {
+      liTarjeta.innerHTML = 'Tarjeta 💳 (Consultar precio)';
     }
-  }catch(e){ console.error("Error en updateMediosPago:", e); }
+
+    // Transferencia + Retiro
+    liTrans.innerHTML = 'Transferencia o Retiro en el local <span style="font-weight:bold; color:#e74c3c;">(10% OFF)</span>';
+
+  }catch(e){
+    console.error("Error en updateMediosPago:", e);
+  }
 }
+
 
 // === Helpers PROMO CAMISAS (restaurado) ===
 function showCamisasPromoInGrid(cat){
@@ -680,7 +661,7 @@ const PRODUCTS=[
   { id:'campera-buckingham', categoria:'camperas', name:'Campera Doble Pechera Buckingham Polo Club', price:49999,
     image:'https://i.ibb.co/VpBGnRRR/Whats-App-Image-2026-04-12-at-1-37-32-PM.jpg',
     description:'Campera doble pechera de la marca Buckingham Polo Club, pensada para brindar abrigo y estilo. Disponible en talle XL.',
-    features:['Diseño de doble pechera para mayor protección térmica','Marca Buckingham Polo Club, símbolo de elegancia','Materiales resistentes y costuras reforzadas','10%  pagando en efectivo o transferencia' , 'Consultar por talles especiales'],
+    features:['Diseño de doble pechera para mayor protección térmica','Marca Buckingham Polo Club, símbolo de elegancia','Materiales resistentes y costuras reforzadas', 'Consultar por talles especiales'],
     sizes:['S','M','L','XL','XXL'],
    tag: null,
     
@@ -704,7 +685,7 @@ const PRODUCTS=[
   { id:'campera-buckingham-reversible', categoria:'camperas', name:'Campera Buckingham Polo Club — Reversible', price:44999,
     image:'https://i.ibb.co/N6xq5CmQ/Whats-App-Image-2026-04-12-at-1-37-33-PM-1.jpg',
     description:'Campera reversible de Buckingham Polo Club, ideal para diferentes estilos y situaciones. Disponible en talles S a doble XL.',
-    features:['Diseño reversible para dos estilos','Marca Buckingham Polo Club, sinónimo de calidad','Ideal para climas fríos y moderados','Disponible en talles desde S a XXL', 'Consultar por talles especiales' ,'Precio increíble $35.000'],
+    features:['Diseño reversible para dos estilos','Marca Buckingham Polo Club, sinónimo de calidad','Ideal para climas fríos y moderados','Disponible en talles desde S a XXL', 'Consultar por talles especiales' ],
     sizes:['S','M','L','XL','XXL'],
     tag: null,
     
@@ -736,7 +717,7 @@ const PRODUCTS=[
   { id:'campera-impermeable-oferta', categoria:'camperas', name:'Campera Impermeable — Oferta Limitada', price:59999,
     image:'https://i.ibb.co/zVHHrw0V/Imagen-de-Whats-App-2025-09-04-a-las-11-06-23-83ac75f2.jpg',
     description:'Campera impermeable. Oferta limitada desde el talle S al doble XL. Precio promocional $35.000 (transferencia o efectivo).',
-    features:['Impermeable de alta calidad','Oferta limitada','Disponible desde talle S hasta doble XXL','Consultar por talles especiales'],
+    features:['Impermeable de alta calidad','Disponible desde talle S hasta doble XXL','Consultar por talles especiales'],
     sizes:['S','M','L','XL','XXL'],
     tag: null,
     
@@ -801,7 +782,7 @@ const PRODUCTS=[
       {src:'https://i.ibb.co/23M4Gwv0/Imagen-de-Whats-App-2025-09-10-a-las-16-31-39-0476913f.jpg', model:'negra con rayas'}
     ],
     description:'Camisas marca Rocco. Oferta especial $39.999. Talles del S al XXL.',
-    features:['Marca Rocco','Varios tonos y diseños','Talles del S al XXL','Oferta especial $39.999'],
+    features:['Marca Rocco','Varios tonos y diseños','Talles del S al XXL'],
     sizes:['S','M','L','XL','XXL'],
     tag: null,
     
@@ -886,8 +867,6 @@ const PRODUCTS=[
       'Marca: Thomson & Williams',
       'Calidad insuperable',
       'Corte soft moderno y confortable',
-      'Precio Tarjeta: $260.000 (3 pagos)',
-      'Promo Efectivo/Transferencia: $230.000',
       'Talles disponibles: 46 al 66'
     ],
     // Generamos los talles del 46 al 66
@@ -924,8 +903,6 @@ const PRODUCTS=[
     features: [
       'Material: Hilo Pima Peruano legítimo (producto excepcional)',
       'Máxima suavidad y transpirabilidad',
-      'Precio Promocional (Efectivo/Transferencia): $50.000',
-      'Precio Tarjeta varía según talle (M-XXL: $60.000 / XXXL: $70.000)',
       'Talles disponibles: M al XXXL'
     ],
     sizes: ['M', 'L', 'XL', 'XXL', 'XXXL'],
