@@ -738,14 +738,24 @@ const PRODUCTS=[
     tag: null,
     
   },
-  { id:'camisaco-corderito', categoria:'camperas', name:'Camisaco forrado en Corderito marca Devrè', price:49999,
-    image:'https://i.ibb.co/jqdFsKW/Imagen-de-Whats-App-2025-09-04-a-las-10-33-17-1b371c5b.jpg',
-    description:'Últimas unidades. Del talle S al XL.',
-    features:['Forrado en corderito','Últimas unidades','Del S al XL','Abrigo suave y cómodo'],
-    sizes:['S','M','L','XL'],
-    tag: null,
-    
-  },
+{
+  id: 'camisaco-corderito',
+  categoria: 'camperas',
+  name: 'Camisaco forrado en Corderito marca Devrè',
+  price: 49999,
+  soldOut: true,
+
+  image: 'https://i.ibb.co/jqdFsKW/Imagen-de-Whats-App-2025-09-04-a-las-10-33-17-1b371c5b.jpg',
+  description: 'Producto agotado.',
+  features: [
+    'Forrado en corderito',
+    'Producto agotado',
+    'Del S al XL',
+    'Abrigo suave y cómodo'
+  ],
+  sizes: ['S', 'M', 'L', 'XL'],
+  tag: null
+},
   { id:'remera-mc-premium', categoria:'remeras', name:'Remera Manga Corta - Primera Marca (Algodón Peinado)', price:15000,
     image:'https://i.ibb.co/k62gp4Zw/Imagen-de-Whats-App-2025-09-04-a-las-22-34-46-2e91c20e.jpg',
     description:'Oferta especial. Algodón peinado, calidad primera marca.',
@@ -942,6 +952,41 @@ const PRODUCTS=[
 const priceLabel = (p)=>{ if(typeof p.price==='number') return fmt(p.price); if(Array.isArray(p.priceRange)&&p.priceRange.length===2) return fmt(p.priceRange[0])+'–'+fmt(p.priceRange[1]); return 'Consultar precio'; };
 const makeBadge = (tag)=> tag===''?"<span class='badge '></span>":(tag==='especial'?"<span class='badge especial'>ESPECIAL</span>":"");
 const card = (p) => {
+    if (p.soldOut) {
+    return `
+        <div style="position:relative;">
+            <img
+                referrerpolicy="no-referrer"
+                src="${p.image}"
+                alt="${p.name}"
+                style="filter:grayscale(40%);opacity:.75;"
+                onerror="this.src='https://via.placeholder.com/300x400?text=Sin+Imagen'"
+            >
+
+            <span style="
+                position:absolute;
+                top:10px;
+                left:10px;
+                background:#e74c3c;
+                color:#fff;
+                padding:6px 10px;
+                border-radius:5px;
+                font-size:.8rem;
+                font-weight:bold;
+            ">
+                AGOTADO
+            </span>
+        </div>
+
+        <div class="product-name">${p.name}</div>
+
+        <div class="product-price">
+            <span class="price-current" style="color:#e74c3c;">
+                Agotado
+            </span>
+        </div>
+    `;
+}
     let priceHTML = '';
 
     // Lógica de Fake Discount: Si existe fakeDiscount, calculamos el precio tachado
