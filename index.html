@@ -1096,6 +1096,21 @@ function updateDetailPriceUI(){
   const el = document.getElementById('detailPrice');
   const addBtn = document.getElementById('addBtn');
   if(!el) return;
+    if (currentProduct && currentProduct.soldOut) {
+    el.textContent = 'AGOTADO';
+    el.style.color = '#e74c3c';
+
+    if (addBtn) {
+        addBtn.disabled = true;
+        addBtn.setAttribute('disabled', 'disabled');
+        addBtn.textContent = 'AGOTADO';
+        addBtn.style.background = '#999';
+    }
+
+    return;
+}
+
+el.style.color = '';
   
   // Aquí está el truco: ahora siempre usa getPriceForCurrent que ya sabe lo del talle XXXL
   const priceNum = getPriceForCurrent(currentProduct);
