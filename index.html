@@ -1338,7 +1338,14 @@ function goToProducts(){
 }
 
 function addToCart(p) {
-  if (!p) return;
+    if (!p) return;
+
+    if (p.soldOut) {
+        alert('Este producto se encuentra agotado.');
+        return;
+    }
+
+    // Continúa el código actual...
 
   // Usar getCurrentModelLabel para asegurar que tomamos el modelo/color correcto
   let modeloActual = getCurrentModelLabel(p);
