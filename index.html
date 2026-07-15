@@ -1271,12 +1271,27 @@ function showProductDetail(id, silent=false, preSelectedModel=null){
   });
 
   const sizeWarn = document.getElementById('sizeWarning'); if(sizeWarn) sizeWarn.style.display='none';
-  const addBtn=document.getElementById('addBtn');
-  if(addBtn){
-    if(p.price==null && !p.priceRange && !p.sizePrices){ addBtn.setAttribute('disabled','disabled'); addBtn.textContent='🛒 No disponible'; }
-    else{ addBtn.removeAttribute('disabled'); addBtn.textContent='🛒 Agregar al Carrito'; }
-    updateDetailPriceUI();
-  }
+ const addBtn = document.getElementById('addBtn');
+
+if (addBtn) {
+    if (p.soldOut) {
+        addBtn.setAttribute('disabled', 'disabled');
+        addBtn.disabled = true;
+        addBtn.textContent = 'AGOTADO';
+        addBtn.style.background = '#999';
+    } else if (p.price == null && !p.priceRange && !p.sizePrices) {
+        addBtn.setAttribute('disabled', 'disabled');
+        addBtn.disabled = true;
+        addBtn.textContent = '🛒 No disponible';
+        addBtn.style.background = '';
+    } else {
+        addBtn.removeAttribute('disabled');
+        addBtn.disabled = false;
+        addBtn.textContent = '🛒 Agregar al Carrito';
+        addBtn.style.background = '';
+        updateDetailPriceUI();
+    }
+}
   showCamisasPromoInDetail(p.categoria==='camisas');
   updateMediosPago(p.categoria);
   requestAnimationFrame(()=>{
