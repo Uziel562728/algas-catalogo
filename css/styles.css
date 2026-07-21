@@ -1,0 +1,478 @@
+:root{--verde-oscuro:#1e3a2e;--verde-medio:#2d5a42;--verde-claro:#f8fffe;--gris-1:#333;--rojo:#e74c3c;--whatsapp:#25d366}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial, sans-serif;background:var(--verde-claro);color:var(--gris-1)}
+/* Header */
+header{position:fixed;top:0;left:0;right:0;height:70px;background:rgba(255,255,255,0.9);backdrop-filter:blur(8px);
+display:flex;align-items:center;justify-content:space-between;z-index:1000;padding:0 20px;border-bottom:1px solid rgba(0,0,0,.08)}
+header img.logo{height:50px;width:50px;border-radius:50%;border:2px solid var(--verde-oscuro);box-shadow:0 2px 6px rgba(0,0,0,.25)}
+header h1{font-family:'Playfair Display',serif;color:var(--verde-oscuro);font-size:1.8rem;flex:1;text-align:center;margin-right:50px}
+/* Sections */
+section{padding:100px 20px}
+.section-title{font-size:2rem;margin-bottom:10px;color:var(--verde-oscuro);text-align:center}
+/* Hero */
+#inicio{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+background:linear-gradient(160deg,#eafff8,#a9efcf);min-height:60vh;padding-top:100px}
+#inicio h1{font-family:'Poppins',sans-serif;font-size:4rem;font-weight:600;color:#1e3a2e;text-shadow:2px 2px 6px rgba(0,0,0,0.25);margin:0}
+.btn{padding:10px 16px;border-radius:8px;cursor:pointer;border:none;font-weight:bold}
+.btn-primary{background:var(--verde-medio);color:#fff}
+/* Catalog index */
+.catalogo-indice{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:10px 0 20px}
+.catalogo-indice .btn{background:#fff;border:1px solid #dcdcdc;color:#333}
+.catalogo-indice .btn.active{background:var(--verde-medio);color:#fff;border-color:var(--verde-medio)}
+
+/* Promo/Notas Camisas (restaurado) */
+.promo-camisas{display:none;margin:10px auto 18px;max-width:1100px;padding:10px 14px;border:2px dashed #2d5a42;
+background:#eef9f4;color:#1e3a2e;border-radius:10px;text-align:center;font-weight:700;letter-spacing:.3px}
+.promo-camisas small{display:block;font-weight:normal;opacity:.85;margin-top:4px}
+.promo-camisas-detail{display:none;margin:8px 0 12px;padding:10px 12px;border:2px dashed #2d5a42;
+background:#eef9f4;color:#1e3a2e;border-radius:10px;font-weight:600}
+
+
+/* Cart */
+/* --- ESTILOS NUEVOS DEL CARRITO TIPO TARJETA --- */
+.cart-card {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: flex-start; /* Alineado arriba para que no se deforme */
+    gap: 15px;
+    position: relative;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    transition: transform 0.1s;
+    cursor: pointer;
+    min-height: 100px; /* Altura mínima para consistencia */
+}
+.cart-card:active {
+    transform: scale(0.98);
+}
+.cart-img {
+    width: 70px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 6px;
+    background: #f4f4f4;
+    flex-shrink: 0; /* Para que no se aplaste nunca */
+}
+.cart-info {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.cart-title {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--verde-oscuro);
+    margin-bottom: 8px;
+    line-height: 1.3;
+    /* Limitamos el texto a 2 líneas para que no rompa el diseño */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.cart-details-row {
+    display: flex;
+    align-items: center; /* Alineados verticalmente */
+    gap: 15px; /* Espacio entre el selector y los detalles */
+    flex-wrap: wrap;
+}
+/* Selector de cantidad estilo Pistakio (< 1 >) */
+.qty-selector {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    height: 32px;
+    background: #fff;
+}
+.qty-btn {
+    width: 30px;
+    height: 100%;
+    border: none;
+    background: none;
+    font-size: 1.1rem;
+    color: var(--verde-medio);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 3px;
+}
+.qty-val {
+    min-width: 25px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 0.95rem;
+}
+/* Info de Talle y Modelo (Donde marcaste amarillo) */
+.spec-box {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    line-height: 1.1;
+}
+.spec-title {
+    font-size: 0.7rem;
+    color: #888;
+    text-transform: uppercase;
+    font-weight: bold;
+    margin-bottom: 2px;
+}
+.spec-value {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--verde-medio);
+}
+/* Precio y Tacho */
+.cart-price-absolute {
+    font-weight: bold;
+    font-size: 1rem;
+    color: #333;
+    align-self: flex-end; /* Lo manda a la derecha si usamos flex column */
+    margin-top: auto;
+}
+.delete-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 1.1rem;
+    color: #999;
+    cursor: pointer;
+    padding: 5px;
+}
+/* Total limpio abajo */
+.cart-footer-clean {
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+    margin-top: 20px;
+}
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--verde-oscuro);
+}
+
+
+
+/* Grid */
+/* --- GRILLA CORREGIDA PARA 2 COLUMNAS EN CELULAR --- */
+.grid {
+    display: grid;
+    gap: 15px; /* Reducimos un poco el espacio para que quepan mejor en móvil */
+    /* Bajamos el mínimo a 140px para forzar las 2 columnas en celular */
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); 
+    justify-content: center;
+    padding: 10px;
+}
+
+.card {
+    position: relative;
+    background: none;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    /* En PC se verán de un tamaño máximo controlado */
+    max-width: 250px; 
+    width: 100%;
+    margin: 0 auto;
+    cursor: pointer;
+}
+
+.card img {
+    width: 100%;
+    aspect-ratio: 3 / 4; 
+    object-fit: cover;
+    border-radius: 4px;
+    background: #f4f4f4;
+    margin-bottom: 8px;
+}
+
+/* Ajuste específico para PC: si la pantalla es grande, que las fotos sean un poco más grandes */
+@media (min-width: 768px) {
+    .grid {
+        grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+        gap: 30px;
+    }
+}
+
+.card .product-name {
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: #333;
+    margin: 5px 0;
+    text-transform: capitalize;
+}
+
+/* Estilo del Precio Fake Discount */
+.product-price {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.price-old {
+    color: #999;
+    text-decoration: line-through;
+    font-size: 0.85rem;
+}
+
+.price-current {
+    color: var(--verde-medio); /* Tu verde actual */
+    font-weight: bold;
+    font-size: 1.05rem;
+}
+
+.price-discount {
+    color: #e74c3c; /* Rojo para el porcentaje */
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+.bundle-offer {
+    flex-basis: 100%;
+    color: #e74c3c;
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+.detail-price-old {
+    color: #999;
+    text-decoration: line-through;
+    font-size: 1rem;
+    margin-right: 10px;
+}
+.detail-bundle-offer {
+    display: block;
+    width: max-content;
+    background: #d97706;
+    color: #fff;
+    padding: 9px 15px;
+    border-radius: 7px;
+    font-size: 1.05rem;
+    font-weight: 800;
+    margin-top: 10px;
+    letter-spacing: .3px;
+    box-shadow: 0 3px 9px rgba(0,0,0,.28);
+}
+
+/* Borramos el tag "Especial" visualmente */
+.badge { display: none !important; }
+.badge.especial{background:#2d5a42;box-shadow:0 0 12px rgba(45,90,66,0.8)}
+@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.1)}100%{transform:scale(1)}}
+/* Detail */
+#productDetail{display:none;padding:100px 20px}
+.detail-content{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;grid-template-areas:'info image';gap:20px;align-items:start}
+#detailImage{grid-area:image;overflow:hidden;position:relative}
+/* Carousel */
+.carousel{position:relative;width:100%;height:auto;overflow:hidden}
+.carousel-track{display:flex;transition:transform .35s ease;gap:0;will-change:transform}
+.carousel-slide{min-width:100%;user-select:none;flex:0 0 100%}
+.carousel-slide img{width:100%;height:auto;max-height:70vh;object-fit:contain;border-radius:12px;background:#f4f4f4;display:block}
+.carousel-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.6);color:#fff;border:2px solid rgba(255,255,255,.85);
+box-shadow:0 2px 8px rgba(0,0,0,.35);z-index:2;border-radius:50%;width:42px;height:42px;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.carousel-btn.prev{left:8px}
+.carousel-btn.next{right:8px}
+.carousel-dots{display:flex;gap:6px;justify-content:center;margin-top:8px}
+.carousel-dot{width:8px;height:8px;border-radius:50%;background:#ccc;cursor:pointer}
+.carousel-dot.active{background:#2d5a42}
+#detailImage img{width:100%;height:auto;max-height:70vh;object-fit:contain;border-radius:12px;display:block;margin:0 auto}
+.detail-info{grid-area:info}
+.detail-header{display:block;margin-bottom:8px}
+.back-btn{background:#e74c3c;color:#fff;border:none;border-radius:6px;padding:8px 14px;font-weight:bold;cursor:pointer}
+.back-btn:hover{background:#c0392b}
+.detail-info h2{color:var(--verde-oscuro);margin:10px 0}
+.detail-info .price{font-size:1.5rem;color:var(--verde-medio);margin:10px 0}
+.payment-note{max-width:900px;margin:8px 0 16px;padding:8px 12px;border:1px solid #d8efe5;background:#eef9f4;border-radius:8px;font-size:.95rem;color:var(--gris-1)}
+ul{padding-left:20px;margin:10px 0}
+.detail-buttons{display:flex;flex-direction:column;gap:15px;margin-top:15px}
+.detail-buttons .btn{width:100%}
+.btn[disabled]{opacity:.55;cursor:not-allowed}
+/* Sizes */
+.sizes{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-start;margin:6px 0 8px}
+.size-chip{width:30px;height:30px;border-radius:50%;border:2px solid #ccc;display:flex;align-items:center;justify-content:center;font-size:.85rem;background:#fff;cursor:pointer}
+.size-chip.selected{border-color:var(--verde-medio);background:#eaf6f0;font-weight:bold}
+.size-warning{color:#e74c3c;font-size:.95rem;display:none;margin-top:4px}
+@media (max-width:768px){.detail-content{grid-template-columns:1fr;grid-template-areas:'image' 'info'}}
+/* Cart */
+#cartFab{position:fixed;top:80px;right:20px;background:#fff;padding:10px 14px;border-radius:999px;box-shadow:0 4px 10px rgba(0,0,0,.2);cursor:pointer;z-index:2000}
+#cartFab.bounce{animation:bounce .6s}
+@keyframes bounce{0%{transform:scale(1)}30%{transform:scale(1.2)}60%{transform:scale(0.9)}100%{transform:scale(1)}}
+.fab-count{background:#e74c3c;color:#fff;border-radius:50%;padding:2px 8px;margin-left:6px}
+/* INICIO DEL REEMPLAZO */
+/* INICIO DEL REEMPLAZO DEFINITIVO #cartModal y animaciones */
+#cartModal{
+    display: block;
+    position: fixed;
+    top: 0;
+    right: 0; /* ⬅️ ANCLADO AQUÍ: DERECHA */
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 3000;
+    align-items: center;
+    justify-content: flex-end; /* ⬅️ EMPUJA EL PANEL A LA DERECHA */
+    overscroll-behavior: contain;
+    visibility: hidden; 
+    opacity: 0;
+    transition: visibility 0.3s, opacity 0.3s;
+}
+#cartModal.visible { /* ⬅️ Clase necesaria para mostrar */
+    visibility: visible;
+    opacity: 1;
+}
+#cartModal .modal-content{
+    background:#fff;
+    border-radius:0;
+    max-width: 420px;
+    width: 100%;
+    height: 100vh;
+    padding: 20px;
+    position: relative;
+    max-height: 100vh;
+    overflow: auto;
+    -webkit-overflow-scrolling:touch;
+    transform: translateX(100%); /* ⬅️ COMIENZA 100% FUERA DE LA DERECHA */
+    transition: transform 0.3s ease-out;
+}
+#cartModal.visible .modal-content { /* ⬅️ Clase necesaria para deslizar */
+    transform: translateX(0); /* ⬅️ TERMINA EN POSICIÓN CERO (dentro de la derecha) */
+}
+/* FIN DEL REEMPLAZO DEFINITIVO */
+/* FIN DEL REEMPLAZO */
+
+#cartModal .close{
+    position:absolute;
+    top:10px;
+    right:20px; /* ⬅️ DEBE ESTAR ANCLADO A LA DERECHA (20px) */
+    cursor:pointer;
+    font-size:1.5rem ; 
+    color: #333; 
+    z-index: 3001;
+}
+.cart-item{
+    display: flex; /* <--- Cambio: era flex */
+    flex-direction: column; /* <--- Cambio: añadido */
+    margin: 0; /* <--- Cambio: era 8px 0 */
+    gap: 0; /* <--- Cambio: era 8px */
+}
+.cart-controls{display:flex;align-items:center;gap:6px}
+.cart-controls button {
+    width: 30px !important; /* <--- Cambio: era 28px */
+    height: 30px !important; /* <--- Cambio: era 28px */
+    background: none !important; 
+    color: var(--gris-1) !important;
+    border-radius: 0 !important;
+}
+.cart-controls button:active { /* <--- Nuevo estilo */
+    background: #f0f0f0 !important;
+}
+.cart-controls button:hover{background:var(--verde-oscuro)}
+.cart-controls span{min-width:24px;text-align:center;font-weight:bold}
+.cart-total{font-weight:bold;font-size:1.2rem;margin-top:15px;text-align:right}
+.cart-actions{display:flex;gap:10px;margin-top:20px}
+.cart-actions button{flex:1}
+  
+  /* --- SELECTOR DE COLORES MEJORADO --- */
+#colorChipsContainer {
+    display: flex;
+    flex-wrap: wrap; /* ⬅️ Permite que los colores bajen si no hay espacio */
+    gap: 12px;
+    align-items: center;
+    max-width: 210px; /* ⬅️ Ajuste para que entren 5 por fila (30px cada uno + gap) */
+    margin-top: 10px;
+}
+
+/* Asegura que los círculos no se deformen al bajar de fila */
+#colorChipsContainer span {
+    flex: 0 0 30px; 
+}
+  
+/* WhatsApp FAB - circular, solo ícono */
+#whatsappFab {
+    position: fixed !important;
+    bottom: 20px !important;
+    right: 20px !important;
+    display: grid;
+    place-items: center;
+    width: 60px;
+    height: 60px;
+    padding: 0;
+    background: var(--whatsapp);
+    color: #fff;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 4000; /* Lo subimos para que esté por encima de todo */
+    box-shadow: 0 4px 10px rgba(0,0,0,.3);
+    transition: none !important; /* Evita que se deslice al moverse */
+}
+
+#whatsappFab img {
+    height: 28px;
+    width: 28px;
+}
+
+/* Anulamos completamente cualquier efecto de la clase .lifted */
+#whatsappFab.lifted {
+    bottom: 20px !important;
+    right: 20px !important;
+    left: auto !important;
+    transform: none !important;
+}
+/* Lock background scroll when modal open */
+body.modal-open{position:fixed; width:100%; overflow:hidden; height:100vh; top:0; left:0; right:0}
+/* Footer */
+footer{background:var(--verde-oscuro);color:#fff;text-align:center;padding:20px;margin-top:40px}
+footer a{color:#fff;text-decoration:underline}
+  
+  /* Estilo para que el botón de basura sea cuadrado y la imagen no se deforme */
+.btn-basura-cuadrado {
+    position: absolute; /* Lo fijamos en la esquina */
+    top: 10px;
+    right: 10px;
+    width: 32px;
+    height: 32px;
+    padding: 6px;
+    background: #f9f9f9; /* Fondo gris claro para que se vea si la imagen es blanca */
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10; /* Por encima de todo */
+}
+
+.btn-basura-cuadrado img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    filter: brightness(0.6); /* Oscurece un poco la imagen para que se vea mejor */
+}
+  
+  /* Animación para borrar producto */
+.slide-out-left {
+    transform: translateX(-120%); /* Se mueve hacia la izquierda fuera de la pantalla */
+    opacity: 0; /* Se va desvaneciendo */
+    transition: transform 0.4s ease-out, opacity 0.4s ease-out; /* Dura 0.4 segundos */
+    pointer-events: none; /* Evita que lo toquen mientras se va */
+}
+  
+/* --- AJUSTE DE FOTOS SOLO PARA CELULAR --- */
+@media (max-width: 768px) {
+    .carousel-slide img, 
+    #detailImage img {
+        max-height: 65vh !important; /* Aquí controlas el tamaño en el celu */
+    }
+}
