@@ -235,9 +235,9 @@ const PRODUCTS=[
    tag: null,
     
   },
-  { id:'campera-impermeable-oferta', categoria:'camperas', name:'Campera Impermeable — Oferta Limitada', price:40000,
+  { id:'campera-impermeable-oferta', categoria:'camperas', name:'Campera Impermeable — Oferta Limitada', price:65000,
     image:new URL('../images/catalogo/zVHHrw0V.jpg', import.meta.url).href,
-    description:'Campera impermeable. Oferta limitada desde el talle S al doble XL. Precio promocional $35.000 (transferencia o efectivo).',
+    description:'Campera impermeable. Oferta limitada desde el talle S al doble XL.',
     features:['Impermeable de alta calidad','Disponible desde talle S hasta doble XXL','Consultar por talles especiales'],
     sizes:['S','M','L','XL','XXL'],
     tag: null,
