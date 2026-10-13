@@ -185,7 +185,7 @@ const PRODUCTS=[
    tag: null,
     
   },
-  { id:'campera-impermeable', categoria:'camperas', name:'Campera Impermeable con Capucha Desmontable Buckingham Polo Club', price:40000,
+  { id:'campera-impermeable', categoria:'camperas', name:'Campera Impermeable con Capucha Desmontable Buckingham Polo Club', price:65000,
     image:'https://i.ibb.co/r23hHjSP/Whats-App-Image-2026-04-12-at-1-37-32-PM-1.jpg',
     description:'Campera impermeable con capucha desmontable de Buckingham Polo Club. Ideal para lluvia y frío. Disponible en XL y color azul.',
     features:['Material impermeable de alta calidad','Capucha desmontable con cierre oculto','Confección resistente y cómoda','Marca Buckingham Polo Club', 'Consultar por talles especiales'],

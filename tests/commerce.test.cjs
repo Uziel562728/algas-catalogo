@@ -40,7 +40,7 @@ function fixture(stored = null, inaccessible = false, hash = '') {
 const expectedPrices = {
   'sweater-punto-ingles-yves-saint-laurent': 50000, 'sweater-super-abrigado': 20000,
   'sweater-medio-cierre-importado': 30000, 'campera-buckingham': 75000,
-  'campera-buckingham-reversible': 65000,
+  'campera-impermeable': 65000, 'campera-buckingham-reversible': 65000,
   'campera-engomada': 65000, 'campera-uniqlo-impermeable': 35000,
   'camisa-rocco': 40000, 'campera-rompevientos': 50000,
   'campera-rompevientos-buckingham-nueva': 50000, 'chaleco-impermeable': 40000,
@@ -55,7 +55,6 @@ test('Precios confirmados, catálogo sin duplicados ni Camisaco', () => {
   assert.equal(app.PRODUCTS.some(p => p.id === 'camisaco-corderito'), false);
   for (const [id, price] of Object.entries(expectedPrices)) assert.equal(app.PRODUCTS.find(p => p.id === id)?.price, price, id);
   assert.equal(app.PRODUCTS.find(p => p.id === 'campera-backing').price, 35000);
-  assert.equal(app.PRODUCTS.find(p => p.id === 'campera-impermeable').price, 40000);
   assert.equal(app.PRODUCTS.find(p => p.id === 'campera-impermeable-oferta').price, 40000);
   assert.equal(app.PRODUCTS.find(p => p.id === 'campera-capucha-desmontable').price, 40000);
   assert.equal(app.PRODUCTS.find(p => p.id === 'chomba-algodon-premium-colores').price, 29999);
@@ -107,6 +106,7 @@ test('Restauración actualiza precios y descarta productos y selecciones inváli
     { id: 'sweater-punto-ingles-yves-saint-laurent', qty: 3, size: 'M', modelo: 'Azul', price: 40000, bundleQuantity: 2, bundlePrice: 75000, name: 'Obsoleto', key: 'old' },
     { id: 'camisa-ysl', qty: 2, size: 'XL', modelo: 'modelo 16', price: 70000 },
     { id: 'chomba-hilo-pima', qty: 1, size: 'XXXL', modelo: ' Negro', price: 70000 },
+    { id: 'campera-impermeable', qty: 2, size: 'XL', modelo: null, price: 40000 },
     { id: 'camisaco-corderito', qty: 1, size: 'M', price: 49999 },
     { id: 'missing', qty: 1, size: 'M' }, null, [],
     { id: 'camisa-rocco', qty: 1, size: 'M', modelo: 'inexistente' },
@@ -116,9 +116,9 @@ test('Restauración actualiza precios y descarta productos y selecciones inváli
     { id: 'camisa-rocco', qty: true, size: 'M' }
   ];
   const cart = app.reconcileCart(legacy);
-  assert.equal(cart.length, 3);
-  assert.deepEqual(Array.from(cart, i => i.price), [50000, 50000, 60000]);
-  assert.deepEqual(Array.from(cart, i => i.qty), [3, 2, 1]);
+  assert.equal(cart.length, 4);
+  assert.deepEqual(Array.from(cart, i => i.price), [50000, 50000, 60000, 65000]);
+  assert.deepEqual(Array.from(cart, i => i.qty), [3, 2, 1, 2]);
   assert.equal(cart[0].modelo, 'Azul'); assert.equal(cart[0].size, 'M');
   assert.equal(cart[0].bundlePrice, undefined); assert.equal(cart[0].bundleQuantity, undefined);
   assert.equal(cart[0].name, app.PRODUCTS[0].name);
