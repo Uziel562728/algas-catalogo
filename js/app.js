@@ -81,7 +81,7 @@ const CURRENCY={style:'currency',currency:'ARS',maximumFractionDigits:0,minimumF
 const fmt=(n)=> n.toLocaleString('es-AR',CURRENCY);
 // State
 // Cargar el carrito desde localStorage al inicio
-let cart = (JSON.parse(localStorage.getItem('algasCart')) || []); 
+let cart = [];
 let currentProduct = null; 
 let prevScrollY = 0; 
 let selectedSize = null; 
@@ -115,10 +115,7 @@ const PRODUCTS=[
   id: 'sweater-punto-ingles-yves-saint-laurent',
   categoria: 'sweaters',
   name: 'Sweater Punto Inglés Yves Saint Laurent — Oferta Especial',
-  price: 40000,
-  oldPrice: 50000,
-  bundleQuantity: 2,
-  bundlePrice: 75000,
+  price: 50000,
   isNew: true,
   image: sweaterPuntoInglesNegroImage,
   images: [
@@ -127,13 +124,12 @@ const PRODUCTS=[
     { src: sweaterPuntoInglesBeigeImage, model: 'Beige' },
     { src: sweaterPuntoInglesVerdeAzuladoImage, model: 'Verde azulado' }
   ],
-  description: 'Sweater marca Yves Saint Laurent confeccionado en punto inglés y tejido con spandex. Oferta especial: $40.000 o 2 por $75.000.',
+  description: 'Sweater marca Yves Saint Laurent confeccionado en punto inglés y tejido con spandex. Oferta especial: $50.000.',
   features: [
     'Marca Yves Saint Laurent',
     'Tejido en punto inglés',
     'Confeccionado con spandex',
-    'Precio de oferta: $40.000',
-    'Promoción especial: 2 por $75.000'
+    'Precio de oferta: $50.000'
   ],
   sizes: ['S', 'M', 'L', 'XL', 'XXL'],
   tag: 'especial'
@@ -143,8 +139,6 @@ const PRODUCTS=[
   categoria: 'sweaters',
   name: 'Sweater Super Abrigado — Oferta Especial',
   price: 20000,
-  bundleQuantity: 2,
-  bundlePrice: 30000,
   isNew: true,
   image: sweaterSuperNegroImage,
   images: [
@@ -153,12 +147,11 @@ const PRODUCTS=[
     { src: sweaterSuperAzulImage, model: 'Azul' },
     { src: sweaterSuperBordoImage, model: 'Bordo' }
   ],
-  description: 'Sweater súper abrigado disponible en negro, gris, azul y bordo. Precio especial: $20.000 o 2 por $30.000.',
+  description: 'Sweater liviano importado',
   features: [
-    'Diseño súper abrigado',
+    'Diseño liviano importado',
     'Disponible en cuatro colores',
-    'Precio de oferta: $20.000',
-    'Promoción especial: 2 por $30.000'
+    'Precio de oferta: $20.000'
   ],
   sizes: ['S', 'M', 'L', 'XL', 'XXL'],
   tag: 'especial'
@@ -169,25 +162,22 @@ const PRODUCTS=[
   name: 'Sweater Medio Cierre Importado — Oferta Especial',
   price: 30000,
   oldPrice: 40000,
-  bundleQuantity: 2,
-  bundlePrice: 55000,
   isNew: true,
   image: sweaterBordoImage,
   images: [
     { src: sweaterBordoImage, model: 'Bordo' },
     { src: sweaterNegroImage, model: 'Negro' }
   ],
-  description: 'Sweater importado con medio cierre. Oferta especial: $30.000 o 2 por $55.000.',
+  description: 'Sweater importado con medio cierre. Oferta especial: $30.000.',
   features: [
     'Producto importado',
     'Diseño con medio cierre',
-    'Precio de oferta: $30.000',
-    'Promoción especial: 2 por $55.000'
+    'Precio de oferta: $30.000'
   ],
   sizes: ['S', 'M', 'L', 'XL', 'XXL'],
   tag: 'especial'
 },
-  { id:'campera-buckingham', categoria:'camperas', name:'Campera Doble Pechera Buckingham Polo Club', price:40000,
+  { id:'campera-buckingham', categoria:'camperas', name:'Campera Doble Pechera Buckingham Polo Club', price:75000,
     image:'https://i.ibb.co/VpBGnRRR/Whats-App-Image-2026-04-12-at-1-37-32-PM.jpg',
     description:'Campera doble pechera de la marca Buckingham Polo Club, pensada para brindar abrigo y estilo. Disponible en talle XL.',
     features:['Diseño de doble pechera para mayor protección térmica','Marca Buckingham Polo Club, símbolo de elegancia','Materiales resistentes y costuras reforzadas', 'Consultar por talles especiales'],
@@ -211,7 +201,7 @@ const PRODUCTS=[
     tag: null,
     
   },
-  { id:'campera-buckingham-reversible', categoria:'camperas', name:'Campera Buckingham Polo Club — Reversible', price:40000,
+  { id:'campera-buckingham-reversible', categoria:'camperas', name:'Campera Buckingham Polo Club — Reversible', price:65000,
     image:'https://i.ibb.co/N6xq5CmQ/Whats-App-Image-2026-04-12-at-1-37-33-PM-1.jpg',
     description:'Campera reversible de Buckingham Polo Club, ideal para diferentes estilos y situaciones. Disponible en talles S a doble XL.',
     features:['Diseño reversible para dos estilos','Marca Buckingham Polo Club, sinónimo de calidad','Ideal para climas fríos y moderados','Disponible en talles desde S a XXL', 'Consultar por talles especiales' ],
@@ -219,7 +209,7 @@ const PRODUCTS=[
     tag: null,
     
   },
-  { id:'campera-engomada', categoria:'camperas', name:'Campera Engomada Buckingham Polo Club', price:40000,
+  { id:'campera-engomada', categoria:'camperas', name:'Campera Engomada Buckingham Polo Club', price:65000,
     image:'https://i.ibb.co/qYvsh4fH/Whats-App-Image-2026-04-12-at-1-37-33-PM-4.jpg',
     description:'Campera engomada Buckingham Polo Club, del talle S al doble XL. Terminación engomada con excelente resistencia y estilo.',
     features:['Terminación engomada de alta resistencia','Marca Buckingham Polo Club','Disponible del S al XXL', 'Consultar por talles especiales' , 'Interior cómodo para uso diario'],
@@ -235,7 +225,7 @@ const PRODUCTS=[
     tag: null,
     
   },
-  { id:'campera-uniqlo-impermeable', categoria:'camperas', name:'Campera Impermeable Símil Uniqlo Buckingham Polo Club', price:25000,
+  { id:'campera-uniqlo-impermeable', categoria:'camperas', name:'Campera Impermeable Símil Uniqlo Buckingham Polo Club', price:35000,
     image:'https://i.ibb.co/rR9VsKXm/Whats-App-Image-2026-04-12-at-1-37-34-PM.jpg',
     description:'Campera impermeable símil Uniqlo de Buckingham Polo Club, disponible del talle S al XXL. ',
     features:['Inspirada en el estilo Uniqlo','Material impermeable de alta calidad','Disponible del talle S al XXL','Confección cómoda y resistente','Consultar por talles especiales'],
@@ -251,41 +241,24 @@ const PRODUCTS=[
     tag: null,
     
   },
-  { id:'campera-rompevientos', categoria:'camperas', name:'Rompevientos Buckingham Polo Club', price:25000,
+  { id:'campera-rompevientos', categoria:'camperas', name:'Rompevientos Buckingham Polo Club', price:50000,
     image:'https://i.ibb.co/DPQ8mYZm/Imagen-de-Whats-App-2025-09-04-a-las-10-33-16-0ff45917.jpg',
-    description:'Varios modelos, talles y colores, del Small al XXL. ¡Increíble oferta $40.000!',
+    description:'Varios modelos, talles y colores, del Small al XXL. ¡Increíble oferta $50.000!',
     features:['Rompevientos liviano','Varios modelos y colores','Talles S al XXL', 'Consultar por talles especiales' ,'Secado rápido','Excelente relación precio-calidad'],
     sizes:['S','M','L','XL','XXL'],
    tag: null,
     
   },
-  { id:'chaleco-impermeable', categoria:'chalecos', name:'Chaleco Impermeable Buckingham Polo Club', price:29999,
+  { id:'chaleco-impermeable', categoria:'chalecos', name:'Chaleco Impermeable Buckingham Polo Club', price:40000,
     image:'https://i.ibb.co/JwPW5XPS/Imagen-de-Whats-App-2025-09-04-a-las-10-33-17-ba7943c4.jpg',
-    description:'Único color. Precio $35.000.',
+    description:'Único color. Precio $40.000.',
     features:['Tejido impermeable','Único color','Marca Buckingham Polo Club','Liviano y cómodo','Ideal para lluvia y viento'],
     sizes:['S','M','L','XL','XXL'],
     tag: null,
     
   },
-{
-  id: 'camisaco-corderito',
-  categoria: 'camperas',
-  name: 'Camisaco forrado en Corderito marca Devrè',
-  price: 49999,
-  soldOut: true,
 
-  image: 'https://i.ibb.co/jqdFsKW/Imagen-de-Whats-App-2025-09-04-a-las-10-33-17-1b371c5b.jpg',
-  description: 'Producto agotado.',
-  features: [
-    'Forrado en corderito',
-    'Producto agotado',
-    'Del S al XL',
-    'Abrigo suave y cómodo'
-  ],
-  sizes: ['S', 'M', 'L', 'XL'],
-  tag: null
-},
-  { id:'remera-mc-premium', categoria:'remeras', name:'Remera Manga Corta - Primera Marca (Algodón Peinado)', price:15000,
+  { id:'remera-mc-premium', categoria:'remeras', name:'Remera Manga Corta - Primera Marca (Algodón Peinado)', price:25000,
     image:'https://i.ibb.co/k62gp4Zw/Imagen-de-Whats-App-2025-09-04-a-las-22-34-46-2e91c20e.jpg',
     description:'Oferta especial. Algodón peinado, calidad primera marca.',
     features:['Algodón peinado','Primera marca','Oferta especial','Corte clásico y cómodo'],
@@ -293,7 +266,7 @@ const PRODUCTS=[
     tag: null,
     
   },
-  { id:'camisa-rochas', categoria:'camisas', name:'Camisa primera marca Rochas importada', price:65000,
+  { id:'camisa-rochas', categoria:'camisas', name:'Camisa primera marca Rochas importada', price:80000,
     image:'https://i.ibb.co/qMzbzg3g/Imagen-de-Whats-App-2025-09-09-a-las-23-41-40-dc17556f.jpg',
     images:[
       {src:'https://i.ibb.co/qMzbzg3g/Imagen-de-Whats-App-2025-09-09-a-las-23-41-40-dc17556f.jpg', model:'blanca con rayas'},
@@ -311,7 +284,7 @@ const PRODUCTS=[
     tag: null,
     
   },
-  { id:'camisa-rocco', categoria:'camisas', name:'Camisa marca Rocco — Oferta especial', price:35000,
+  { id:'camisa-rocco', categoria:'camisas', name:'Camisa marca Rocco — Oferta especial', price:40000,
     image:'https://i.ibb.co/gZv8X62R/Imagen-de-Whats-App-2025-09-10-a-las-16-31-37-d034c8e0.jpg',
     images:[
       {src:'https://i.ibb.co/gZv8X62R/Imagen-de-Whats-App-2025-09-10-a-las-16-31-37-d034c8e0.jpg', model:'blanca con rayas'},
@@ -320,13 +293,13 @@ const PRODUCTS=[
       {src:'https://i.ibb.co/tTmYf0T4/Imagen-de-Whats-App-2025-09-10-a-las-16-31-38-dd398098.jpg', model:'blanca lisa'},
       {src:'https://i.ibb.co/23M4Gwv0/Imagen-de-Whats-App-2025-09-10-a-las-16-31-39-0476913f.jpg', model:'negra con rayas'}
     ],
-    description:'Camisas marca Rocco. Oferta especial $39.999. Talles del S al XXL.',
+    description:'Camisas marca Rocco. Oferta especial $40.000. Talles del S al XXL.',
     features:['Marca Rocco','Varios tonos y diseños','Talles del S al XXL'],
     sizes:['S','M','L','XL','XXL'],
     tag: null,
     
   },
-  { id:'camisa-ysl', categoria:'camisas', name:'Camisa Yves Saint Laurent — 100% Algodón', priceRange:[50000,70000],
+  { id:'camisa-ysl', categoria:'camisas', name:'Camisa Yves Saint Laurent — 100% Algodón', price:50000,
     image:'https://i.ibb.co/tM3rFddt/Imagen-de-Whats-App-2025-09-15-a-las-16-22-09-bd64a629.jpg',
     images:[
       {src:'https://i.ibb.co/tM3rFddt/Imagen-de-Whats-App-2025-09-15-a-las-16-22-09-bd64a629.jpg', model:'modelo 01'},
@@ -385,7 +358,7 @@ const PRODUCTS=[
     id: 'traje-thomson-williams-soft', // ID único
     categoria: 'trajes', // Nueva categoría
     name: 'Traje Soft Thomson & Williams', // Nombre del producto
-    price: 199999, // Precio de lista (tarjeta)
+    price: 350000, // Precio de lista (tarjeta)
 
     // --- IMÁGENES ---
     // Imagen principal para la grilla (Verde)
@@ -418,11 +391,11 @@ const PRODUCTS=[
     id: 'chomba-hilo-pima',
     categoria: 'chombas',
     name: 'Chomba Hilo Pima Peruano Original Thomson & Williams',
-    price: 35000, // Precio base
+    price: 60000, // Precio base
     
     // Precios según talle
     sizePrices: {
-      'M': 60000, 'L': 60000, 'XL': 60000, 'XXL': 60000, 'XXXL': 70000 
+      'M': 60000, 'L': 60000, 'XL': 60000, 'XXL': 60000, 'XXXL': 60000
     },
     
     image: 'https://i.ibb.co/Y40RWhpM/Imagen-de-Whats-App-2025-11-24-a-las-16-16-56-ca4ca3ea.jpg',
@@ -452,7 +425,7 @@ const PRODUCTS=[
   id: 'campera-rompevientos-buckingham-nueva', 
   categoria: 'camperas', 
   name: 'Campera Rompevientos Buckingham Polo Club - Impermeable', 
-  price: 25000, // Precio Tarjeta
+  price: 50000, // Precio Tarjeta
   
   // Imagen principal (usamos la primera para la grilla)
   image: 'https://i.ibb.co/MkWF08Lm/Imagen-de-Whats-App-2025-12-14-a-las-14-31-59-f5d77cab.jpg',
@@ -480,7 +453,6 @@ const PRODUCTS=[
 // Helpers
 const priceLabel = (p)=>{ if(typeof p.price==='number') return fmt(p.price); if(Array.isArray(p.priceRange)&&p.priceRange.length===2) return fmt(p.priceRange[0])+'–'+fmt(p.priceRange[1]); return 'Consultar precio'; };
 const isOfferProduct = (p) => Boolean(
-  p.bundlePrice ||
   p.oldPrice ||
   p.fakeDiscount ||
   p.tag === 'especial' ||
@@ -491,15 +463,9 @@ const sortCatalogProducts = (products) => products
   .map((product, index) => ({ product, index }))
   .sort((a, b) => catalogPriority(b.product) - catalogPriority(a.product) || a.index - b.index)
   .map(({ product }) => product);
-const bundleLineTotal = (item) => {
-  if (item.price == null || isNaN(item.price)) return 0;
-  if (item.bundleQuantity > 1 && typeof item.bundlePrice === 'number') {
-    const bundles = Math.floor(item.qty / item.bundleQuantity);
-    const remainder = item.qty % item.bundleQuantity;
-    return bundles * item.bundlePrice + remainder * item.price;
-  }
-  return item.price * item.qty;
-};
+const lineTotal = (item) => Number.isFinite(item.price) && Number.isSafeInteger(item.qty) && item.qty > 0
+  ? item.price * item.qty
+  : 0;
 const makeBadge = (tag)=> tag===''?"<span class='badge '></span>":(tag==='especial'?"<span class='badge especial'>ESPECIAL</span>":"");
 const card = (p) => {
     if (p.soldOut) {
@@ -566,22 +532,7 @@ const card = (p) => {
     const imageHTML = `
         <div style="position:relative;">
             <img referrerpolicy="no-referrer" src="${p.image}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/300x400?text=Sin+Imagen'">
-            ${p.bundlePrice ? `
-                <span style="
-                    position:absolute;
-                    top:10px;
-                    left:10px;
-                    background:#d97706;
-                    color:#fff;
-                    padding:6px 10px;
-                    border-radius:5px;
-                    font-size:.8rem;
-                    font-weight:bold;
-                    box-shadow:0 2px 6px rgba(0,0,0,.2);
-                ">
-                    ${p.bundleQuantity} POR ${fmt(p.bundlePrice)}
-                </span>
-            ` : ''}
+
         </div>
     `;
 
@@ -663,10 +614,10 @@ function buildCarousel(images){
 // === Precios por modelo (YSL) ===
 const MODEL_PRICES = {
   'camisa-ysl': {
-    'modelo 01': 50000, 'modelo 02': 60000, 'modelo 03': 50000, 'modelo 04': 50000, 'modelo 05': 60000,
-    'modelo 06': 50000, 'modelo 07': 60000, 'modelo 08': 60000, 'modelo 09': 50000, 'modelo 10': 50000,
-    'modelo 11': 50000, 'modelo 12': 50000, 'modelo 13': 60000, 'modelo 14': 70000, 'modelo 15': 60000,
-    'modelo 16': 70000, 'modelo 17': 60000
+    'modelo 01': 50000, 'modelo 02': 50000, 'modelo 03': 50000, 'modelo 04': 50000, 'modelo 05': 50000,
+    'modelo 06': 50000, 'modelo 07': 50000, 'modelo 08': 50000, 'modelo 09': 50000, 'modelo 10': 50000,
+    'modelo 11': 50000, 'modelo 12': 50000, 'modelo 13': 50000, 'modelo 14': 50000, 'modelo 15': 50000,
+    'modelo 16': 50000, 'modelo 17': 50000
   }
 };
 // Helpers de precio en detalle (sin tocar tu lógica de render)
@@ -691,7 +642,7 @@ function updateDetailPriceUI(){
 
 el.style.color = '';
   
-  // Aquí está el truco: ahora siempre usa getPriceForCurrent que ya sabe lo del talle XXXL
+  // Aquí está el truco: usa el mismo precio vigente que el carrito
   const priceNum = getPriceForCurrent(currentProduct);
   
   if(typeof priceNum==='number'){
@@ -699,7 +650,6 @@ el.style.color = '';
       el.innerHTML = `
         <span class="detail-price-old">${fmt(currentProduct.oldPrice)}</span>
         <span>${fmt(priceNum)}</span>
-        ${currentProduct.bundlePrice ? `<span class="detail-bundle-offer">o ${currentProduct.bundleQuantity} por ${fmt(currentProduct.bundlePrice)}</span>` : ''}
       `;
     } else {
       el.textContent = fmt(priceNum);
@@ -1012,8 +962,8 @@ function updateCartDisplay(){
   let total = 0;
 
   cart.forEach((item,i)=>{
-    const lineTotal = bundleLineTotal(item);
-    total += lineTotal;
+    const subtotal = lineTotal(item);
+    total += subtotal;
 
     let itemImageSrc = item.image;
     const originalProduct = PRODUCTS.find(p => p.id === item.id);
@@ -1063,7 +1013,7 @@ function updateCartDisplay(){
       </div>
 
       <div class="cart-price-absolute">
-         ${(item.price==null || isNaN(item.price)) ? 'Consultar' : fmt(lineTotal)}
+         ${(item.price==null || isNaN(item.price)) ? 'Consultar' : fmt(subtotal)}
       </div>
 
 
@@ -1172,17 +1122,15 @@ function checkout() {
     lines.push(`  Talle ${it.size || '-'}: ${it.qty} unidades`);
     if (typeof it.price === 'number' && !isNaN(it.price)) {
       lines.push(`  Precio unitario: ${fmt(it.price)}`);
-      lines.push(`  Subtotal: ${fmt(bundleLineTotal(it))}`);
-      if (it.bundlePrice && it.qty >= it.bundleQuantity) {
-        lines.push(`  Promo aplicada: ${it.bundleQuantity} por ${fmt(it.bundlePrice)}`);
-      }
+      lines.push(`  Subtotal: ${fmt(lineTotal(it))}`);
+
     } else {
       lines.push(`  Precio: A consultar`);
     }
     lines.push('');
   });
 
- const total = cart.reduce((s, it) => s + bundleLineTotal(it), 0);
+ const total = cart.reduce((s, it) => s + lineTotal(it), 0);
   lines.push('━━━━━━━━━━━━━━━━━━━━');
   // CORREGIDO: Usar backticks para template literal
   lines.push(`💰 TOTAL: ${fmt(total)}`);
@@ -1262,11 +1210,13 @@ window.addEventListener('popstate', (event)=>{
 });
 // Init
 document.addEventListener('DOMContentLoaded', ()=>{
+  cart = restoreCart();
+  saveCart();
   // window.scrollTo(0,0); setTimeout(()=>window.scrollTo(0,0),0); // Puede ser problemático, mejor quitar
   buildIndex();
   renderProductsGrid(PRODUCTS);
   showCamisasPromoInGrid('all');
-  updateCartDisplay(); // Actualizar carrito por si había algo guardado (no implementado aquí)
+  updateCartDisplay(); // Mostrar el carrito reconciliado con el catálogo vigente
 
   const hash = location.hash || '';
   if(hash.startsWith('#detalle-')){
@@ -1300,27 +1250,66 @@ function getCurrentModelLabel(p){
   return null;
 }
 
-function getPriceForCurrent(p){
-  try{
-    if(!p) return null;
+// Resolución compartida por detalle, carrito y restauración del almacenamiento.
+function resolveProductPrice(product, size = null, model = null) {
+  if (!product) return null;
+  let price = product.price;
+  if (product.sizePrices && size && Object.hasOwn(product.sizePrices, size)) {
+    price = product.sizePrices[size];
+  } else if (product.id === 'camisa-ysl' && model && Object.hasOwn(MODEL_PRICES['camisa-ysl'], model)) {
+    price = MODEL_PRICES['camisa-ysl'][model];
+  }
+  return typeof price === 'number' && Number.isFinite(price) && price > 0 ? price : null;
+}
 
-    // 1. PRIORIDAD MÁXIMA: Si el talle tiene un precio especial (como el XXXL de 70k), devolvemos ese y listo.
-    if (p.sizePrices && selectedSize && typeof p.sizePrices[selectedSize] === 'number') {
-        return p.sizePrices[selectedSize];
+function getPriceForCurrent(p) {
+  return resolveProductPrice(p, selectedSize, getCurrentModelLabel(p));
+}
+
+function reconcileCart(savedCart) {
+  if (!Array.isArray(savedCart)) return [];
+  const reconciled = [];
+  for (const saved of savedCart) {
+    if (!saved || typeof saved !== 'object' || Array.isArray(saved)) continue;
+    const product = PRODUCTS.find(p => p.id === saved.id);
+    if (!product || product.soldOut) continue;
+    const qty = typeof saved.qty === 'number' || typeof saved.qty === 'string' ? Number(saved.qty) : NaN;
+    if (!Number.isSafeInteger(qty) || qty <= 0) continue;
+    const size = typeof saved.size === 'string' || typeof saved.size === 'number' ? String(saved.size) : null;
+    if (!size || !product.sizes?.includes(size)) continue;
+    const models = (product.images || []).map(image => image.model || image.alt).filter(Boolean);
+    let model = saved.modelo ?? null;
+    if (models.length) {
+      if (model === null || model === '') model = models[0];
+      if (!models.includes(model)) continue;
+    } else if (model !== null && model !== '') {
+      continue;
+    } else {
+      model = null;
     }
-
-    // 2. SEGUNDA PRIORIDAD: Si es Camisa YSL y tiene precio por modelo.
-    const currentModel = getCurrentModelLabel(p);
-    if (p.id==='camisa-ysl' && currentModel && MODEL_PRICES['camisa-ysl'] && typeof MODEL_PRICES['camisa-ysl'][currentModel]==='number'){
-      return MODEL_PRICES['camisa-ysl'][currentModel];
+    const price = resolveProductPrice(product, size, model);
+    if (price === null) continue;
+    const key = product.id + '::' + (model || 'default') + '::' + size;
+    const existing = reconciled.find(item => item.key === key);
+    if (existing) {
+      if (Number.isSafeInteger(existing.qty + qty)) existing.qty += qty;
+      continue;
     }
+    // Solo el catálogo vigente aporta datos comerciales; el almacenamiento aporta selección y cantidad.
+    const item = { ...product, key, size, modelo: model, qty, price };
+    delete item.images;
+    reconciled.push(item);
+  }
+  return reconciled;
+}
 
-    // 3. TERCERA PRIORIDAD: Precio base del producto.
-    if (typeof p.price==='number') return p.price;
-
-    return null;
-  }catch(e){ console.error("Error en getPriceForCurrent:", e); }
-  return null;
+function restoreCart() {
+  try {
+    return reconcileCart(JSON.parse(localStorage.getItem('algasCart')));
+  } catch (error) {
+    console.warn('No se pudo restaurar el carrito guardado:', error);
+    return [];
+  }
 }
 
 function updateModelAndPrice() {
