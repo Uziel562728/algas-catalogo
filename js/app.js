@@ -99,6 +99,8 @@ function unlockBodyScroll(){
   document.body.style.top='';
   window.scrollTo(0, y);
 }
+const IMAGE_FALLBACK = new URL('../images/image-unavailable.svg', import.meta.url).href;
+const DELETE_ICON = new URL('../images/eliminar.png', import.meta.url).href;
 // ===== CATÁLOGO =====
 const sweaterBordoImage = new URL('../images/sweater medio cierre/sweater medio cierre color bordo claro .png', import.meta.url).href;
 const sweaterNegroImage = new URL('../images/sweater medio cierre/sweater medio cierre color negro .png', import.meta.url).href;
@@ -178,7 +180,7 @@ const PRODUCTS=[
   tag: 'especial'
 },
   { id:'campera-buckingham', categoria:'camperas', name:'Campera Doble Pechera Buckingham Polo Club', price:75000,
-    image:'https://i.ibb.co/VpBGnRRR/Whats-App-Image-2026-04-12-at-1-37-32-PM.jpg',
+    image:new URL('../images/catalogo/VpBGnRRR.jpg', import.meta.url).href,
     description:'Campera doble pechera de la marca Buckingham Polo Club, pensada para brindar abrigo y estilo. Disponible en talle XL.',
     features:['Diseño de doble pechera para mayor protección térmica','Marca Buckingham Polo Club, símbolo de elegancia','Materiales resistentes y costuras reforzadas', 'Consultar por talles especiales'],
     sizes:['S','M','L','XL','XXL'],
@@ -186,7 +188,7 @@ const PRODUCTS=[
     
   },
   { id:'campera-impermeable', categoria:'camperas', name:'Campera Impermeable con Capucha Desmontable Buckingham Polo Club', price:65000,
-    image:'https://i.ibb.co/r23hHjSP/Whats-App-Image-2026-04-12-at-1-37-32-PM-1.jpg',
+    image:new URL('../images/catalogo/r23hHjSP.jpg', import.meta.url).href,
     description:'Campera impermeable con capucha desmontable de Buckingham Polo Club. Ideal para lluvia y frío. Disponible en XL y color azul.',
     features:['Material impermeable de alta calidad','Capucha desmontable con cierre oculto','Confección resistente y cómoda','Marca Buckingham Polo Club', 'Consultar por talles especiales'],
     sizes:['S','M','L','XL','XXL'],
@@ -194,7 +196,7 @@ const PRODUCTS=[
     
   },
   { id:'campera-backing', categoria:'camperas', name:'Campera Backing Polo Club — Oferta Especial', price:35000,
-    image:'https://i.ibb.co/cXgH4Vw3/Whats-App-Image-2026-04-12-at-1-37-33-PM.jpg',
+    image:new URL('../images/catalogo/cXgH4Vw3.jpg', import.meta.url).href,
     description:'Campera Backing Polo Club en color único. Oferta especial desde talle S hasta doble XL.',
     features:['Diseño exclusivo de Backing Polo Club','Oferta limitada a un único color','Disponible desde talle S hasta doble XXL','Confección resistente y cómoda','Precio promocional especial', 'Consultar por talles especiales'],
     sizes:['S','M','L','XL','XXL'],
@@ -202,7 +204,7 @@ const PRODUCTS=[
     
   },
   { id:'campera-buckingham-reversible', categoria:'camperas', name:'Campera Buckingham Polo Club — Reversible', price:65000,
-    image:'https://i.ibb.co/N6xq5CmQ/Whats-App-Image-2026-04-12-at-1-37-33-PM-1.jpg',
+    image:new URL('../images/catalogo/N6xq5CmQ.jpg', import.meta.url).href,
     description:'Campera reversible de Buckingham Polo Club, ideal para diferentes estilos y situaciones. Disponible en talles S a doble XL.',
     features:['Diseño reversible para dos estilos','Marca Buckingham Polo Club, sinónimo de calidad','Ideal para climas fríos y moderados','Disponible en talles desde S a XXL', 'Consultar por talles especiales' ],
     sizes:['S','M','L','XL','XXL'],
@@ -210,7 +212,7 @@ const PRODUCTS=[
     
   },
   { id:'campera-engomada', categoria:'camperas', name:'Campera Engomada Buckingham Polo Club', price:65000,
-    image:'https://i.ibb.co/qYvsh4fH/Whats-App-Image-2026-04-12-at-1-37-33-PM-4.jpg',
+    image:new URL('../images/catalogo/qYvsh4fH.jpg', import.meta.url).href,
     description:'Campera engomada Buckingham Polo Club, del talle S al doble XL. Terminación engomada con excelente resistencia y estilo.',
     features:['Terminación engomada de alta resistencia','Marca Buckingham Polo Club','Disponible del S al XXL', 'Consultar por talles especiales' , 'Interior cómodo para uso diario'],
     sizes:['S','M','L','XL','XXL'],
@@ -218,7 +220,7 @@ const PRODUCTS=[
     
   },
   { id:'campera-capucha-desmontable', categoria:'camperas', name:'Campera Buckingham Polo Club — Capucha Desmontable', price:40000,
-    image:'https://i.ibb.co/Xxdq6f5c/Whats-App-Image-2026-04-12-at-1-37-33-PM-6.jpg',
+    image:new URL('../images/catalogo/Xxdq6f5c.jpg', import.meta.url).href,
     description:'Campera con capucha desmontable e impermeable de Buckingham Polo Club, con precio increíble. Ideal para lluvia y uso diario.',
     features:['Capucha desmontable para mayor versatilidad','Tejido impermeable para lluvia','Marca Buckingham Polo Club','Confección cómoda para uso diario','Consultar por talles especiales'],
     sizes:['S','M','L','XL','XXL'],
@@ -226,7 +228,7 @@ const PRODUCTS=[
     
   },
   { id:'campera-uniqlo-impermeable', categoria:'camperas', name:'Campera Impermeable Símil Uniqlo Buckingham Polo Club', price:35000,
-    image:'https://i.ibb.co/rR9VsKXm/Whats-App-Image-2026-04-12-at-1-37-34-PM.jpg',
+    image:new URL('../images/catalogo/rR9VsKXm.jpg', import.meta.url).href,
     description:'Campera impermeable símil Uniqlo de Buckingham Polo Club, disponible del talle S al XXL. ',
     features:['Inspirada en el estilo Uniqlo','Material impermeable de alta calidad','Disponible del talle S al XXL','Confección cómoda y resistente','Consultar por talles especiales'],
     sizes:['S','M','L','XL','XXL'],
@@ -234,7 +236,7 @@ const PRODUCTS=[
     
   },
   { id:'campera-impermeable-oferta', categoria:'camperas', name:'Campera Impermeable — Oferta Limitada', price:40000,
-    image:'https://i.ibb.co/zVHHrw0V/Imagen-de-Whats-App-2025-09-04-a-las-11-06-23-83ac75f2.jpg',
+    image:new URL('../images/catalogo/zVHHrw0V.jpg', import.meta.url).href,
     description:'Campera impermeable. Oferta limitada desde el talle S al doble XL. Precio promocional $35.000 (transferencia o efectivo).',
     features:['Impermeable de alta calidad','Disponible desde talle S hasta doble XXL','Consultar por talles especiales'],
     sizes:['S','M','L','XL','XXL'],
@@ -242,7 +244,7 @@ const PRODUCTS=[
     
   },
   { id:'campera-rompevientos', categoria:'camperas', name:'Rompevientos Buckingham Polo Club', price:50000,
-    image:'https://i.ibb.co/DPQ8mYZm/Imagen-de-Whats-App-2025-09-04-a-las-10-33-16-0ff45917.jpg',
+    image:new URL('../images/catalogo/DPQ8mYZm.jpg', import.meta.url).href,
     description:'Varios modelos, talles y colores, del Small al XXL. ¡Increíble oferta $50.000!',
     features:['Rompevientos liviano','Varios modelos y colores','Talles S al XXL', 'Consultar por talles especiales' ,'Secado rápido','Excelente relación precio-calidad'],
     sizes:['S','M','L','XL','XXL'],
@@ -250,7 +252,7 @@ const PRODUCTS=[
     
   },
   { id:'chaleco-impermeable', categoria:'chalecos', name:'Chaleco Impermeable Buckingham Polo Club', price:40000,
-    image:'https://i.ibb.co/JwPW5XPS/Imagen-de-Whats-App-2025-09-04-a-las-10-33-17-ba7943c4.jpg',
+    image:new URL('../images/catalogo/JwPW5XPS.jpg', import.meta.url).href,
     description:'Único color. Precio $40.000.',
     features:['Tejido impermeable','Único color','Marca Buckingham Polo Club','Liviano y cómodo','Ideal para lluvia y viento'],
     sizes:['S','M','L','XL','XXL'],
@@ -259,7 +261,7 @@ const PRODUCTS=[
   },
 
   { id:'remera-mc-premium', categoria:'remeras', name:'Remera Manga Corta - Primera Marca (Algodón Peinado)', price:25000,
-    image:'https://i.ibb.co/k62gp4Zw/Imagen-de-Whats-App-2025-09-04-a-las-22-34-46-2e91c20e.jpg',
+    image:new URL('../images/catalogo/k62gp4Zw.jpg', import.meta.url).href,
     description:'Oferta especial. Algodón peinado, calidad primera marca.',
     features:['Algodón peinado','Primera marca','Oferta especial','Corte clásico y cómodo'],
     sizes:['XS','S','M','L','XL','XXL'],
@@ -267,16 +269,16 @@ const PRODUCTS=[
     
   },
   { id:'camisa-rochas', categoria:'camisas', name:'Camisa primera marca Rochas importada', price:80000,
-    image:'https://i.ibb.co/qMzbzg3g/Imagen-de-Whats-App-2025-09-09-a-las-23-41-40-dc17556f.jpg',
+    image:new URL('../images/catalogo/qMzbzg3g.jpg', import.meta.url).href,
     images:[
-      {src:'https://i.ibb.co/qMzbzg3g/Imagen-de-Whats-App-2025-09-09-a-las-23-41-40-dc17556f.jpg', model:'blanca con rayas'},
-      {src:'https://i.ibb.co/BHFDdnGT/Imagen-de-Whats-App-2025-09-09-a-las-23-41-40-cdb0bb08.jpg', model:'blanca con cuadraditos azules'},
-      {src:'https://i.ibb.co/DDpnsxc3/Imagen-de-Whats-App-2025-09-09-a-las-23-41-40-a689e4c3.jpg', model:'blanca con cuadraditos celestes'},
-      {src:'https://i.ibb.co/0yzWkbfg/Imagen-de-Whats-App-2025-09-09-a-las-23-41-40-9e7fafbe.jpg', model:'gris con cuadraditos'},
-      {src:'https://i.ibb.co/mVQMfzy2/Imagen-de-Whats-App-2025-09-09-a-las-23-41-41-e4f63b4d.jpg', model:'celeste rayada'},
-      {src:'https://i.ibb.co/sDTfj5w/Imagen-de-Whats-App-2025-09-11-a-las-17-19-20-3f1a47d0.jpg', model:'azul rayada'},
-      {src:'https://i.ibb.co/tTMVZ4y5/Imagen-de-Whats-App-2025-09-11-a-las-17-19-21-22aaa98f.jpg', model:'marron lisa'},
-      {src:'https://i.ibb.co/Mx2F0PXH/Imagen-de-Whats-App-2025-09-11-a-las-17-19-21-9ea15da8.jpg', model:'blanca lisa'}
+      {src:new URL('../images/catalogo/qMzbzg3g.jpg', import.meta.url).href, model:'blanca con rayas'},
+      {src:new URL('../images/catalogo/BHFDdnGT.jpg', import.meta.url).href, model:'blanca con cuadraditos azules'},
+      {src:new URL('../images/catalogo/DDpnsxc3.jpg', import.meta.url).href, model:'blanca con cuadraditos celestes'},
+      {src:new URL('../images/catalogo/0yzWkbfg.jpg', import.meta.url).href, model:'gris con cuadraditos'},
+      {src:new URL('../images/catalogo/mVQMfzy2.jpg', import.meta.url).href, model:'celeste rayada'},
+      {src:new URL('../images/catalogo/sDTfj5w.jpg', import.meta.url).href, model:'azul rayada'},
+      {src:new URL('../images/catalogo/tTMVZ4y5.jpg', import.meta.url).href, model:'marron lisa'},
+      {src:new URL('../images/catalogo/Mx2F0PXH.jpg', import.meta.url).href, model:'blanca lisa'}
     ],
     description:'Marca Rochas. 80% algodón. Varios tonos. Talles del S al XXL.',
     features:['Marca Rochas','80% algodón','Varios tonos disponibles','Talles del S al XXL','Consultá el precio'],
@@ -285,13 +287,13 @@ const PRODUCTS=[
     
   },
   { id:'camisa-rocco', categoria:'camisas', name:'Camisa marca Rocco — Oferta especial', price:40000,
-    image:'https://i.ibb.co/gZv8X62R/Imagen-de-Whats-App-2025-09-10-a-las-16-31-37-d034c8e0.jpg',
+    image:new URL('../images/catalogo/gZv8X62R.jpg', import.meta.url).href,
     images:[
-      {src:'https://i.ibb.co/gZv8X62R/Imagen-de-Whats-App-2025-09-10-a-las-16-31-37-d034c8e0.jpg', model:'blanca con rayas'},
-      {src:'https://i.ibb.co/mrM7mpgh/Imagen-de-Whats-App-2025-09-10-a-las-16-31-38-4ab03b07.jpg', model:'negra con cuadraditos'},
-      {src:'https://i.ibb.co/xq52DPBJ/Imagen-de-Whats-App-2025-09-10-a-las-16-31-38-99aed11c.jpg', model:'celeste lisa'},
-      {src:'https://i.ibb.co/tTmYf0T4/Imagen-de-Whats-App-2025-09-10-a-las-16-31-38-dd398098.jpg', model:'blanca lisa'},
-      {src:'https://i.ibb.co/23M4Gwv0/Imagen-de-Whats-App-2025-09-10-a-las-16-31-39-0476913f.jpg', model:'negra con rayas'}
+      {src:new URL('../images/catalogo/gZv8X62R.jpg', import.meta.url).href, model:'blanca con rayas'},
+      {src:new URL('../images/catalogo/mrM7mpgh.jpg', import.meta.url).href, model:'negra con cuadraditos'},
+      {src:new URL('../images/catalogo/xq52DPBJ.jpg', import.meta.url).href, model:'celeste lisa'},
+      {src:new URL('../images/catalogo/tTmYf0T4.jpg', import.meta.url).href, model:'blanca lisa'},
+      {src:new URL('../images/catalogo/23M4Gwv0.jpg', import.meta.url).href, model:'negra con rayas'}
     ],
     description:'Camisas marca Rocco. Oferta especial $40.000. Talles del S al XXL.',
     features:['Marca Rocco','Varios tonos y diseños','Talles del S al XXL'],
@@ -300,25 +302,25 @@ const PRODUCTS=[
     
   },
   { id:'camisa-ysl', categoria:'camisas', name:'Camisa Yves Saint Laurent — 100% Algodón', price:50000,
-    image:'https://i.ibb.co/tM3rFddt/Imagen-de-Whats-App-2025-09-15-a-las-16-22-09-bd64a629.jpg',
+    image:new URL('../images/catalogo/tM3rFddt.jpg', import.meta.url).href,
     images:[
-      {src:'https://i.ibb.co/tM3rFddt/Imagen-de-Whats-App-2025-09-15-a-las-16-22-09-bd64a629.jpg', model:'modelo 01'},
-      {src:'https://i.ibb.co/LzyYt9L1/Imagen-de-Whats-App-2025-09-15-a-las-16-22-10-14e1a743.jpg', model:'modelo 02'},
-      {src:'https://i.ibb.co/xqGrQLNV/Imagen-de-Whats-App-2025-09-15-a-las-16-22-10-d9c3ca50.jpg', model:'modelo 03'},
-      {src:'https://i.ibb.co/YBzK92Bw/Imagen-de-Whats-App-2025-09-15-a-las-16-22-10-478a6c88.jpg', model:'modelo 04'},
-      {src:'https://i.ibb.co/mV3NyWv7/Imagen-de-Whats-App-2025-09-15-a-las-16-22-10-62b4189e.jpg', model:'modelo 05'},
-      {src:'https://i.ibb.co/27LnnSdj/Imagen-de-Whats-App-2025-09-15-a-las-16-22-11-3591d70d.jpg', model:'modelo 06'},
-      {src:'https://i.ibb.co/pvhHXhpx/Imagen-de-Whats-App-2025-09-15-a-las-16-22-11-c53aee86.jpg', model:'modelo 07'},
-      {src:'https://i.ibb.co/xcFR2w4/Imagen-de-Whats-App-2025-09-15-a-las-16-22-11-3050943c.jpg', model:'modelo 08'},
-      {src:'https://i.ibb.co/3ydTxVQ1/Imagen-de-Whats-App-2025-09-15-a-las-16-22-12-feb4e7e4.jpg', model:'modelo 09'},
-      {src:'https://i.ibb.co/TxWMdDVR/Imagen-de-Whats-App-2025-09-15-a-las-16-22-12-d79c3e84.jpg', model:'modelo 10'},
-      {src:'https://i.ibb.co/BVxSvKFC/Imagen-de-Whats-App-2025-09-15-a-las-16-22-12-abdb9f42.jpg', model:'modelo 11'},
-      {src:'https://i.ibb.co/8LTFT59N/Imagen-de-Whats-App-2025-09-15-a-las-16-22-13-744a2e8e.jpg', model:'modelo 12'},
-      {src:'https://i.ibb.co/qqfVWnC/Imagen-de-Whats-App-2025-09-15-a-las-16-22-13-35fe9016.jpg', model:'modelo 13'},
-      {src:'https://i.ibb.co/TMNmnWkD/Imagen-de-Whats-App-2025-09-15-a-las-16-22-13-47d26d6f.jpg', model:'modelo 14'},
-      {src:'https://i.ibb.co/ZDnW7rj/Imagen-de-Whats-App-2025-09-15-a-las-16-22-13-395d716f.jpg', model:'modelo 15'},
-      {src:'https://i.ibb.co/mLchkJf/Imagen-de-Whats-App-2025-09-15-a-las-16-22-14-e09a9aaf.jpg', model:'modelo 16'},
-      {src:'https://i.ibb.co/hxLX8fDt/Imagen-de-Whats-App-2025-09-15-a-las-16-22-14-3f416705.jpg', model:'modelo 17'}
+      {src:new URL('../images/catalogo/tM3rFddt.jpg', import.meta.url).href, model:'modelo 01'},
+      {src:new URL('../images/catalogo/LzyYt9L1.jpg', import.meta.url).href, model:'modelo 02'},
+      {src:new URL('../images/catalogo/xqGrQLNV.jpg', import.meta.url).href, model:'modelo 03'},
+      {src:new URL('../images/catalogo/YBzK92Bw.jpg', import.meta.url).href, model:'modelo 04'},
+      {src:new URL('../images/catalogo/mV3NyWv7.jpg', import.meta.url).href, model:'modelo 05'},
+      {src:new URL('../images/catalogo/27LnnSdj.jpg', import.meta.url).href, model:'modelo 06'},
+      {src:new URL('../images/catalogo/pvhHXhpx.jpg', import.meta.url).href, model:'modelo 07'},
+      {src:new URL('../images/catalogo/xcFR2w4.jpg', import.meta.url).href, model:'modelo 08'},
+      {src:new URL('../images/catalogo/3ydTxVQ1.jpg', import.meta.url).href, model:'modelo 09'},
+      {src:new URL('../images/catalogo/TxWMdDVR.jpg', import.meta.url).href, model:'modelo 10'},
+      {src:new URL('../images/catalogo/BVxSvKFC.jpg', import.meta.url).href, model:'modelo 11'},
+      {src:new URL('../images/catalogo/8LTFT59N.jpg', import.meta.url).href, model:'modelo 12'},
+      {src:new URL('../images/catalogo/qqfVWnC.jpg', import.meta.url).href, model:'modelo 13'},
+      {src:new URL('../images/catalogo/TMNmnWkD.jpg', import.meta.url).href, model:'modelo 14'},
+      {src:new URL('../images/catalogo/ZDnW7rj.jpg', import.meta.url).href, model:'modelo 15'},
+      {src:new URL('../images/catalogo/mLchkJf.jpg', import.meta.url).href, model:'modelo 16'},
+      {src:new URL('../images/catalogo/hxLX8fDt.jpg', import.meta.url).href, model:'modelo 17'}
     ],
     description:'Sastrería de lujo en algodón 100% de fibra larga. Terminación impecable en cuello y puños; corte moderno con estructura clásica.',
     features:['100% algodón premium','Costuras reforzadas','Conserva forma y color','Corte moderno'],
@@ -331,16 +333,16 @@ const PRODUCTS=[
     categoria: 'chombas',
     name: 'Chomba 100% Algodón (Varios Colores)',
     price: 29999,
-    image: 'https://i.ibb.co/nGq637f/Imagen-de-Whats-App-2025-10-26-a-las-15-09-30-ca057623.jpg',
+    image: new URL('../images/catalogo/nGq637f.jpg', import.meta.url).href,
     images:[
-      {src: 'https://i.ibb.co/nGq637f/Imagen-de-Whats-App-2025-10-26-a-las-15-09-30-ca057623.jpg', model: 'Gris'},
-      {src: 'https://i.ibb.co/xKdJ0pHj/Imagen-de-Whats-App-2025-10-26-a-las-16-28-04-0908ebeb.jpg', model: 'Rosa'},
-      {src: 'https://i.ibb.co/DPX5DP9h/Imagen-de-Whats-App-2025-10-26-a-las-16-39-34-6555552d.jpg', model: 'Negro'},
-      {src: 'https://i.ibb.co/Dg6Bfycy/Imagen-de-Whats-App-2025-10-26-a-las-16-43-49-eeb476ee.jpg', model: 'Blanco'},
-      {src: 'https://i.ibb.co/8n6Ftqvz/Imagen-de-Whats-App-2025-10-26-a-las-18-10-17-385cf442.jpg', model: 'Naranja'},
-      {src: 'https://i.ibb.co/mV7RgNV4/Imagen-de-Whats-App-2025-10-26-a-las-18-10-17-5dbb78fe.jpg', model: 'Bordo'},
-      {src: 'https://i.ibb.co/TqPrQPZ1/Imagen-de-Whats-App-2025-10-26-a-las-18-10-17-73d49d04.jpg', model: 'Celeste'},
-      {src: 'https://i.ibb.co/707vBmd/Imagen-de-Whats-App-2025-10-26-a-las-18-10-17-9c9a251f.jpg', model: 'Mostaza'}
+      {src: new URL('../images/catalogo/nGq637f.jpg', import.meta.url).href, model: 'Gris'},
+      {src: new URL('../images/catalogo/xKdJ0pHj.jpg', import.meta.url).href, model: 'Rosa'},
+      {src: new URL('../images/catalogo/DPX5DP9h.jpg', import.meta.url).href, model: 'Negro'},
+      {src: new URL('../images/catalogo/Dg6Bfycy.jpg', import.meta.url).href, model: 'Blanco'},
+      {src: new URL('../images/catalogo/8n6Ftqvz.jpg', import.meta.url).href, model: 'Naranja'},
+      {src: new URL('../images/catalogo/mV7RgNV4.jpg', import.meta.url).href, model: 'Bordo'},
+      {src: new URL('../images/catalogo/TqPrQPZ1.jpg', import.meta.url).href, model: 'Celeste'},
+      {src: new URL('../images/catalogo/707vBmd.jpg', import.meta.url).href, model: 'Mostaza'}
     ],
     description: 'Una chomba premium confeccionada en 100% algodón puro, ofreciendo una suavidad y durabilidad excepcionales. Calidad superior con increíbles resultados en confort y calce.',
     features: [
@@ -362,15 +364,15 @@ const PRODUCTS=[
 
     // --- IMÁGENES ---
     // Imagen principal para la grilla (Verde)
-    image: 'https://i.ibb.co/3yV4d7px/Imagen-de-Whats-App-2025-10-27-a-las-16-46-31-86af5f26.jpg',
+    image: new URL('../images/catalogo/3yV4d7px.jpg', import.meta.url).href,
 
     // Imágenes para el carrusel (como las camisas)
     images: [
-      {src: 'https://i.ibb.co/3yV4d7px/Imagen-de-Whats-App-2025-10-27-a-las-16-46-31-86af5f26.jpg', model: 'Verde'},
-      {src: 'https://i.ibb.co/GfCt2RCv/Imagen-de-Whats-App-2025-10-27-a-las-16-46-31-f1ff27e2.jpg', model: 'Bordo'},
-      {src: 'https://i.ibb.co/Fbkq9XG6/Imagen-de-Whats-App-2025-10-27-a-las-16-46-32-f15817f9.jpg', model: 'Gris'},
-      {src: 'https://i.ibb.co/hFLjb4sD/Imagen-de-Whats-App-2025-10-27-a-las-16-46-32-1bce43b6.jpg', model: 'Celeste'},
-      {src: 'https://i.ibb.co/7tRngXB2/Imagen-de-Whats-App-2025-10-27-a-las-18-21-49-ba86bce2.jpg', model: 'Marron'}
+      {src: new URL('../images/catalogo/3yV4d7px.jpg', import.meta.url).href, model: 'Verde'},
+      {src: new URL('../images/catalogo/GfCt2RCv.jpg', import.meta.url).href, model: 'Bordo'},
+      {src: new URL('../images/catalogo/Fbkq9XG6.jpg', import.meta.url).href, model: 'Gris'},
+      {src: new URL('../images/catalogo/hFLjb4sD.jpg', import.meta.url).href, model: 'Celeste'},
+      {src: new URL('../images/catalogo/7tRngXB2.jpg', import.meta.url).href, model: 'Marron'}
     ],
     // --- FIN IMÁGENES ---
 
@@ -398,18 +400,18 @@ const PRODUCTS=[
       'M': 60000, 'L': 60000, 'XL': 60000, 'XXL': 60000, 'XXXL': 60000
     },
     
-    image: 'https://i.ibb.co/Y40RWhpM/Imagen-de-Whats-App-2025-11-24-a-las-16-16-56-ca4ca3ea.jpg',
+    image: new URL('../images/catalogo/Y40RWhpM.jpg', import.meta.url).href,
     
     images:[
-      {src: 'https://i.ibb.co/Y40RWhpM/Imagen-de-Whats-App-2025-11-24-a-las-16-16-56-ca4ca3ea.jpg', model: 'Rosa Pálido'},
-      {src: 'https://i.ibb.co/xtKFszk3/Imagen-de-Whats-App-2025-11-24-a-las-16-16-56-f7cc5cd9.jpg', model: 'Beige / Arena'},
-      {src: 'https://i.ibb.co/hFG1GDgr/Imagen-de-Whats-App-2025-11-24-a-las-16-16-57-5870fac9.jpg', model: 'celeste Claro'},
-      {src: 'https://i.ibb.co/20nybJWM/Imagen-de-Whats-App-2025-11-24-a-las-16-16-57-214d8f5c.jpg', model: 'Blanco'},
-      {src: 'https://i.ibb.co/ZpsBqG60/Imagen-de-Whats-App-2025-11-24-a-las-16-16-57-1b59fcb3.jpg', model: 'Gris '},
-      {src: 'https://i.ibb.co/MxmRwfpG/Imagen-de-Whats-App-2025-11-24-a-las-16-16-57-e3d43251.jpg', model: 'Verde Militar'},
-      {src: 'https://i.ibb.co/TDVsBLfW/Imagen-de-Whats-App-2025-11-24-a-las-16-16-58-7c50772d.jpg', model: 'Azul Marino '},
-      {src: 'https://i.ibb.co/sv7njSDn/Imagen-de-Whats-App-2025-11-24-a-las-16-16-58-f09e8f53.jpg', model: 'Azul claro'},
-      {src: 'https://i.ibb.co/67pH4rYm/Imagen-de-Whats-App-2025-11-24-a-las-16-32-08-b3b88eb8.jpg', model: ' Negro'}
+      {src: new URL('../images/catalogo/Y40RWhpM.jpg', import.meta.url).href, model: 'Rosa Pálido'},
+      {src: new URL('../images/catalogo/xtKFszk3.jpg', import.meta.url).href, model: 'Beige / Arena'},
+      {src: new URL('../images/catalogo/hFG1GDgr.jpg', import.meta.url).href, model: 'celeste Claro'},
+      {src: new URL('../images/catalogo/20nybJWM.jpg', import.meta.url).href, model: 'Blanco'},
+      {src: new URL('../images/catalogo/ZpsBqG60.jpg', import.meta.url).href, model: 'Gris '},
+      {src: new URL('../images/catalogo/MxmRwfpG.jpg', import.meta.url).href, model: 'Verde Militar'},
+      {src: new URL('../images/catalogo/TDVsBLfW.jpg', import.meta.url).href, model: 'Azul Marino '},
+      {src: new URL('../images/catalogo/sv7njSDn.jpg', import.meta.url).href, model: 'Azul claro'},
+      {src: new URL('../images/catalogo/67pH4rYm.jpg', import.meta.url).href, model: ' Negro'}
     ],
     description: 'Chomba confeccionada con Hilo Pima Peruano legítimo, un producto excepcional, ofreciendo un tacto suave y una durabilidad superior.',
     features: [
@@ -428,13 +430,13 @@ const PRODUCTS=[
   price: 50000, // Precio Tarjeta
   
   // Imagen principal (usamos la primera para la grilla)
-  image: 'https://i.ibb.co/MkWF08Lm/Imagen-de-Whats-App-2025-12-14-a-las-14-31-59-f5d77cab.jpg',
+  image: new URL('../images/catalogo/MkWF08Lm.jpg', import.meta.url).href,
   
   // Imágenes y Modelos/Colores para el carrusel
   images: [
-    {src: 'https://i.ibb.co/MkWF08Lm/Imagen-de-Whats-App-2025-12-14-a-las-14-31-59-f5d77cab.jpg', model: 'Mostaza y Blanco'},
-    {src: 'https://i.ibb.co/hnBsNS8/Imagen-de-Whats-App-2025-12-14-a-las-14-31-59-5ea91511.jpg', model: 'Rojo y Azul'},
-    {src: 'https://i.ibb.co/0j6ZFGc9/Imagen-de-Whats-App-2025-12-14-a-las-14-32-00-1bc18621.jpg', model: 'Gris y Blanco'}
+    {src: new URL('../images/catalogo/MkWF08Lm.jpg', import.meta.url).href, model: 'Mostaza y Blanco'},
+    {src: new URL('../images/catalogo/hnBsNS8.jpg', import.meta.url).href, model: 'Rojo y Azul'},
+    {src: new URL('../images/catalogo/0j6ZFGc9.jpg', import.meta.url).href, model: 'Gris y Blanco'}
   ],
   
   description: 'Campera rompevientos de la primera marca Buckingham Polo Club. Diseño impermeable, con capucha desmontable y de calidad insuperable.',
@@ -476,7 +478,7 @@ const card = (p) => {
                 src="${p.image}"
                 alt="${p.name}"
                 style="filter:grayscale(40%);opacity:.75;"
-                onerror="this.src='https://via.placeholder.com/300x400?text=Sin+Imagen'"
+                onerror="this.onerror=null;this.src='${IMAGE_FALLBACK}'"
             >
 
             <span style="
@@ -531,7 +533,7 @@ const card = (p) => {
 
     const imageHTML = `
         <div style="position:relative;">
-            <img referrerpolicy="no-referrer" src="${p.image}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/300x400?text=Sin+Imagen'">
+            <img referrerpolicy="no-referrer" src="${p.image}" alt="${p.name}" onerror="this.onerror=null;this.src='${IMAGE_FALLBACK}'">
 
         </div>
     `;
@@ -598,9 +600,9 @@ const ORDER = ['camperas','sweaters','camisas','remeras','chombas','trajes','cha
 // Carousel builders
 function buildCarousel(images){
   const imgs = images && images.length ? images : [];
-  if(!imgs.length) return '<img referrerpolicy="no-referrer" src="https://via.placeholder.com/500x400?text=Sin+Imagen" alt="Imagen">';
+  if(!imgs.length) return `<img src="${IMAGE_FALLBACK}" alt="Imagen no disponible">`;
   // CORREGIDO: Usar backticks y cerrar etiquetas correctamente
-  const slides = imgs.map(obj => `<div class="carousel-slide"><img referrerpolicy="no-referrer" src="${(obj.src||obj)}" onerror="this.src='https://via.placeholder.com/500x400?text=Sin+Imagen'"></div>`).join('');
+  const slides = imgs.map(obj => `<div class="carousel-slide"><img referrerpolicy="no-referrer" src="${(obj.src||obj)}" alt="${obj.alt || obj.model || 'Imagen del producto'}" onerror="this.onerror=null;this.src='${IMAGE_FALLBACK}'"></div>`).join('');
   const dots = imgs.map((_,i)=> `<span class="carousel-dot${i===0?' active':''}" data-i="${i}"></span>`).join('');
   return `
     <div class="carousel" id="carousel">
@@ -772,7 +774,7 @@ function showProductDetail(id, silent=false, preSelectedModel=null){
           // CAMBIO: Pasamos el índice inicial
           setTimeout(() => attachCarouselHandlers(initialCarouselIndex), 0);
       } else {
-          document.getElementById('detailImage').innerHTML = `<img referrerpolicy="no-referrer" src="${p.image}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/500x400?text=Sin+Imagen'">`;
+          document.getElementById('detailImage').innerHTML = `<img referrerpolicy="no-referrer" src="${p.image}" alt="${p.name}" onerror="this.onerror=null;this.src='${IMAGE_FALLBACK}'">`;
           selectedModel = null;
           if (selector) selector.style.display = 'none';
       }
@@ -785,7 +787,7 @@ function showProductDetail(id, silent=false, preSelectedModel=null){
       // CAMBIO: Pasamos el índice inicial
       setTimeout(() => attachCarouselHandlers(initialCarouselIndex), 0);
   } else {
-      document.getElementById('detailImage').innerHTML = `<img referrerpolicy="no-referrer" src="${p.image}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/500x400?text=Sin+Imagen'">`;
+      document.getElementById('detailImage').innerHTML = `<img referrerpolicy="no-referrer" src="${p.image}" alt="${p.name}" onerror="this.onerror=null;this.src='${IMAGE_FALLBACK}'">`;
       selectedModel = null;
   }
 
@@ -997,7 +999,7 @@ function updateCartDisplay(){
     div.onclick = () => openProductFromCart(item.id, item.modelo);
 
     div.innerHTML = `
-      <img src="${itemImageSrc}" class="cart-img" alt="${item.name}">
+      <img src="${itemImageSrc}" class="cart-img" alt="${item.name}" onerror="this.onerror=null;this.src='${IMAGE_FALLBACK}'">
 
       <div class="cart-info">
           <div class="cart-title">${item.name}</div>
@@ -1020,7 +1022,7 @@ function updateCartDisplay(){
 
 <button type="button" class="btn-basura-cuadrado" 
     onclick="event.stopPropagation(); removeItem('${item.key}')">
-    <img src="https://cdn-icons-png.flaticon.com/512/484/484662.png" alt="Eliminar">
+    <img src="${DELETE_ICON}" alt="Eliminar">
 </button>
     `;
     items.appendChild(div);
@@ -1416,7 +1418,7 @@ if (product.categoria !== 'chombas' && product.categoria !== 'trajes' && product
         carouselIndex = 0;
         nameDisplay.textContent = firstColorName.toUpperCase();
         if(!document.getElementById('carousel')) {
-             detailImageContainer.innerHTML = `<img referrerpolicy="no-referrer" src="${product.images[0].src}" alt="${product.name} - ${firstColorName}">`;
+             detailImageContainer.innerHTML = `<img referrerpolicy="no-referrer" src="${product.images[0].src}" alt="${product.name} - ${firstColorName}" onerror="this.onerror=null;this.src='${IMAGE_FALLBACK}'">`;
         }
     }
 }
@@ -1429,7 +1431,7 @@ if (product.categoria !== 'chombas' && product.categoria !== 'trajes' && product
     const b = document.createElement('button');
     b.id='btnAsk'; b.className='btn'; b.style.background='#25d366'; b.style.color='#fff';
     b.onclick = consultarWhatsApp; // Asignar función existente
-    b.innerHTML = '<img src="https://i.ibb.co/BV91S86b/image.png" alt="WhatsApp" style="height:20px;width:20px;vertical-align:middle;margin-right:8px">Consultar por WhatsApp';
+    b.innerHTML = '<img src="images/whatsapp.svg" alt="WhatsApp" style="height:20px;width:20px;vertical-align:middle;margin-right:8px">Consultar por WhatsApp';
     container.querySelector('.detail-buttons').appendChild(b); // Añadir a los botones existentes
   }
 })();*/
