@@ -15,10 +15,10 @@ const app = vm.runInNewContext(source.replaceAll('import.meta.url', 'moduleUrl')
 
 test('Todas las fotos de catálogo y variantes son archivos locales válidos', () => {
   const photos = new Set(app.PRODUCTS.flatMap(p => [p.image, ...(p.images || []).map(i => i.src)]));
-  assert.equal(photos.size, 76);
+  assert.equal(photos.size, 113);
   for (const photo of photos) {
     assert.equal(new URL(photo).protocol, 'file:');
-    const target = fileURLToPath(photo);
+    const target = fileURLToPath(photo.replaceAll('%/', '%25/'));
     const relative = path.relative(path.join(root, 'images'), target);
     assert.equal(relative.startsWith('..') || path.isAbsolute(relative), false);
     const bytes = fs.readFileSync(target);

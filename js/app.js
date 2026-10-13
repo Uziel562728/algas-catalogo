@@ -38,20 +38,33 @@ function updateMediosPago(categoria){
 
     if(!liTarjeta || !liTrans || !liEfectivo) return;
 
-    const precioActual = currentProduct ? getPriceForCurrent(currentProduct) : null;
-
     // ❌ Eliminamos efectivo
     liEfectivo.style.display = 'none';
 
-    // Tarjeta
-    if(typeof precioActual === 'number'){
-      liTarjeta.innerHTML = `Tarjeta 💳 <span style="font-weight:bold; color:#2d5a42;">(${fmt(precioActual)} en 3 cuotas)</span>`;
-    } else {
-      liTarjeta.innerHTML = 'Tarjeta 💳 (Consultar precio)';
+    if (currentProduct && currentProduct.id === 'remera-algodon-peinado-24-1') {
+      liTarjeta.innerHTML = '💳 Tarjeta: <span style="font-weight:bold; color:#2d5a42;">$ 18.000 en hasta 3 cuotas de $ 6.000 por unidad</span> <small style="color:#666;">(2 remeras por $ 36.000 en 3 cuotas de $ 12.000)</small>';
+      liTrans.innerHTML = '🏦 Transferencia o depósito bancario: <span style="font-weight:bold; color:#2d5a42;">1 remera por $ 18.000 · 2 remeras por $ 30.000</span> <span style="font-weight:bold; color:#e74c3c;">(Promo Especial)</span>';
+      return;
     }
 
-    // Transferencia + Retiro
-    liTrans.innerHTML = 'Transferencia o Retiro en el local <span style="font-weight:bold; color:#e74c3c;">(10% OFF)</span>';
+    if (currentProduct && currentProduct.id === 'chomba-algodon-100') {
+      liTarjeta.innerHTML = '💳 Tarjeta: <span style="font-weight:bold; color:#2d5a42;">Una chomba: $ 19.999 en 3 cuotas (dos de $ 6.666,33 y una de $ 6.666,34)</span> <small style="color:#666;">· Dos chombas: $ 39.998 en 3 cuotas</small>';
+      liTrans.innerHTML = '🏦 Efectivo, transferencia bancaria o depósito: <span style="font-weight:bold; color:#2d5a42;">Una chomba: $ 19.999 · Dos chombas: $ 35.000</span> <span style="font-weight:bold; color:#e74c3c;">(Promo Especial)</span>';
+      return;
+    }
+
+    const precioActual = currentProduct ? getPriceForCurrent(currentProduct) : null;
+
+    // Tarjeta
+    if(typeof precioActual === 'number'){
+      const cuota = Math.round(precioActual / 3);
+      const precioTrans = Math.round(precioActual * 0.9);
+      liTarjeta.innerHTML = `💳 Tarjeta: <span style="font-weight:bold; color:#2d5a42;">${fmt(precioActual)} en 3 cuotas de ${fmt(cuota)}</span>`;
+      liTrans.innerHTML = `🏦 Efectivo, transferencia o depósito bancario: <span style="font-weight:bold; color:#2d5a42;">${fmt(precioTrans)}</span> <span style="font-weight:bold; color:#e74c3c;">(10% OFF)</span>`;
+    } else {
+      liTarjeta.innerHTML = '💳 Tarjeta: (Consultar precio)';
+      liTrans.innerHTML = '🏦 Efectivo, transferencia o depósito bancario <span style="font-weight:bold; color:#e74c3c;">(10% OFF)</span>';
+    }
 
   }catch(e){
     console.error("Error en updateMediosPago:", e);
@@ -112,6 +125,49 @@ const sweaterPuntoInglesAzulImage = new URL('../images/sweater punto ingles/azul
 const sweaterPuntoInglesBeigeImage = new URL('../images/sweater punto ingles/beige.png', import.meta.url).href;
 const sweaterPuntoInglesNegroImage = new URL('../images/sweater punto ingles/negro.png', import.meta.url).href;
 const sweaterPuntoInglesVerdeAzuladoImage = new URL('../images/sweater punto ingles/verde azulado.png', import.meta.url).href;
+// Suéter Escote en V Yves Saint Laurent
+const sueterYslAmarilloImage = new URL('../images/suéter escote en V  marca Yves Saint Laurent/color amarillo.png', import.meta.url).href;
+const sueterYslAzulImage = new URL('../images/suéter escote en V  marca Yves Saint Laurent/color azul.png', import.meta.url).href;
+const sueterYslBeigeImage = new URL('../images/suéter escote en V  marca Yves Saint Laurent/color beigue.png', import.meta.url).href;
+const sueterYslCremaImage = new URL('../images/suéter escote en V  marca Yves Saint Laurent/color crema.png', import.meta.url).href;
+const sueterYslGrisImage = new URL('../images/suéter escote en V  marca Yves Saint Laurent/color gris.png', import.meta.url).href;
+const sueterYslRosaSalmonImage = new URL('../images/suéter escote en V  marca Yves Saint Laurent/color rosa salmon.png', import.meta.url).href;
+const sueterYslVerdeClaroImage = new URL('../images/suéter escote en V  marca Yves Saint Laurent/color verde claro.png', import.meta.url).href;
+const sueterYslVioletaImage = new URL('../images/suéter escote en V  marca Yves Saint Laurent/color violeta.png', import.meta.url).href;
+// Bermuda Rocco
+const bermudaRoccoBeigeImage = new URL('../images/bermuda de la marca Rocco/color beige.png', import.meta.url).href;
+const bermudaRoccoNegroImage = new URL('../images/bermuda de la marca Rocco/color negro.png', import.meta.url).href;
+// Remera Algodón Peinado 24/1
+const remeraAlgodonBeigeImage = new URL('../images/remera algodón peinado 24_1/color beige.png', import.meta.url).href;
+const remeraAlgodonBlancoImage = new URL('../images/remera algodón peinado 24_1/color blanco.png', import.meta.url).href;
+const remeraAlgodonCremaImage = new URL('../images/remera algodón peinado 24_1/color crema.png', import.meta.url).href;
+const remeraAlgodonGrisImage = new URL('../images/remera algodón peinado 24_1/color gris.png', import.meta.url).href;
+const remeraAlgodonMarronImage = new URL('../images/remera algodón peinado 24_1/color marron .png', import.meta.url).href;
+const remeraAlgodonNegroImage = new URL('../images/remera algodón peinado 24_1/color negro.png', import.meta.url).href;
+const remeraAlgodonRosaImage = new URL('../images/remera algodón peinado 24_1/color rosa.png', import.meta.url).href;
+// Chomba Algodón 100%
+const chombaAlgodonAmarilloImage = new URL('../images/chomba algodón 100%/amarillo.png', import.meta.url).href;
+const chombaAlgodonAzulMarinoImage = new URL('../images/chomba algodón 100%/azul marino.png', import.meta.url).href;
+const chombaAlgodonAzulImage = new URL('../images/chomba algodón 100%/azul.png', import.meta.url).href;
+const chombaAlgodonBlancoImage = new URL('../images/chomba algodón 100%/blanco.png', import.meta.url).href;
+const chombaAlgodonCelesteAquaImage = new URL('../images/chomba algodón 100%/celeste aqua.png', import.meta.url).href;
+const chombaAlgodonGrisImage = new URL('../images/chomba algodón 100%/gris.png', import.meta.url).href;
+const chombaAlgodonRosaSalmonViejoImage = new URL('../images/chomba algodón 100%/rosa salmon viejo.png', import.meta.url).href;
+const chombaAlgodonRosaViejoImage = new URL('../images/chomba algodón 100%/rosa viejo .png', import.meta.url).href;
+const chombaAlgodonVerdeSalviaImage = new URL('../images/chomba algodón 100%/verde salvia.png', import.meta.url).href;
+// Chomba Devré de Algodón
+const chombaDevreAzulImage = new URL('../images/Chomba marca Devré/azul.png', import.meta.url).href;
+const chombaDevreBeigeImage = new URL('../images/Chomba marca Devré/beige.png', import.meta.url).href;
+const chombaDevreBlancoImage = new URL('../images/Chomba marca Devré/blanco.png', import.meta.url).href;
+const chombaDevreBordoImage = new URL('../images/Chomba marca Devré/bordo.png', import.meta.url).href;
+const chombaDevreCelesteAquaImage = new URL('../images/Chomba marca Devré/celeste aqua.png', import.meta.url).href;
+const chombaDevreGrisImage = new URL('../images/Chomba marca Devré/gris.png', import.meta.url).href;
+const chombaDevreRosadoImage = new URL('../images/Chomba marca Devré/rosado .png', import.meta.url).href;
+const chombaDevreVerdeMilitarImage = new URL('../images/Chomba marca Devré/verde militar.png', import.meta.url).href;
+// Chomba Devré Prelavada
+const chombaDevrePrelavadaAzulImage = new URL('../images/chomba marca devre prelabada/azul.png', import.meta.url).href;
+const chombaDevrePrelavadaGrisImage = new URL('../images/chomba marca devre prelabada/gris.png', import.meta.url).href;
+const chombaDevrePrelavadaRosaSalmonImage = new URL('../images/chomba marca devre prelabada/rosa salmon.png', import.meta.url).href;
 const PRODUCTS=[
 {
   id: 'sweater-punto-ingles-yves-saint-laurent',
@@ -177,6 +233,71 @@ const PRODUCTS=[
     'Precio de oferta: $30.000'
   ],
   sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+  tag: 'especial'
+},
+{
+  id: 'sueter-escote-en-v-yves-saint-laurent',
+  categoria: 'sweaters',
+  name: 'Suéter Escote en V Yves Saint Laurent',
+  price: 60000,
+  isNew: true,
+  image: sueterYslAzulImage,
+  images: [
+    { src: sueterYslAzulImage, model: 'Azul' },
+    { src: sueterYslBeigeImage, model: 'Beige' },
+    { src: sueterYslGrisImage, model: 'Gris' },
+    { src: sueterYslCremaImage, model: 'Crema' },
+    { src: sueterYslRosaSalmonImage, model: 'Rosa Salmón' },
+    { src: sueterYslVerdeClaroImage, model: 'Verde Claro' },
+    { src: sueterYslAmarilloImage, model: 'Amarillo' },
+    { src: sueterYslVioletaImage, model: 'Violeta' }
+  ],
+  colorMap: {
+    'Azul': '#416bba',
+    'Beige': '#c5a17a',
+    'Beigue': '#c5a17a',
+    'Gris': '#464749',
+    'Crema': '#e8dfce',
+    'Rosa Salmón': '#ec5a5b',
+    'Rosa Salmon': '#ec5a5b',
+    'Verde Claro': '#758175',
+    'Verde claro': '#758175',
+    'Amarillo': '#f2dc7a',
+    'Violeta': '#6a4175'
+  },
+  description: 'Suéter escote en V Yves Saint Laurent, una prenda de estilo clásico y elegante, ideal para combinar con distintos looks. Disponible en una variedad de colores.',
+  features: [
+    'Marca: Yves Saint Laurent',
+    'Corte: Escote en V',
+    'Disponible en una variedad de colores'
+  ],
+  sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+  tag: null
+},
+{
+  id: 'bermuda-rocco-gabardina-elastizada',
+  categoria: 'bermudas',
+  name: 'Bermuda Rocco de Gabardina Elastizada',
+  price: 30000,
+  isNew: true,
+  image: bermudaRoccoBeigeImage,
+  images: [
+    { src: bermudaRoccoBeigeImage, model: 'Beige' },
+    { src: bermudaRoccoNegroImage, model: 'Negro' }
+  ],
+  colorMap: {
+    'Beige': '#d8bd9e',
+    'Negro': '#333235'
+  },
+  description: 'Bermuda Rocco confeccionada en gabardina elastizada, ideal para quienes buscan comodidad, estilo y libertad de movimiento. Una prenda versátil para el uso diario, disponible en diferentes colores y talles.',
+  features: [
+    'Marca: Rocco',
+    'Material: Gabardina elastizada',
+    'Talles disponibles: S al XXXL',
+    'Variedad de colores',
+    'Precio especial de oferta: $30.000'
+  ],
+  sizes: ['S', 'M', 'L', 'XL', 'XXL', 'XXXL'],
   tag: 'especial'
 },
   { id:'campera-buckingham', categoria:'camperas', name:'Campera Doble Pechera Buckingham Polo Club', price:75000,
@@ -268,6 +389,45 @@ const PRODUCTS=[
     tag: null,
     
   },
+  {
+    id: 'remera-algodon-peinado-24-1',
+    categoria: 'remeras',
+    name: 'Remera Algodón Peinado 24/1',
+    price: 18000,
+    isNew: true,
+    image: remeraAlgodonNegroImage,
+    images: [
+      { src: remeraAlgodonNegroImage, model: 'Negro' },
+      { src: remeraAlgodonBlancoImage, model: 'Blanco' },
+      { src: remeraAlgodonGrisImage, model: 'Gris' },
+      { src: remeraAlgodonBeigeImage, model: 'Beige' },
+      { src: remeraAlgodonCremaImage, model: 'Crema' },
+      { src: remeraAlgodonMarronImage, model: 'Marrón' },
+      { src: remeraAlgodonRosaImage, model: 'Rosa' }
+    ],
+    colorMap: {
+      'Negro': '#1a1a19',
+      'Blanco': '#eae9ed',
+      'Gris': '#737468',
+      'Beige': '#d4c8b9',
+      'Crema': '#e7ded3',
+      'Marrón': '#b79470', 'Rosado': '#b9153c', 'Bordó': '#54111f',
+        'Azul Marino': '#1f2841', 'Celeste Aqua': '#aee0e9', 'Verde Salvia': '#8a9684',
+        'Rosa Salmón Viejo': '#dbb19c', 'Rosa Salmon Viejo': '#dbb19c', 'Rosa Viejo': '#e5ac9f',
+      'Marron': '#b79470',
+      'Rosa': '#eabfc2'
+    },
+    description: 'Remera confeccionada en algodón peinado 24/1, ideal para el uso diario. Una prenda cómoda, versátil y fácil de combinar, disponible en una amplia variedad de colores y talles.',
+    features: [
+      'Material: Algodón peinado 24/1',
+      'Talles disponibles: S al XXL',
+      'Amplia variedad de colores',
+      'Precio unitario: $18.000',
+      'Promoción especial: 2 por $30.000 abonando mediante transferencia o depósito bancario'
+    ],
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    tag: 'especial'
+  },
   { id:'camisa-rochas', categoria:'camisas', name:'Camisa primera marca Rochas importada', price:80000,
     image:new URL('../images/catalogo/qMzbzg3g.jpg', import.meta.url).href,
     images:[
@@ -328,8 +488,126 @@ const PRODUCTS=[
    tag: null,
     
   },
-  {
-    id: 'chomba-algodon-premium-colores',
+    {
+    id: 'chomba-algodon-100',
+    categoria: 'chombas',
+    name: 'Chomba Algodón 100%',
+    price: 19999,
+    isNew: true,
+    image: chombaAlgodonAzulMarinoImage,
+    images: [
+      { src: chombaAlgodonAzulMarinoImage, model: 'Azul Marino' },
+      { src: chombaAlgodonAzulImage, model: 'Azul' },
+      { src: chombaAlgodonBlancoImage, model: 'Blanco' },
+      { src: chombaAlgodonGrisImage, model: 'Gris' },
+      { src: chombaAlgodonAmarilloImage, model: 'Amarillo' },
+      { src: chombaAlgodonCelesteAquaImage, model: 'Celeste Aqua' },
+      { src: chombaAlgodonVerdeSalviaImage, model: 'Verde Salvia' },
+      { src: chombaAlgodonRosaSalmonViejoImage, model: 'Rosa Salmón Viejo' },
+      { src: chombaAlgodonRosaViejoImage, model: 'Rosa Viejo' }
+    ],
+    colorMap: {
+      'Azul Marino': '#1f2841',
+      'Azul marino': '#1f2841',
+      'Azul': '#577ab0',
+      'Blanco': '#e8e6ec',
+      'Gris': '#c0bebf',
+      'Amarillo': '#eddaa4',
+      'Celeste Aqua': '#aee0e9',
+      'Celeste aqua': '#aee0e9',
+      'Verde Salvia': '#8a9684',
+      'Verde salvia': '#8a9684',
+      'Rosa Salmón Viejo': '#dbb19c',
+      'Rosa Salmón viejo': '#dbb19c',
+      'Rosa Salmon Viejo': '#dbb19c',
+      'Rosa salmon viejo': '#dbb19c',
+      'Rosa Viejo': '#e5ac9f',
+      'Rosa viejo': '#e5ac9f'
+    },
+    description: 'Chomba confeccionada en 100% algodón, ideal para quienes buscan comodidad y estilo en una misma prenda. Su diseño clásico y versátil permite combinarla fácilmente para diferentes ocasiones. Disponible en una amplia variedad de colores y talles.',
+    features: [
+      'Material: 100% algodón',
+      'Talles disponibles: S al 5XL',
+      'Amplia variedad de colores',
+      'Oferta especial: una por $19.999 o dos por $35.000 abonando en efectivo, transferencia bancaria o depósito'
+    ],
+    sizes: ['S', 'M', 'L', 'XL', 'XXL', 'XXXL', '4XL', '5XL'],
+    tag: 'especial'
+  },
+  {
+    id: 'chomba-devre-algodon',
+    categoria: 'chombas',
+    name: 'Chomba Devré de Algodón',
+    price: 35000,
+    isNew: true,
+    image: chombaDevreAzulImage,
+    images: [
+      { src: chombaDevreAzulImage, model: 'Azul' },
+      { src: chombaDevreBeigeImage, model: 'Beige' },
+      { src: chombaDevreBlancoImage, model: 'Blanco' },
+      { src: chombaDevreBordoImage, model: 'Bordó' },
+      { src: chombaDevreCelesteAquaImage, model: 'Celeste Aqua' },
+      { src: chombaDevreGrisImage, model: 'Gris' },
+      { src: chombaDevreRosadoImage, model: 'Rosado' },
+      { src: chombaDevreVerdeMilitarImage, model: 'Verde Militar' }
+    ],
+    colorMap: {
+      'Azul': '#1f2130',
+      'Beige': '#c3ab95',
+      'Blanco': '#f2f1f6',
+      'Bordó': '#54111f',
+      'Bordo': '#54111f',
+      'Celeste Aqua': '#8cdeee',
+      'Celeste aqua': '#8cdeee',
+      'Gris': '#99989a',
+      'Rosado': '#b9153c',
+      'Verde Militar': '#4a4b3b',
+      'Verde militar': '#4a4b3b'
+    },
+    description: 'Chomba Devré confeccionada en algodón, una prenda clásica y versátil, ideal para combinar comodidad y estilo. Perfecta para diferentes ocasiones, disponible en una variedad de colores y talles.',
+    features: [
+      'Marca: Devré',
+      'Material: Algodón',
+      'Talles disponibles: S al XXL',
+      'Variedad de colores',
+      'Precio especial: $35.000',
+      '10% OFF abonando en efectivo o transferencia bancaria'
+    ],
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    tag: 'especial'
+  },
+  {
+        id: 'chomba-devre-prelavada',
+    categoria: 'chombas',
+    name: 'Chomba Devré Prelavada',
+    price: 35000,
+    isNew: true,
+    image: chombaDevrePrelavadaAzulImage,
+    images: [
+      { src: chombaDevrePrelavadaAzulImage, model: 'Azul' },
+      { src: chombaDevrePrelavadaGrisImage, model: 'Gris' },
+      { src: chombaDevrePrelavadaRosaSalmonImage, model: 'Rosa Salmón' }
+    ],
+    colorMap: {
+      'Azul': '#566b92',
+      'Gris': '#a8a099',
+      'Rosa Salmón': '#cb8177',
+      'Rosa Salmon': '#cb8177'
+    },
+    description: 'Chomba Devré prelavada, una prenda de estilo clásico y versátil, ideal para combinar con diferentes looks. Su acabado prelavado le aporta una terminación distintiva. Disponible en una variedad de colores y talles.',
+    features: [
+      'Marca: Devré',
+      'Terminación: Prelavada',
+      'Talles disponibles: S al XXL',
+      'Diferentes colores disponibles',
+      'Precio de oferta: $35.000',
+      '10% OFF en efectivo o transferencia'
+    ],
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    tag: 'especial'
+  },
+  {
+        id: 'chomba-algodon-premium-colores',
     categoria: 'chombas',
     name: 'Chomba 100% Algodón (Varios Colores)',
     price: 29999,
@@ -528,7 +806,13 @@ const card = (p) => {
         `;
     } else {
         // Precio normal si no tiene descuento
+        if (p.id === 'remera-algodon-peinado-24-1') {
+        priceHTML = `<div class="product-price"><span class="price-current">${priceLabel(p)}</span><div style="color:#25d366;font-size:0.85rem;font-weight:bold;margin-top:2px;">✨ Promo: 2 POR $30.000</div></div>`;
+    } else if (p.id === 'chomba-algodon-100') {
+        priceHTML = `<div class="product-price"><span class="price-current">${priceLabel(p)}</span><div style="color:#25d366;font-size:0.85rem;font-weight:bold;margin-top:2px;">✨ Promo: 2 POR $35.000</div></div>`;
+    } else {
         priceHTML = `<div class="product-price"><span class="price-current">${priceLabel(p)}</span></div>`;
+    }
     }
 
     const imageHTML = `
@@ -573,7 +857,7 @@ function buildIndex(){
   const cont = document.getElementById('catalogoIndice');
   const cats = Array.from(new Set(PRODUCTS.map(p=>p.categoria)));
   // CORREGIDO: Agregar 'chombas' al orden deseado
-const ORDER = ['camperas','sweaters','camisas','remeras','chombas','trajes','chalecos','pantalones']; 
+const ORDER = ['camperas','sweaters','camisas','remeras','chombas','trajes','chalecos','pantalones','bermudas']; 
   const ordered = ORDER.filter(c=>cats.includes(c)).concat(cats.filter(c=>!ORDER.includes(c)));
   cont.innerHTML = '';
   const btnAll = document.createElement('button');
@@ -679,7 +963,7 @@ function attachCarouselHandlers(initialIndex = 0){
     track.style.transform = `translateX(${-carouselIndex*100}%)`;
     dots.forEach((d,i)=>{
         d.classList.toggle('active', i===carouselIndex);
-        if (currentProduct.categoria === 'chombas' || currentProduct.categoria === 'trajes' || currentProduct.categoria === 'camperas') {
+        if (currentProduct.categoria === 'chombas' || currentProduct.categoria === 'trajes' || currentProduct.categoria === 'camperas' || currentProduct.categoria === 'sweaters' || currentProduct.categoria === 'bermudas' || currentProduct.categoria === 'remeras') {
                 const chips = document.querySelectorAll('#colorChipsContainer span');
                 chips.forEach(c => c.style.border = '2px solid #ccc');
 
@@ -766,7 +1050,7 @@ function showProductDetail(id, silent=false, preSelectedModel=null){
       }
   }
 
-  if (p.categoria === 'chombas' || p.categoria === 'trajes' || p.categoria === 'camperas' || p.categoria === 'sweaters') {
+  if (p.categoria === 'chombas' || p.categoria === 'trajes' || p.categoria === 'camperas' || p.categoria === 'sweaters' || p.categoria === 'bermudas' || p.categoria === 'remeras') {
       document.getElementById('detailImage').innerHTML = '';
       if (p.images && p.images.length > 1) {
           document.getElementById('detailImage').innerHTML = buildCarousel(p.images);
@@ -1029,6 +1313,23 @@ function updateCartDisplay(){
   });
 
   if (cart.length > 0) {
+    const remerasCount = cart.filter(it => it.id === 'remera-algodon-peinado-24-1').reduce((s, it) => s + it.qty, 0);
+    const remerasPairs = Math.floor(remerasCount / 2);
+    const remerasSingles = remerasCount % 2;
+    const remerasTransferTotal = (remerasPairs * 30000) + (remerasSingles * 18000);
+
+    const chombasCount = cart.filter(it => it.id === 'chomba-algodon-100').reduce((s, it) => s + it.qty, 0);
+    const chombasPairs = Math.floor(chombasCount / 2);
+    const chombasSingles = chombasCount % 2;
+    const chombasTransferTotal = (chombasPairs * 35000) + (chombasSingles * 19999);
+
+    let otherTransferTotal = 0;
+    cart.forEach(it => {
+      if (it.id !== 'remera-algodon-peinado-24-1' && it.id !== 'chomba-algodon-100') {
+        otherTransferTotal += Math.round(lineTotal(it) * 0.9);
+      }
+    });
+    const totalTransfer = remerasTransferTotal + chombasTransferTotal + otherTransferTotal;
     const footerDiv = document.createElement('div');
     footerDiv.className = 'cart-footer-clean';
     footerDiv.innerHTML = `
@@ -1036,6 +1337,12 @@ function updateCartDisplay(){
           <span>Total:</span>
           <span>${fmt(total)}</span>
       </div>
+      <div class="total-row" style="color:#2d5a42;font-weight:bold;margin-top:4px;">
+          <span>Transferencia / Depósito:</span>
+          <span>${fmt(totalTransfer)}</span>
+      </div>
+      ${remerasPairs > 0 ? '<div style="font-size:0.85rem;color:#2d5a42;margin-top:4px;text-align:right;">🎉 ¡Promo 2 por $30.000 aplicada en Remeras por transferencia!</div>' : ''}
+      ${chombasPairs > 0 ? '<div style="font-size:0.85rem;color:#2d5a42;margin-top:4px;text-align:right;">🎉 ¡Promo 2 por $35.000 aplicada en Chombas 100% Algodón!</div>' : ''}
     `;
     items.appendChild(footerDiv);
   } else {
@@ -1133,11 +1440,38 @@ function checkout() {
   });
 
  const total = cart.reduce((s, it) => s + lineTotal(it), 0);
-  lines.push('━━━━━━━━━━━━━━━━━━━━');
-  // CORREGIDO: Usar backticks para template literal
-  lines.push(`💰 TOTAL: ${fmt(total)}`);
-  lines.push('');
-  lines.push('¡Espero su confirmación! 😊');
+  lines.push('━━━━━━━━━━━━━━━━━━━━');
+  lines.push(`💰 TOTAL: ${fmt(total)}`);
+
+  const remerasCount = cart.filter(it => it.id === 'remera-algodon-peinado-24-1').reduce((s, it) => s + it.qty, 0);
+  const remerasPairs = Math.floor(remerasCount / 2);
+  const remerasSingles = remerasCount % 2;
+  const remerasTransferTotal = (remerasPairs * 30000) + (remerasSingles * 18000);
+
+  const chombasCount = cart.filter(it => it.id === 'chomba-algodon-100').reduce((s, it) => s + it.qty, 0);
+  const chombasPairs = Math.floor(chombasCount / 2);
+  const chombasSingles = chombasCount % 2;
+  const chombasTransferTotal = (chombasPairs * 35000) + (chombasSingles * 19999);
+
+  let otherTransferTotal = 0;
+  cart.forEach(it => {
+    if (it.id !== 'remera-algodon-peinado-24-1' && it.id !== 'chomba-algodon-100') {
+      otherTransferTotal += Math.round(lineTotal(it) * 0.9);
+    }
+  });
+  const totalTransfer = remerasTransferTotal + chombasTransferTotal + otherTransferTotal;
+
+  if (totalTransfer !== total) {
+    lines.push(`🏦 TOTAL (Efectivo / Transferencia / Depósito): ${fmt(totalTransfer)}`);
+  }
+  if (remerasPairs > 0) {
+    lines.push(`🎉 Incluye Promo Remeras: 2 por $30.000`);
+  }
+  if (chombasPairs > 0) {
+    lines.push(`🎉 Incluye Promo Chombas: 2 por $35.000`);
+  }
+  lines.push('');
+  lines.push('¡Espero su confirmación! 😊');
 
   const msg = encodeURIComponent(lines.join('\n'));
   // CORREGIDO: Usar backticks para template literal
@@ -1355,13 +1689,16 @@ function buildColorSelector(product) {
         'Rosa Pálido': '#D4A9A6', 'Beige / Arena': '#d1b27a', 'celeste Claro': '#A9D7EC',   
         'Gris ': '#A8A8A8', 'Verde Militar': '#4C6556', 'Azul Marino ': '#1A233A',
         'Azul claro': '#26364D', ' Negro': '#171F27',
+        'Amarillo': '#f2dc7a', 'Crema': '#e8dfce', 'Rosa Salmón': '#ec5a5b', 'Rosa Salmon': '#ec5a5b',
+        'Verde Claro': '#758175', 'Verde claro': '#758175', 'Violeta': '#6a4175', 'Beigue': '#c5a17a',
+        'Marrón': '#b79470',
       
       'Mostaza y Blanco': '#FFDB58,#FFFFFF', 
         'Rojo y Azul': '#E74C3C,#2980B9',      
         'Gris y Blanco': '#A9A9A9,#FFFFFF'
     };
     
-if (product.categoria !== 'chombas' && product.categoria !== 'trajes' && product.categoria !== 'camperas' && product.categoria !== 'sweaters') {
+if (product.categoria !== 'chombas' && product.categoria !== 'trajes' && product.categoria !== 'camperas' && product.categoria !== 'sweaters' && product.categoria !== 'bermudas' && product.categoria !== 'remeras') {
         if (selector) selector.style.display = 'none';
         return;
     }
@@ -1375,7 +1712,7 @@ if (product.categoria !== 'chombas' && product.categoria !== 'trajes' && product
 
     product.images.forEach((img, index) => {
         const colorName = img.model || 'Color ' + (index + 1);
-        let colorCode = hexMap[colorName] || '#555'; 
+        let colorCode = (product.colorMap && product.colorMap[colorName]) || hexMap[colorName] || '#555'; 
 
         const chip = document.createElement('span');
         chip.style.width = '30px'; 

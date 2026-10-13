@@ -45,13 +45,19 @@ const expectedPrices = {
   'camisa-rocco': 40000, 'campera-rompevientos': 50000,
   'campera-rompevientos-buckingham-nueva': 50000, 'chaleco-impermeable': 40000,
   'remera-mc-premium': 25000, 'camisa-rochas': 80000, 'camisa-ysl': 50000,
-  'traje-thomson-williams-soft': 350000, 'chomba-hilo-pima': 60000
+  'traje-thomson-williams-soft': 350000, 'chomba-hilo-pima': 60000,
+  'sueter-escote-en-v-yves-saint-laurent': 60000,
+  'bermuda-rocco-gabardina-elastizada': 30000,
+  'remera-algodon-peinado-24-1': 18000,
+  'chomba-algodon-100': 19999,
+  'chomba-devre-algodon': 35000,
+  'chomba-devre-prelavada': 35000
 };
 
 test('Precios confirmados, catálogo sin duplicados ni Camisaco', () => {
   const app = fixture();
-  assert.equal(app.PRODUCTS.length, 21);
-  assert.equal(new Set(app.PRODUCTS.map(p => p.id)).size, 21);
+  assert.equal(app.PRODUCTS.length, 27);
+  assert.equal(new Set(app.PRODUCTS.map(p => p.id)).size, 27);
   assert.equal(app.PRODUCTS.some(p => p.id === 'camisaco-corderito'), false);
   for (const [id, price] of Object.entries(expectedPrices)) assert.equal(app.PRODUCTS.find(p => p.id === id)?.price, price, id);
   assert.equal(app.PRODUCTS.find(p => p.id === 'campera-backing').price, 35000);
@@ -86,10 +92,16 @@ test('Todos los talles y colores Pima mantienen $60.000', () => {
 
 test('Sin promociones por cantidad, incluso ante campos antiguos', () => {
   const app = fixture();
-  assert.doesNotMatch(source, /bundlePrice|bundleQuantity|bundleLineTotal|2 por|2 POR/);
+  assert.doesNotMatch(source, /bundlePrice|bundleQuantity|bundleLineTotal/);
   for (const product of app.PRODUCTS) {
     assert.equal(product.bundlePrice, undefined); assert.equal(product.bundleQuantity, undefined);
-    assert.doesNotMatch(app.card(product), /\d+ POR/);
+    if (product.id === 'remera-algodon-peinado-24-1') {
+      assert.match(app.card(product), /2 POR \$30\.000/);
+    } else if (product.id === 'chomba-algodon-100') {
+      assert.match(app.card(product), /2 POR \$35\.000/);
+    } else {
+      assert.doesNotMatch(app.card(product), /\d+ POR/);
+    }
   }
   for (const [id, unit] of [['sweater-punto-ingles-yves-saint-laurent', 50000], ['sweater-super-abrigado', 20000], ['sweater-medio-cierre-importado', 30000]]) {
     for (const qty of [1, 2, 3, 4, 5]) assert.equal(app.lineTotal({ id, price: unit, qty, bundleQuantity: 2, bundlePrice: 1 }), unit * qty);
@@ -179,7 +191,7 @@ test('Carrito, cantidades y mensaje de WhatsApp coinciden en subtotales y total'
 test('Enlace directo al Camisaco retirado vuelve a la grilla', () => {
   const app = fixture(null, false, '#detalle-camisaco-corderito');
   app.init(); assert.equal(app.historyWrites.at(-1)[2], '/');
-  assert.equal(app.nodes.get('productsGrid').children.length, 21);
+  assert.equal(app.nodes.get('productsGrid').children.length, 27);
 });
 
 
