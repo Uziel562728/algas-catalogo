@@ -195,7 +195,7 @@ const PRODUCTS=[
 {
   id: 'sweater-super-abrigado',
   categoria: 'sweaters',
-  name: 'Sweater Super Abrigado — Oferta Especial',
+  name: 'Sweater liviano importado — Oferta Especial',
   price: 20000,
   isNew: true,
   image: sweaterSuperNegroImage,
@@ -381,7 +381,7 @@ const PRODUCTS=[
     
   },
 
-  { id:'remera-mc-premium', categoria:'remeras', name:'Remera Manga Corta - Primera Marca (Algodón Peinado)', price:25000,
+  { id:'remera-mc-premium', categoria:'remeras', name:'Remera Manga Corta - Marca rocco (Algodón Peinado)', price:25000,
     image:new URL('../images/catalogo/k62gp4Zw.jpg', import.meta.url).href,
     description:'Oferta especial. Algodón peinado, calidad primera marca.',
     features:['Algodón peinado','Primera marca','Oferta especial','Corte clásico y cómodo'],
