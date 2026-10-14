@@ -146,15 +146,15 @@ const remeraAlgodonMarronImage = new URL('../images/remera algodón peinado 24_1
 const remeraAlgodonNegroImage = new URL('../images/remera algodón peinado 24_1/color negro.png', import.meta.url).href;
 const remeraAlgodonRosaImage = new URL('../images/remera algodón peinado 24_1/color rosa.png', import.meta.url).href;
 // Chomba Algodón 100%
-const chombaAlgodonAmarilloImage = new URL('../images/chomba algodón 100%/amarillo.png', import.meta.url).href;
-const chombaAlgodonAzulMarinoImage = new URL('../images/chomba algodón 100%/azul marino.png', import.meta.url).href;
-const chombaAlgodonAzulImage = new URL('../images/chomba algodón 100%/azul.png', import.meta.url).href;
-const chombaAlgodonBlancoImage = new URL('../images/chomba algodón 100%/blanco.png', import.meta.url).href;
-const chombaAlgodonCelesteAquaImage = new URL('../images/chomba algodón 100%/celeste aqua.png', import.meta.url).href;
-const chombaAlgodonGrisImage = new URL('../images/chomba algodón 100%/gris.png', import.meta.url).href;
-const chombaAlgodonRosaSalmonViejoImage = new URL('../images/chomba algodón 100%/rosa salmon viejo.png', import.meta.url).href;
-const chombaAlgodonRosaViejoImage = new URL('../images/chomba algodón 100%/rosa viejo .png', import.meta.url).href;
-const chombaAlgodonVerdeSalviaImage = new URL('../images/chomba algodón 100%/verde salvia.png', import.meta.url).href;
+const chombaAlgodonAmarilloImage = new URL('../images/chomba algodón 100/amarillo.png', import.meta.url).href;
+const chombaAlgodonAzulMarinoImage = new URL('../images/chomba algodón 100/azul marino.png', import.meta.url).href;
+const chombaAlgodonAzulImage = new URL('../images/chomba algodón 100/azul.png', import.meta.url).href;
+const chombaAlgodonBlancoImage = new URL('../images/chomba algodón 100/blanco.png', import.meta.url).href;
+const chombaAlgodonCelesteAquaImage = new URL('../images/chomba algodón 100/celeste aqua.png', import.meta.url).href;
+const chombaAlgodonGrisImage = new URL('../images/chomba algodón 100/gris.png', import.meta.url).href;
+const chombaAlgodonRosaSalmonViejoImage = new URL('../images/chomba algodón 100/rosa salmon viejo.png', import.meta.url).href;
+const chombaAlgodonRosaViejoImage = new URL('../images/chomba algodón 100/rosa viejo .png', import.meta.url).href;
+const chombaAlgodonVerdeSalviaImage = new URL('../images/chomba algodón 100/verde salvia.png', import.meta.url).href;
 // Chomba Devré de Algodón
 const chombaDevreAzulImage = new URL('../images/Chomba marca Devré/azul.png', import.meta.url).href;
 const chombaDevreBeigeImage = new URL('../images/Chomba marca Devré/beige.png', import.meta.url).href;

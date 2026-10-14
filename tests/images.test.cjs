@@ -18,7 +18,7 @@ test('Todas las fotos de catálogo y variantes son archivos locales válidos', (
   assert.equal(photos.size, 113);
   for (const photo of photos) {
     assert.equal(new URL(photo).protocol, 'file:');
-    const target = fileURLToPath(photo.replaceAll('%/', '%25/'));
+    const target = fileURLToPath(photo);
     const relative = path.relative(path.join(root, 'images'), target);
     assert.equal(relative.startsWith('..') || path.isAbsolute(relative), false);
     const bytes = fs.readFileSync(target);
